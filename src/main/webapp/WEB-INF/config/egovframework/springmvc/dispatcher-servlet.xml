@@ -44,10 +44,16 @@
         </property>
     </bean>
 
-    <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="1"
+    <!-- 예제용 -->
+	<bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="2"
 	    p:viewClass="org.springframework.web.servlet.view.JstlView"
 	    p:prefix="/WEB-INF/jsp/egovframework/example/" p:suffix=".jsp"/>
-
+	
+	<!-- 실제 기능(room)용 -->
+	<bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="1"
+	    p:viewClass="org.springframework.web.servlet.view.JstlView"
+	    p:prefix="/WEB-INF/jsp/egovframework/room" p:suffix=".jsp"/>
+	    
     <!-- For Pagination Tag -->
     <bean id="imageRenderer" class="egovframework.example.cmmn.web.EgovImgPaginationRenderer"/>
 
