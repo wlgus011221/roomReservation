@@ -1,0 +1,153 @@
+@charset "UTF-8";
+
+/* --- 폼 공통 --- */
+form .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.form-input, .form-select, .form-textarea {
+    padding: 0.5rem;
+    border: 1px solid var(--gray-300);
+    border-radius: 4px;
+    font-size: 0.875rem;
+}
+
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* --- 그리드 --- */
+.grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+/* --- 반복 예약 --- */
+#recurring-booking.hidden {
+    display: none;
+}
+
+.checkbox-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.checkbox-item input[type="checkbox"] {
+    accent-color: var(--primary-color);
+}
+
+/* --- 반복 예약 미리보기 --- */
+.alert-info {
+    background-color: var(--info-color);
+    color: var(--info-text-color);
+    padding: 1rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+}
+
+.alert-info h4 {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+/* --- 관리자 전용 --- */
+.alert-warning {
+    background-color: var(--warning-color-light);
+    color: var(--warning-color-dark);
+    padding: 1rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+}
+
+.alert-warning h4 {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.alert-warning .flex {
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* --- 버튼 --- */
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.btn-primary {
+    color: white;
+}
+
+.btn-secondary {
+    background-color: var(--gray-100);
+    color: var(--gray-800);
+}
+
+.btn-warning {
+    background-color: var(--warning-color);
+    color: white;
+}
+
+/* --- 레이아웃 --- */
+.flex {
+    display: flex;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.justify-end {
+    justify-content: flex-end;
+}
+
+.gap-2 {
+    gap: 0.5rem;
+}
+
+.gap-3 {
+    gap: 0.75rem;
+}
+
+.gap-4 {
+    gap: 1rem;
+}
+
+.gap-6 {
+    gap: 1.5rem;
+}
+
+.border-top {
+    border-top: 1px solid var(--gray-200);
+    padding-top: 1.5rem;
+}

@@ -1,0 +1,82 @@
+@charset "UTF-8";
+
+/* 회원가입 페이지 전용 */
+
+/* 페이지 레이아웃 */
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem 0;
+  background-color: #f5f5f5;
+}
+
+/* 카드 크기 */
+.card {
+  width: 100%;
+  max-width: 500px;
+  margin: 1rem;
+}
+
+/* 카드 내부 콘텐츠 */
+.card-content {
+  padding: 2rem;
+}
+
+/* 상단 제목 영역 */
+.card-content > div {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.card-content h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 0.5rem;
+}
+
+.card-content p {
+  color: var(--gray-600);
+}
+
+/* 라디오 버튼 그룹 */
+.form-group .flex label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* 체크박스 문구 */
+.form-group label.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+/* 제출 버튼 */
+.btn-primary.submit-btn {
+  width: 100%;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* 하단 링크 */
+.form-footer {
+  text-align: center;
+}
+
+.form-footer a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.form-footer a:hover {
+  text-decoration: underline;
+}

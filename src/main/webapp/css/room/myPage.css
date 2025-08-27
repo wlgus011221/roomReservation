@@ -1,0 +1,468 @@
+@charset "UTF-8";
+
+/* 메인 타이틀 스타일 */
+.main-container h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 2rem;
+}
+
+/* 탭 네비게이션 컨테이너 */
+.tab-navigation {
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 0.5rem; /* 탭 버튼 간 간격 */
+}
+
+/* 탭 버튼 기본 스타일 */
+.tab-btn {
+    padding: 0.5rem 1rem;
+    background-color: #f5f5f5;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.tab-btn:hover {
+    background-color: #e0e0e0;
+}
+
+/* 활성화된 탭 버튼 */
+.tab-btn.active {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* 프로필 탭 컨테이너 */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* 카드 공통 스타일 */
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    padding: 1rem;
+}
+
+.card-header {
+    margin-bottom: 1rem;
+}
+
+.card-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--gray-900);
+}
+
+/* 프로필 중앙 정렬 영역 */
+.profile-info {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.user-avatar {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    background-color: #ddd; /* 아바타 기본 배경 */
+}
+
+.profile-info h4 {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.profile-info p {
+    color: var(--gray-600);
+    font-size: 0.875rem;
+}
+
+/* 프로필 세부 정보 레이블 및 값 */
+.profile-details > div {
+    margin-bottom: 0.75rem;
+}
+
+.profile-details label {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+}
+
+.profile-details p {
+    font-weight: 500;
+    margin: 0;
+}
+
+/* 프로필 수정 버튼 */
+.btn-profile-edit {
+    width: 100%;
+    margin-top: 1.5rem;
+}
+
+/* 통계 카드 */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.stats-item {
+    text-align: center;
+}
+
+.stats-item .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.stats-item .stat-label {
+    color: var(--gray-600);
+    font-size: 0.875rem;
+}
+
+/* 예약관리 탭 버튼 그룹 */
+.booking-filters .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+/* 테이블 스타일 */
+.booking-table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow-x: auto;
+}
+
+.booking-table thead tr {
+    background-color: var(--gray-50);
+}
+
+.booking-table th,
+.booking-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+/* 상태 배지 */
+.status-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.status-occupied {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.status-available {
+    background-color: var(--success-color);
+    color: #fff;
+}
+
+.status-cancelled {
+    background-color: var(--danger-color);
+    color: #fff;
+}
+
+/* 테이블 내 버튼 */
+.booking-table .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+/* 내 참석 정보 탭 */
+/* 내 참석 정보 설명 */
+.attendance-description {
+    color: var(--gray-600);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* 참석 정보 테이블 */
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow-x: auto;
+}
+
+.attendance-table thead tr {
+    background-color: var(--gray-50);
+}
+
+.attendance-table th,
+.attendance-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+/* 참석 상태 배지 */
+.status-success {
+    background-color: var(--success-color);
+    color: #fff;
+}
+
+/* 테이블 내 버튼 */
+.attendance-table .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+/* 알림 관리 탭 */
+/* 알림 관리 제목 */
+.notification-section h4 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* 체크박스 라벨 공통 */
+.notification-section label {
+    display: flex;
+    align-items: center; /* 변경: items-center → align-items */
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+/* 설정 저장 버튼 */
+.notification-section .btn {
+    margin-top: 1.5rem;
+}
+
+/* 최근 알림 카드 */
+.notification-list {
+    margin-top: 0;
+}
+
+.notification-item {
+    padding: 1rem;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* 알림 아이콘 */
+.notification-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.notification-icon.primary {
+    background-color: var(--primary-color);
+}
+
+.notification-icon.success {
+    background-color: var(--success-color);
+}
+
+/* 알림 내용 텍스트 */
+.notification-item p:first-child {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.notification-item p:nth-child(2) {
+    color: var(--gray-600);
+    font-size: 0.875rem;
+}
+
+.notification-item p:nth-child(3) {
+    color: var(--gray-500);
+    font-size: 0.75rem;
+}
+
+
+/* 내 일정 대시보드 탭 */
+/* 뷰 토글 버튼 */
+.view-toggle {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.view-btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border: 1px solid var(--gray-300);
+    background: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.view-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* 달력뷰 */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background-color: var(--gray-200);
+}
+
+.calendar-header-cell {
+    background-color: var(--gray-100);
+    padding: 0.5rem;
+    text-align: center;
+    font-weight: 500;
+}
+
+.calendar-cell {
+    background-color: white;
+    padding: 0.5rem;
+    min-height: 80px;
+    position: relative;
+}
+
+.calendar-cell span {
+    color: inherit;
+}
+
+.calendar-cell .calendar-event {
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 0.75rem;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    margin-top: 0.25rem;
+}
+
+.calendar-cell .calendar-event.success {
+    background-color: var(--success-color);
+}
+
+/* 리스트뷰 */
+.schedule-list .schedule-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.schedule-time {
+    width: 100px;
+    font-weight: 500;
+}
+
+.schedule-content {
+    flex: 1;
+}
+
+.schedule-content h5 {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.schedule-content p {
+    color: var(--gray-600);
+    font-size: 0.875rem;
+}
+
+/* 타임라인뷰 */
+.timeline-container {
+    position: relative;
+    height: 400px;
+    overflow-y: auto;
+}
+
+.timeline-header {
+    display: flex;
+    border-bottom: 2px solid var(--gray-300);
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+}
+
+.timeline-header > div:first-child {
+    width: 120px;
+    padding: 0.5rem;
+    font-weight: 600;
+    border-right: 1px solid var(--gray-300);
+}
+
+.timeline-header > div:nth-child(2) {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(17, 1fr);
+}
+
+.timeline-header > div:nth-child(2) > div {
+    padding: 0.5rem;
+    text-align: center;
+    font-size: 0.75rem;
+    border-right: 1px solid var(--gray-200);
+}
+
+.timeline-row {
+    display: flex;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.timeline-row > div:first-child {
+    width: 120px;
+    padding: 1rem;
+    font-weight: 500;
+    border-right: 1px solid var(--gray-300);
+    background-color: var(--gray-50);
+}
+
+.timeline-row > div:nth-child(2) {
+    flex: 1;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(17, 1fr);
+    height: 60px;
+}
+
+.timeline-event {
+    margin: 8px 2px;
+    color: white;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timeline-event.primary {
+    background-color: var(--primary-color);
+}
+
+.timeline-event.success {
+    background-color: var(--success-color);
+}

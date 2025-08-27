@@ -36,7 +36,7 @@
                 </button>
 
                 <div style="text-align: center;">
-                    <a href="register.html" style="color: var(--primary-color); text-decoration: none; font-size: 0.875rem;">
+                    <a href="register.do" style="color: var(--primary-color); text-decoration: none; font-size: 0.875rem;">
                         계정이 없으신가요? 회원가입
                     </a>
                 </div>
