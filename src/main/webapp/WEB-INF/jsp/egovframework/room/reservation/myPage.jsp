@@ -17,9 +17,9 @@
             <h1>회의실 예약 시스템</h1>
         </div>
         <nav class="nav-menu">
-            <a href="#" class="active">대시보드</a>
-            <a href="#">예약하기</a>
-            <a href="#">마이페이지</a>
+            <a href="main.do">대시보드</a>
+            <a href="booking.do">예약하기</a>
+            <a href="myPage.do" class="active">마이페이지</a>
         </nav>
         <div class="header-right">
             <div class="notification-icon">
