@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="/css/room/common.css">
     <link rel="stylesheet" href="/css/room/myPage.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- 캘린더 API -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.css" />
+	<script src="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.js"></script>
 </head>
 <body>
     <!-- 헤더 -->
@@ -17,9 +20,10 @@
             <h1>회의실 예약 시스템</h1>
         </div>
         <nav class="nav-menu">
-            <a href="main.do">대시보드</a>
+            <a href="main.do" class="active">대시보드</a>
             <a href="booking.do">예약하기</a>
-            <a href="myPage.do" class="active">마이페이지</a>
+            <a href="myPage.do">마이페이지</a>
+            <a href="roomManagement.do">회의실 관리</a>
         </nav>
         <div class="header-right">
             <div class="notification-icon">
@@ -322,107 +326,46 @@
 		            <div class="flex items-center justify-between">
 		                <h3 class="card-title">내 일정 대시보드</h3>
 		                <div class="view-toggle">
-		                    <button class="view-btn active" onclick="showView('calendar')">
+		                    <button class="view-btn active" onclick="showView('calendar', this)">
 		                        <i class="fas fa-calendar"></i> 달력뷰
 		                    </button>
-		                    <button class="view-btn" onclick="showView('list')">
+		                    <button class="view-btn" onclick="showView('list', this)">
 		                        <i class="fas fa-list"></i> 리스트뷰
 		                    </button>
-		                    <button class="view-btn" onclick="showView('timeline')">
+		                    <button class="view-btn" onclick="showView('timeline', this)">
 		                        <i class="fas fa-chart-gantt"></i> 타임라인뷰
 		                    </button>
 		                </div>
 		            </div>
 		        </div>
 		        <div class="card-content">
-		            <!-- 달력뷰 -->
-		            <div id="calendar-view" class="dashboard-view active">
-		                <div class="calendar-header">
-		                    <button class="btn btn-secondary"><i class="fas fa-chevron-left"></i></button>
-		                    <h4>2024년 1월</h4>
-		                    <button class="btn btn-secondary"><i class="fas fa-chevron-right"></i></button>
-		                </div>
-		                <div class="calendar-grid">
-		                    <div class="calendar-header-cell">일</div>
-		                    <div class="calendar-header-cell">월</div>
-		                    <div class="calendar-header-cell">화</div>
-		                    <div class="calendar-header-cell">수</div>
-		                    <div class="calendar-header-cell">목</div>
-		                    <div class="calendar-header-cell">금</div>
-		                    <div class="calendar-header-cell">토</div>
-		
-		                    <div class="calendar-cell"><span style="color: var(--gray-400);">31</span></div>
-		                    <div class="calendar-cell"><span>1</span></div>
-		                    <div class="calendar-cell"><span>2</span></div>
-		                    <div class="calendar-cell"><span>3</span></div>
-		                    <div class="calendar-cell"><span>4</span></div>
-		                    <div class="calendar-cell"><span>5</span></div>
-		                    <div class="calendar-cell"><span>6</span></div>
-		
-		                    <div class="calendar-cell">
-		                        <span>15</span>
-		                        <div class="calendar-event primary">09:00 기획회의</div>
-		                    </div>
-		                    <div class="calendar-cell">
-		                        <span>16</span>
-		                        <div class="calendar-event success">14:00 클라이언트</div>
-		                    </div>
-		                </div>
-		            </div>
-		
-		            <!-- 리스트뷰 -->
-		            <div id="list-view" class="dashboard-view">
-		                <div class="schedule-list">
-		                    <div class="schedule-item">
-		                        <div class="schedule-time">09:00-10:00</div>
-		                        <div class="schedule-content">
-		                            <h5>주간 기획 회의</h5>
-		                            <p>컨퍼런스룸 A • 5명 참석</p>
-		                        </div>
-		                        <div class="schedule-status">
-		                            <span class="status-badge status-occupied">진행 중</span>
-		                        </div>
-		                    </div>
-		                    <div class="schedule-item">
-		                        <div class="schedule-time">14:00-15:30</div>
-		                        <div class="schedule-content">
-		                            <h5>클라이언트 미팅</h5>
-		                            <p>미팅룸 1 • 3명 참석</p>
-		                        </div>
-		                        <div class="schedule-status">
-		                            <span class="status-badge status-available">예정</span>
-		                        </div>
-		                    </div>
-		                </div>
-		            </div>
-		
-		            <!-- 타임라인뷰 -->
-		            <div id="timeline-view" class="dashboard-view">
-		                <div class="timeline-container">
-		                    <div class="timeline-header">
-		                        <div>시간</div>
-		                        <div>
-		                            <div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div><div>13</div>
-		                            <div>14</div><div>15</div><div>16</div><div>17</div><div>18</div><div>19</div>
-		                            <div>20</div><div>21</div><div>22</div><div>23</div>
-		                        </div>
-		                    </div>
-		
-		                    <div class="timeline-row">
-		                        <div>오늘 (1/15)</div>
-		                        <div>
-		                            <div class="timeline-event primary" style="grid-column: 3 / 4;">기획회의</div>
-		                            <div class="timeline-event success" style="grid-column: 8 / 10;">클라이언트 미팅</div>
-		                        </div>
-		                    </div>
-		                </div>
-		            </div>
+		            <!-- 캘린더 -->
+        			<div id="calendar-view" class="dashboard-view active">
+				        <div id="calendar" class="calendar"></div>
+				    </div>
+				
+				    <!-- 리스트 -->
+				    <div id="list-view" class="dashboard-view" style="display:none;">
+				        <ul>
+				            <li>회의실 A - 팀 회의 (2025-08-26 10:00)</li>
+				            <li>회의실 B - 외부 미팅 (2025-08-28 14:00)</li>
+				        </ul>
+				    </div>
+				
+				    <!-- 타임라인 (같은 캘린더 div 사용) -->
+				    <div id="timeline-view" class="dashboard-view" style="display:none;">
+				        <div id="calendar-timeline" class="calendar"></div>
+				    </div>
 		        </div>
 		    </div>
 		</div>
     </main>
 
     <script>
+	    let calendar;       // 캘린더 인스턴스
+	    let isCalendarInit = false;
+	 	
+    	// 마이페이지 탭 전환
         function showTab(tabName) {
             // 모든 탭 버튼과 컨텐츠 비활성화
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -431,17 +374,57 @@
             // 선택된 탭 활성화
             event.target.classList.add('active');
             document.getElementById(tabName + '-tab').classList.add('active');
-        }
-
-        function showView(viewName) {
-            // 모든 뷰 버튼과 컨텐츠 비활성화
-            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.dashboard-view').forEach(view => view.classList.remove('active'));
             
-            // 선택된 뷰 활성화
-            event.target.classList.add('active');
-            document.getElementById(viewName + '-view').classList.add('active');
+         	// 내 일정 대시보드 탭이면 캘린더 강제 렌더링
+            if(tabName === 'dashboard') {
+		        if(!isCalendarInit) {
+		            // 캘린더 생성
+		            const Calendar = tui.Calendar;
+		            calendar = new Calendar('#calendar', {
+		                defaultView: 'month',
+		                useDetailPopup: true,
+		                useCreationPopup: true,
+		                calendars: [
+		                    { id: 'default', name: '회의실 예약', color: '#ffffff', bgColor: '#0475f4' }
+		                ]
+		            });
+		
+		            // 테스트 이벤트 추가
+		            calendar.createEvents([
+		                { id: '1', calendarId: 'default', title: '팀 회의', category: 'time', start: '2025-08-26T10:00:00', end: '2025-08-26T11:00:00' },
+		                { id: '2', calendarId: 'default', title: '외부 미팅', category: 'time', start: '2025-08-28T14:00:00', end: '2025-08-28T15:30:00' }
+		            ]);
+		
+		            isCalendarInit = true;
+		        }
+		        // 뷰 초기화
+		        showView('calendar', document.querySelector('.view-btn.active'));
+		    }
         }
+		
+    	// 내 일정 대시보드
+        function showView(viewName, btn) {
+		    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+		    btn.classList.add('active');
+		
+		    document.getElementById('calendar-view').style.display = 'none';
+		    document.getElementById('timeline-view').style.display = 'none';
+		    document.getElementById('list-view').style.display = 'none';
+		
+		    if(viewName === 'calendar') {
+		        document.getElementById('calendar-view').style.display = 'block';
+		        calendar.changeView('month');
+		        calendar.render();
+		    } else if(viewName === 'timeline') {
+		        document.getElementById('calendar-view').style.display = 'block';
+		        calendar.changeView('day');
+		        calendar.render();
+		    } else if(viewName === 'list') {
+		        document.getElementById('list-view').style.display = 'block';
+		    }
+		}
+
+
     </script>
 </body>
 </html>

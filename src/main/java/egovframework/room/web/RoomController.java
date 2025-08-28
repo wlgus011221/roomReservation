@@ -51,7 +51,6 @@ public class RoomController {
 		return "/roomManagement";
 	}
 	
-	/*
 	@RequestMapping(value= "/test.do")
 	@ResponseBody
 	public String test(ModelMap model) throws Exception {
@@ -72,5 +71,4 @@ public class RoomController {
             return "DB 연결 실패: " + e.getMessage();
         }
 	}
-	*/
 }
