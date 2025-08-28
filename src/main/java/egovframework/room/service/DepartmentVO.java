@@ -19,11 +19,16 @@ public class DepartmentVO extends DepartmentDefaultVO {
         this.departmentIdx = departmentIdx;
     }
 
-    public String getName() {
+	public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
+    
+    @Override
+   	public String toString() {
+   		return "DepartmentVO [departmentIdx=" + departmentIdx + ", name=" + name + "]";
+   	}
 }

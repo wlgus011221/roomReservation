@@ -2,7 +2,6 @@ package egovframework.room.service.impl;
 
 import java.util.List;
 import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
-import egovframework.room.service.DepartmentDefaultVO;
 import egovframework.room.service.DepartmentVO;
 
 @Mapper
@@ -12,6 +11,6 @@ public interface DepartmentMapper {
     void updateDepartment(DepartmentVO vo) throws Exception;
     void deleteDepartment(DepartmentVO vo) throws Exception;
     DepartmentVO selectDepartment(DepartmentVO vo) throws Exception;
-    List<?> selectDepartmentList(DepartmentDefaultVO searchVO) throws Exception;
-    int selectDepartmentListTotCnt(DepartmentDefaultVO searchVO);
+    List<DepartmentVO> selectDepartmentList(DepartmentVO searchVO) throws Exception;
+    int selectDepartmentListTotCnt(DepartmentVO searchVO);
 }

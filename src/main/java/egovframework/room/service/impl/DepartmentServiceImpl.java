@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import egovframework.room.service.DepartmentService;
-import egovframework.room.service.DepartmentDefaultVO;
 import egovframework.room.service.DepartmentVO;
 import lombok.RequiredArgsConstructor;
 
@@ -44,12 +43,12 @@ public class DepartmentServiceImpl extends EgovAbstractServiceImpl implements De
     }
 
     @Override
-    public List<?> selectDepartmentList(DepartmentDefaultVO searchVO) throws Exception {
+    public List<?> selectDepartmentList(DepartmentVO searchVO) throws Exception {
         return departmentMapper.selectDepartmentList(searchVO);
     }
 
     @Override
-    public int selectDepartmentListTotCnt(DepartmentDefaultVO searchVO) {
+    public int selectDepartmentListTotCnt(DepartmentVO searchVO) {
         return departmentMapper.selectDepartmentListTotCnt(searchVO);
     }
 }

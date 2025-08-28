@@ -42,7 +42,7 @@ public interface DepartmentService {
      * @return 부서 목록
      * @exception Exception
      */
-    List<?> selectDepartmentList(DepartmentDefaultVO searchVO) throws Exception;
+    List<?> selectDepartmentList(DepartmentVO searchVO) throws Exception;
 
     /**
      * 부서 총 갯수를 조회한다.
@@ -50,5 +50,5 @@ public interface DepartmentService {
      * @return 부서 총 갯수
      * @exception
      */
-    int selectDepartmentListTotCnt(DepartmentDefaultVO searchVO);
+    int selectDepartmentListTotCnt(DepartmentVO searchVO);
 }

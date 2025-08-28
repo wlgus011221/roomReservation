@@ -2,6 +2,7 @@ package egovframework.room.web;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -11,7 +12,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import egovframework.room.service.DepartmentDefaultVO;
 import egovframework.room.service.DepartmentService;
+import egovframework.room.service.DepartmentVO;
+import egovframework.room.service.impl.DepartmentMapper;
 
 @Controller
 public class RoomController {
@@ -19,7 +23,11 @@ public class RoomController {
 	@Autowired
 	private DataSource dataSource;
 	
+	@Autowired
 	private DepartmentService departmentService;
+	
+	@Autowired
+	private DepartmentMapper departmentMapper;
 	
 	@RequestMapping(value= "/main.do")
 	public String main(ModelMap model) throws Exception {
@@ -51,24 +59,35 @@ public class RoomController {
 		return "/roomManagement";
 	}
 	
-	@RequestMapping(value= "/test.do")
+	@RequestMapping(value= "/test.do", produces = "text/html; charset=UTF-8")
 	@ResponseBody
 	public String test(ModelMap model) throws Exception {
-		System.out.println("테스트중");
-		try {
-            Connection conn = dataSource.getConnection();
-            String dbName = conn.getCatalog();
-            String dbVersion = conn.getMetaData().getDatabaseProductVersion();
-            conn.close();
-            
-            // System.out.println("연결 성공");
-            
-            return "DB 연결 성공!<br>" +
-                   "데이터베이스: " + dbName + "<br>" +
-                   "MySQL 버전: " + dbVersion;
-        } catch (SQLException e) {
-        	// System.out.println("연결 실패");
-            return "DB 연결 실패: " + e.getMessage();
-        }
+	    System.out.println("테스트중");
+	    try {
+	        // DB 연결 확인
+	        Connection conn = dataSource.getConnection();
+	        String dbName = conn.getCatalog();
+	        String dbVersion = conn.getMetaData().getDatabaseProductVersion();
+	        conn.close();
+
+	        // department 테이블 조회
+	        List<DepartmentVO> deptList = departmentMapper.selectDepartmentList(new DepartmentVO());
+
+	        StringBuilder sb = new StringBuilder();
+	        sb.append("DB 연결 성공!<br>");
+	        sb.append("데이터베이스: " + dbName + "<br>");
+	        sb.append("MySQL 버전: " + dbVersion + "<br>");
+	        sb.append("부서 목록:<br>");
+
+	        for (DepartmentVO dept : deptList) {
+	            sb.append("[" + dept.getDepartmentIdx() + "] " + dept.getName() + "<br>");
+	        }
+
+	        return sb.toString();
+
+	    } catch (SQLException e) {
+	        return "DB 연결 실패: " + e.getMessage();
+	    }
 	}
+
 }

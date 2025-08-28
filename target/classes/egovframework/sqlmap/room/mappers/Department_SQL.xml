@@ -37,27 +37,18 @@
     </select>
 
     <!-- 부서 목록 조회 -->
-    <select id="selectDepartmentList" parameterType="departmentSearchVO" resultType="egovMap">
+    <select id="selectDepartmentList" parameterType="departmentVO" resultMap="department">
         SELECT 
             department_idx,
             name
         FROM department
-        WHERE 1=1
-        <if test="searchCondition != null and searchCondition == '0' and searchKeyword != null and searchKeyword != ''">
-            AND name LIKE CONCAT('%', #{searchKeyword}, '%')
-        </if>
-        ORDER BY department_idx DESC
-        LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+        ORDER BY department_idx ASC
     </select>
 
     <!-- 부서 총 개수 조회 -->
-    <select id="selectDepartmentListTotCnt" parameterType="departmentSearchVO" resultType="int">
+    <select id="selectDepartmentListTotCnt" parameterType="departmentVO" resultType="int">
         SELECT COUNT(*) totcnt
         FROM department
-        WHERE 1=1
-        <if test="searchCondition != null and searchCondition == '0' and searchKeyword != null and searchKeyword != ''">
-            AND name LIKE CONCAT('%', #{searchKeyword}, '%')
-        </if>
     </select>
 
 </mapper>

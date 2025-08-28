@@ -92,4 +92,11 @@ public class UserVO extends UserDefaultVO {
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
     }
+
+	@Override
+	public String toString() {
+		return "UserVO [userIdx=" + userIdx + ", id=" + id + ", name=" + name + ", departmentIdx=" + departmentIdx
+				+ ", phone=" + phone + ", email=" + email + ", passwd=" + passwd + ", departmentName=" + departmentName
+				+ "]";
+	}
 }
