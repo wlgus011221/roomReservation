@@ -41,11 +41,15 @@ public class RoomController {
 	
 	@RequestMapping(value= "/register.do")
 	public String register(ModelMap model) throws Exception {
+		// DB에서 부서 목록 조회
+		List<DepartmentVO> deptList = departmentMapper.selectDepartmentList(new DepartmentVO());
+	    model.addAttribute("deptList", deptList);
+			    
 		return "/register";
 	}
 	
 	@RequestMapping(value= "/myPage.do")
-	public String myPage(ModelMap model) throws Exception {
+	public String myPage(ModelMap model) throws Exception {	
 		return "/myPage";
 	}
 	

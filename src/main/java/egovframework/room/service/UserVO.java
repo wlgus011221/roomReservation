@@ -6,7 +6,10 @@ public class UserVO extends UserDefaultVO {
 
     /** 사용자 인덱스 */
     private int userIdx;
-
+    
+    /** 사용자 타입 */
+    private String userType;
+    
     /** 아이디 */
     private String id;
 
@@ -36,7 +39,15 @@ public class UserVO extends UserDefaultVO {
     public void setUserIdx(int userIdx) {
         this.userIdx = userIdx;
     }
+    
+    public String getUserType() {
+        return userType;
+    }
 
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+    
     public String getId() {
         return id;
     }
@@ -95,8 +106,8 @@ public class UserVO extends UserDefaultVO {
 
 	@Override
 	public String toString() {
-		return "UserVO [userIdx=" + userIdx + ", id=" + id + ", name=" + name + ", departmentIdx=" + departmentIdx
-				+ ", phone=" + phone + ", email=" + email + ", passwd=" + passwd + ", departmentName=" + departmentName
-				+ "]";
+		return "UserVO [userIdx=" + userIdx + ", userType=" + userType + ", id=" + id + ", name=" + name
+				+ ", departmentIdx=" + departmentIdx + ", phone=" + phone + ", email=" + email + ", passwd=" + passwd
+				+ ", departmentName=" + departmentName + "]";
 	}
 }

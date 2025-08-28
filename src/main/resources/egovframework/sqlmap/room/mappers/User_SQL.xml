@@ -6,6 +6,7 @@
 
     <resultMap id="user" type="userVO">
         <result property="userIdx" column="user_idx"/>
+        <result property="userType" column="user_type"/>
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="departmentIdx" column="department_idx"/>
@@ -19,6 +20,7 @@
     <insert id="insertUser" parameterType="userVO" useGeneratedKeys="true" keyProperty="userIdx">
         INSERT INTO users (
             id,
+            user_type,
             name,
             department_idx,
             phone,
@@ -26,6 +28,7 @@
             passwd
         ) VALUES (
             #{id},
+            #{userType},
             #{name},
             #{departmentIdx},
             #{phone},
@@ -58,6 +61,7 @@
     <select id="selectUser" parameterType="userVO" resultMap="user">
         SELECT 
             u.user_idx,
+            u.user_type,
             u.id,
             u.name,
             u.department_idx,
@@ -74,6 +78,7 @@
     <select id="selectUserList" parameterType="userVO" resultMap="user">
         SELECT 
             u.user_idx,
+            u.user_type,
             u.id,
             u.name,
             u.department_idx,

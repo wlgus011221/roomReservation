@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -25,15 +26,16 @@
                         <input type="text" class="form-input" placeholder="이름" required>
                     </div>
                     <div class="form-group">
+	                    <label class="form-label">사번 *</label>
+	                    <input type="text" class="form-input" placeholder="사번" required>
+	                </div>
+                    <div class="form-group">
                         <label class="form-label">부서 *</label>
                         <select class="form-select" required>
                             <option value="">부서 선택</option>
-                            <option value="dev">개발팀</option>
-                            <option value="design">디자인팀</option>
-                            <option value="marketing">마케팅팀</option>
-                            <option value="sales">영업팀</option>
-                            <option value="hr">인사팀</option>
-                            <option value="finance">재무팀</option>
+                            <c:forEach var="dept" items="${deptList}">
+					            <option value="${dept.departmentIdx}">${dept.name}</option>
+					        </c:forEach>
                         </select>
                     </div>
                 </div>

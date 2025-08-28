@@ -32,8 +32,8 @@
                 </svg>
             </div>
             <div class="user-info">
-                <span>홍길동님</span>
-                <span>로그아웃</span>
+                <a href="login.do">로그인</a>
+                <a href="register.do">회원가입</a>
             </div>
         </div>
     </header>
