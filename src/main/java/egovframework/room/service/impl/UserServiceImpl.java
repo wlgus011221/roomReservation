@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import egovframework.room.service.UserService;
-import egovframework.room.service.UserDefaultVO;
 import egovframework.room.service.UserVO;
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +19,8 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements UserServ
 
     @Override
     public String insertUser(UserVO vo) throws Exception {
-        LOGGER.debug(vo.toString());
+        LOGGER.debug("사용자 등록: " + vo.toString());
+        
         userMapper.insertUser(vo);
         return String.valueOf(vo.getUserIdx());
     }
@@ -44,12 +44,12 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements UserServ
     }
 
     @Override
-    public List<?> selectUserList(UserDefaultVO searchVO) throws Exception {
-        return userMapper.selectUserList(searchVO);
+    public List<?> selectUserList(UserVO vo) throws Exception {
+        return userMapper.selectUserList(vo);
     }
 
     @Override
-    public int selectUserListTotCnt(UserDefaultVO searchVO) {
-        return userMapper.selectUserListTotCnt(searchVO);
+    public int selectUserListTotCnt(UserVO vo) {
+        return userMapper.selectUserListTotCnt(vo);
     }
 }

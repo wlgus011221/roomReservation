@@ -42,7 +42,7 @@ public interface UserService {
      * @return 사용자 목록
      * @exception Exception
      */
-    List<?> selectUserList(UserDefaultVO searchVO) throws Exception;
+    List<?> selectUserList(UserVO searchVO) throws Exception;
 
     /**
      * 사용자 총 갯수를 조회한다.
@@ -50,5 +50,5 @@ public interface UserService {
      * @return 사용자 총 갯수
      * @exception
      */
-    int selectUserListTotCnt(UserDefaultVO searchVO);
+    int selectUserListTotCnt(UserVO searchVO);
 }

@@ -9,10 +9,10 @@
         <result property="userType" column="user_type"/>
         <result property="id" column="id"/>
         <result property="name" column="name"/>
-        <result property="departmentIdx" column="department_idx"/>
         <result property="phone" column="phone"/>
         <result property="email" column="email"/>
         <result property="passwd" column="passwd"/>
+        <result property="departmentIdx" column="department_idx"/>
         <result property="departmentName" column="department_name"/>
     </resultMap>
 
@@ -36,6 +36,20 @@
             #{passwd}
         )
     </insert>
+    
+    <!-- 아이디로 사용자 조회 (중복 확인용) -->
+    <select id="selectUserById" parameterType="userVO" resultType="int">
+        SELECT COUNT(*) cnt
+        FROM users
+        WHERE id = #{id}
+    </select>
+
+    <!-- 이메일로 사용자 조회 (중복 확인용) -->
+    <select id="selectUserByEmail" parameterType="userVO" resultType="int">
+        SELECT COUNT(*) cnt
+        FROM users
+        WHERE email = #{email}
+    </select>
 
     <!-- 사용자 수정 -->
     <update id="updateUser" parameterType="userVO">
@@ -96,5 +110,6 @@
         FROM users u
         LEFT JOIN department d ON u.department_idx = d.department_idx
     </select>
-
+	
+	
 </mapper>

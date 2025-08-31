@@ -56,6 +56,14 @@ body {
   font-size: 0.875rem;
 }
 
+.text-success {
+    color: var(--success-color);
+}
+
+.text-danger {
+    color: var(--danger-color);
+}
+
 /* 제출 버튼 */
 .btn-primary.submit-btn {
   width: 100%;
@@ -64,6 +72,11 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+}
+
+.btn-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 /* 하단 링크 */
