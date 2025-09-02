@@ -56,16 +56,12 @@
     <!-- 사용자 수정 -->
     <update id="updateUser" parameterType="userVO">
         UPDATE users SET
-            id = #{id},
             name = #{name},
             department_idx = #{departmentIdx},
             phone = #{phone},
             email = #{email}
-            <if test="passwd != null and passwd != ''">
-                , passwd = #{passwd}
-            </if>
         WHERE 1=1 
-        ANDuser_idx = #{userIdx}
+        AND user_idx = #{userIdx}
     </update>
 
     <!-- 사용자 삭제 -->
@@ -124,4 +120,11 @@
 		AND id = #{id}
 		AND passwd = #{passwd}
 	</select>
+	
+	<!-- 비밀번호 변경 -->
+	<update id="updatePassword" parameterType="userVO">
+        UPDATE users
+        SET passwd = #{passwd}
+        WHERE user_idx = #{userIdx}
+    </update>
 </mapper>

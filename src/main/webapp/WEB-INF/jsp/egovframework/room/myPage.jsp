@@ -119,7 +119,7 @@
 						</div>
 					</div>
 					<div class="card-content">
-						<form id="profileEditForm">
+						<form id="profileEditForm" action="updateProfile.do" method="post">
 							<div class="form-group">
 								<label class="form-label">이름 *</label> 
 								<input type="text" name="name" id="userName" class="form-input" required>
@@ -135,11 +135,11 @@
 							</div>
 							<div class="form-group">
 								<label class="form-label">이메일 *</label> 
-								<input type="email" id="editEmail" class="form-input" required>
+								<input type="email" name="email" id="editEmail" class="form-input" required>
 							</div>
 							<div class="form-group">
 								<label class="form-label">전화번호 *</label> 
-								<input type="tel" id="editPhone" class="form-input" required>
+								<input type="tel" name="phone" id="editPhone" class="form-input" required>
 							</div>
 							<div class="flex justify-end gap-3">
 								<button type="button" class="btn btn-warning" onclick="openPasswordModal()">비밀번호 변경</button>
@@ -158,7 +158,7 @@
 			            <h3 class="card-title">비밀번호 변경</h3>
 			        </div>
 			        <div class="card-content">
-			            <form id="passwordEditForm">
+			            <form id="passwordEditForm" action="updatePassword.do" method="post">
 			                <div class="form-group">
 			                    <label>현재 비밀번호</label>
 			                    <input type="password" name="currentPassword" class="form-input" required>
@@ -413,6 +413,14 @@
 	    let calendar;       // 캘린더 인스턴스
 	    let isCalendarInit = false;
 	 	
+	 	// 서버에서 전달된 'msg' 값이 있는지 확인
+	    const message = '${msg}';
+	    
+	    // 메시지가 비어있지 않거나 'null'이 아니면 알림창 띄우기
+	    if (message && message !== 'null' && message.trim() !== '') {
+	        alert(message);
+	    }
+	    
     	// 마이페이지 탭 전환
         function showTab(tabName) {
             // 모든 탭 버튼과 컨텐츠 비활성화
@@ -476,16 +484,33 @@
 	    function closeModal() {
 	    	profileEditModal.classList.add('hidden');
 	    }
+	    
 		
+	    const passwordEditModal = document.getElementById('passwordEditModal');
+	    const passwordEditForm = document.getElementById('passwordEditForm');
+	    
 	    // 비밀번호 변경 모달 열기 함수
 	    function openPasswordModal() {
-	        document.getElementById('passwordEditModal').classList.remove('hidden');
+	    	passwordEditForm.reset(); // 폼 내용 초기화
+	        passwordEditModal.classList.remove('hidden');
 	    }
 
 	    // 비밀번호 변경 모달 닫기 함수
 	    function closePasswordModal() {
-	        document.getElementById('passwordEditModal').classList.add('hidden');
+	    	passwordEditModal.classList.add('hidden');
 	    }
+	    
+	    passwordEditForm.addEventListener('submit', function(event) {
+	        const newPassword = this.newPassword.value;
+	        const confirmPassword = this.confirmPassword.value;
+
+	        // 새 비밀번호와 확인 비밀번호가 일치하는지 검사
+	        if (newPassword !== confirmPassword) {
+	            alert('새 비밀번호가 일치하지 않습니다.');
+	            event.preventDefault(); 
+	            return false; // 폼 제출 중지
+	        }
+	    });
 	    
     	// 내 일정 대시보드
         function showView(viewName, btn) {

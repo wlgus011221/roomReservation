@@ -60,4 +60,6 @@ public interface UserService {
      */
     UserVO selectLoginCheck(UserVO vo) throws Exception;
 
+	void updatePassword(Integer userIdx, String currentPassword, String newPassword) throws Exception;
+
 }

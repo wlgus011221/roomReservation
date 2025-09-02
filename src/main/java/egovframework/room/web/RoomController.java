@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -211,6 +212,71 @@ public class RoomController {
 		}
 		
 		return "/myPage";
+	}
+
+	@PostMapping("/updateProfile.do")
+	public String updateProfile(@RequestParam("name") String name,
+	                            @RequestParam("departmentIdx") int departmentIdx,
+	                            @RequestParam("email") String email,
+	                            @RequestParam("phone") String phone,
+	                            HttpSession session,
+	                            Model model) throws Exception {
+
+	    Integer userIdx = (Integer) session.getAttribute("userIdx");
+	    if (userIdx == null) {
+	        model.addAttribute("msg", "로그인 상태가 아닙니다.");
+	        return "forward:/login.do";
+	    }
+	    
+	    try {
+	        UserVO userVO = new UserVO();
+	        userVO.setUserIdx(userIdx);
+	        userVO.setName(name);
+	        userVO.setDepartmentIdx(departmentIdx);
+	        userVO.setEmail(email);
+	        userVO.setPhone(phone);
+	        
+	        System.out.println(userIdx);
+	        
+	        // 서비스 호출
+	        userService.updateUser(userVO);
+	        
+	        // 세션 정보 업데이트 (필수)
+	        session.setAttribute("name", name);
+	        
+	        model.addAttribute("msg", "프로필 정보가 성공적으로 변경되었습니다.");
+	    } catch (Exception e) {
+	        model.addAttribute("msg", "프로필 업데이트 중 오류가 발생했습니다: " + e.getMessage());
+	    }
+	    
+	    // 처리 후 다시 마이페이지로 돌아감
+	    return "forward:/myPage.do";
+	}
+
+	@PostMapping("/updatePassword.do")
+	public String updatePassword(@RequestParam("currentPassword") String currentPassword, 
+	                             @RequestParam("newPassword") String newPassword, 
+	                             HttpSession session, Model model) throws Exception {
+
+	    Integer userIdx = (Integer) session.getAttribute("userIdx");
+	    if (userIdx == null) {
+	        model.addAttribute("msg", "로그인 상태가 아닙니다.");
+	        return "forward:/myPage.do"; // 로그인 페이지로 리디렉션
+	    }
+	    
+	    // 암호화 로직은 기존과 동일
+	    String hashedCurrentPassword = sha512(currentPassword);
+	    String hashedNewPassword = sha512(newPassword);
+	    
+	    try {
+	        userService.updatePassword(userIdx, hashedCurrentPassword, hashedNewPassword);
+	        model.addAttribute("msg", "비밀번호 변경이 완료되었습니다.");
+	    } catch (Exception e) {
+	        model.addAttribute("msg", e.getMessage());
+	    }
+	    
+	    // 처리 후 마이페이지로 다시 포워딩
+	    return "forward:/myPage.do";
 	}
 
 	@RequestMapping(value = "/booking.do")

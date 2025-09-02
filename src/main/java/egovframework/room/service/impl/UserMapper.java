@@ -20,4 +20,5 @@ public interface UserMapper {
     int selectUserByEmail(UserVO vo) throws Exception;
     
     UserVO selectLoginCheck(UserVO vo) throws Exception;
+	int updatePassword(UserVO userVO);
 }

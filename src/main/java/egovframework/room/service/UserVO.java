@@ -16,9 +16,6 @@ public class UserVO extends UserDefaultVO {
     /** 이름 */
     private String name;
 
-    /** 부서 인덱스 */
-    private int departmentIdx;
-
     /** 전화번호 */
     private String phone;
 
@@ -27,6 +24,9 @@ public class UserVO extends UserDefaultVO {
 
     /** 비밀번호 */
     private String passwd;
+    
+    /** 부서 인덱스 */
+    private int departmentIdx;
 
     /** 부서명 (조인용) */
     private String departmentName;
