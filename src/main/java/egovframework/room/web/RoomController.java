@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,11 +93,13 @@ public class RoomController {
 			request.getSession().setAttribute("id", resultVO.getId());
 			request.getSession().setAttribute("name", resultVO.getName());
 			request.getSession().setAttribute("userType", resultVO.getUserType());
+			request.getSession().setAttribute("userIdx", resultVO.getUserIdx());
 			return "redirect:/main.do";
 		} else {
 			request.getSession().setAttribute("id", "");
 			request.getSession().setAttribute("name", "");
 			request.getSession().setAttribute("userType", "");
+			request.getSession().setAttribute("userIdx", "");
 			model.addAttribute("msg", "사용자 정보가 올바르지 않습니다.");
 			return "forward:/login.do";
 		}
@@ -188,7 +191,25 @@ public class RoomController {
 	}
 
 	@RequestMapping(value = "/myPage.do")
-	public String myPage(ModelMap model) throws Exception {
+	public String myPage(ModelMap model, HttpSession session) throws Exception {
+		Integer userIdx = (Integer)session.getAttribute("userIdx");
+		
+		if(userIdx != null) {
+			// 1. UserVO 객체 생성 및 ID 설정
+	        UserVO vo = new UserVO();
+	        vo.setUserIdx(userIdx);
+
+	        // 2. UserVO 객체를 서비스 메소드로 전달하여 DB 조회
+	        UserVO userDetails = userService.selectUser(vo);
+	        
+	        // 3. 조회된 정보를 모델에 담아 JSP로 전달
+	        model.addAttribute("userDetails", userDetails);
+	        
+	        // 4. 부서 목록 전체 조회
+	        List<DepartmentVO> deptList = departmentMapper.selectDepartmentList(new DepartmentVO());
+			model.addAttribute("deptList", deptList);
+		}
+		
 		return "/myPage";
 	}
 

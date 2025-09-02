@@ -118,7 +118,7 @@
 	
 	<!-- 로그인 체크 -->
 	<select id="selectLoginCheck" parameterType="userVO" resultMap="user">
-		SELECT id, name, user_type
+		SELECT id, name, user_type, user_idx
 		FROM users
 		WHERE 1=1
 		AND id = #{id}
