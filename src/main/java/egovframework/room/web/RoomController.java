@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,6 +65,7 @@ public class RoomController {
 
 	@RequestMapping(value = "/main.do")
 	public String main(ModelMap model) throws Exception {
+		model.addAttribute("today", new Date());
 		return "/main";
 	}
 

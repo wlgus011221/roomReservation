@@ -1,20 +1,5 @@
 @charset "UTF-8";
 
-/* 회의실 예약 시스템 대시보드 스타일 특화 */
-
-/* 헤더 세부 레이아웃 */
-.header-left h1 {
-	font-size: 18px;
-	font-weight: 600;
-	color: #333;
-}
-
-.header-right {
-	display: flex;
-	align-items: center;
-	gap: 16px;
-}
-
 /* 메인 컨테이너 */
 .main-container {
 	max-width: 1200px;

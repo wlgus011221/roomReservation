@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -23,7 +24,7 @@
         <div class="section-header">
             <h2 class="section-title">회의실 예약 현황</h2>
             <div class="date-controls">
-                <input type="date" class="date-input" value="2025-08-21">
+                <input type="date" class="date-input" value="<fmt:formatDate value='${today}' pattern='yyyy-MM-dd' />">
                 <button class="search-btn">조회</button>
             </div>
         </div>
