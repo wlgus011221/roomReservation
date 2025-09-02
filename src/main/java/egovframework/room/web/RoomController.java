@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -66,8 +68,45 @@ public class RoomController {
 	}
 
 	@RequestMapping(value = "/login.do")
-	public String login(ModelMap model) throws Exception {
+	public String login(ModelMap model) throws Exception {	
 		return "/login";
+	}
+	
+	/**
+	 * 로그인 처리 
+	 */
+	@PostMapping(value = "/loginProcess.do")
+	public String loginProcess(ModelMap model, @RequestParam("id") String id, @RequestParam("passwd") String passwd, HttpServletRequest request) throws Exception {
+		System.out.println("id=" + id);
+		System.out.println("passwd=" + sha512(passwd));
+		
+		UserVO userVO = new UserVO();
+		userVO.setId(id);
+		userVO.setPasswd(sha512(passwd));
+
+		UserVO resultVO = userService.selectLoginCheck(userVO);
+		
+		if(resultVO != null && resultVO.getId() != null) {
+			request.getSession().setAttribute("id", resultVO.getId());
+			request.getSession().setAttribute("name", resultVO.getName());
+			request.getSession().setAttribute("userType", resultVO.getUserType());
+			return "redirect:/main.do";
+		} else {
+			request.getSession().setAttribute("id", "");
+			request.getSession().setAttribute("name", "");
+			request.getSession().setAttribute("userType", "");
+			model.addAttribute("msg", "사용자 정보가 올바르지 않습니다.");
+			return "forward:/login.do";
+		}
+	}
+	
+	/**
+	 * 로그아웃 처리
+	 */
+	@RequestMapping(value= "logout.do")
+	public String logout(ModelMap model, HttpServletRequest request) throws Exception {
+		request.getSession().invalidate();
+		return "redirect:main.do";
 	}
 
 	@RequestMapping(value = "/register.do")
@@ -82,7 +121,7 @@ public class RoomController {
 	/**
 	 * 회원가입 처리
 	 */
-	@PostMapping(value = "/registerProc.do")
+	@PostMapping(value = "/registerProcess.do")
 	public String registerProcess(@ModelAttribute UserVO userVO, RedirectAttributes redirectAttributes) throws Exception {
 		System.out.println("회원가입 처리 - UserVO: " + userVO.toString());
 		try {

@@ -14,7 +14,10 @@ public interface UserMapper {
     UserVO selectUser(UserVO vo) throws Exception;
     List<?> selectUserList(UserVO vo) throws Exception;
     int selectUserListTotCnt(UserVO vo);
- // 중복 체크용 (개수 반환)
+    
+    // 중복 체크용 (개수 반환)
     int selectUserById(UserVO vo) throws Exception;
     int selectUserByEmail(UserVO vo) throws Exception;
+    
+    UserVO selectLoginCheck(UserVO vo) throws Exception;
 }

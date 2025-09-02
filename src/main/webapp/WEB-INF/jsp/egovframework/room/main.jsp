@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -20,9 +21,13 @@
         </div>
         <nav class="nav-menu">
             <a href="main.do" class="active">대시보드</a>
-            <a href="booking.do">예약하기</a>
-            <a href="myPage.do">마이페이지</a>
-            <a href="roomManagement.do">회의실 관리</a>
+            <c:if test="${not empty sessionScope.name}">
+            	<a href="booking.do">예약하기</a>
+            	<a href="myPage.do">마이페이지</a>
+            </c:if>
+            <c:if test="${sessionScope.userType eq 'ADMIN'}">
+		    	<a href="roomManagement.do">회의실 관리</a>
+		    </c:if>
         </nav>
         <div class="header-right">
             <div class="notification-icon">
@@ -31,10 +36,16 @@
                     <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                 </svg>
             </div>
-            <div class="user-info">
-                <a href="login.do">로그인</a>
-                <a href="register.do">회원가입</a>
-            </div>
+            <div class="user-profile">
+	            <c:if test="${not empty sessionScope.name}">
+	                <span>${sessionScope.name}님 환영합니다</span>
+	                <a href="logout.do">로그아웃</a>
+	            </c:if>
+	            <c:if test="${empty sessionScope.name}">
+	                <a href="login.do">로그인</a>
+	                <a href="register.do">회원가입</a>
+	            </c:if>
+	        </div>
         </div>
     </header>
 

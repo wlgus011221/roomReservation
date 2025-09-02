@@ -52,4 +52,9 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements UserServ
     public int selectUserListTotCnt(UserVO vo) {
         return userMapper.selectUserListTotCnt(vo);
     }
+    
+    @Override
+    public UserVO selectLoginCheck(UserVO vo) throws Exception {
+        return userMapper.selectLoginCheck(vo);
+    }
 }

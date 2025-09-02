@@ -41,14 +41,16 @@
     <select id="selectUserById" parameterType="userVO" resultType="int">
         SELECT COUNT(*) cnt
         FROM users
-        WHERE id = #{id}
+        WHERE 1=1
+        AND id = #{id}
     </select>
 
     <!-- 이메일로 사용자 조회 (중복 확인용) -->
     <select id="selectUserByEmail" parameterType="userVO" resultType="int">
         SELECT COUNT(*) cnt
         FROM users
-        WHERE email = #{email}
+        WHERE 1=1
+        AND email = #{email}
     </select>
 
     <!-- 사용자 수정 -->
@@ -62,13 +64,15 @@
             <if test="passwd != null and passwd != ''">
                 , passwd = #{passwd}
             </if>
-        WHERE user_idx = #{userIdx}
+        WHERE 1=1 
+        ANDuser_idx = #{userIdx}
     </update>
 
     <!-- 사용자 삭제 -->
     <delete id="deleteUser" parameterType="userVO">
         DELETE FROM users 
-        WHERE user_idx = #{userIdx}
+        WHERE 1=1
+        AND user_idx = #{userIdx}
     </delete>
 
     <!-- 사용자 상세 조회 -->
@@ -85,7 +89,8 @@
             d.name as department_name
         FROM users u
         LEFT JOIN department d ON u.department_idx = d.department_idx
-        WHERE u.user_idx = #{userIdx}
+        WHERE 1=1
+        AND u.user_idx = #{userIdx}
     </select>
 
     <!-- 사용자 목록 조회 -->
@@ -111,5 +116,12 @@
         LEFT JOIN department d ON u.department_idx = d.department_idx
     </select>
 	
-	
+	<!-- 로그인 체크 -->
+	<select id="selectLoginCheck" parameterType="userVO" resultMap="user">
+		SELECT id, name, user_type
+		FROM users
+		WHERE 1=1
+		AND id = #{id}
+		AND passwd = #{passwd}
+	</select>
 </mapper>

@@ -27,11 +27,11 @@
                 </div>
             </c:if>
 
-            <form id="registerForm" action="registerProc.do" method="post">
+            <form id="registerForm" action="registerProcess.do" method="post">
                 <div class="grid grid-cols-2 gap-4">
                     <div class="form-group">
                         <label class="form-label">이름 *</label>
-                        <input type="text" name="name" class="form-input" placeholder="이름" required>
+                        <input type="text" name="name" id="userName" class="form-input" placeholder="이름" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">사번 *</label>
@@ -64,7 +64,7 @@
 
                 <div class="form-group">
                     <label class="form-label">전화번호</label>
-                    <input type="tel" name="phone" class="form-input" placeholder="010-0000-0000">
+                    <input type="tel" name="phone" id="userPhone" class="form-input" placeholder="010-0000-0000">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">

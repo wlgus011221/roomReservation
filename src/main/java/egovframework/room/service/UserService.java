@@ -51,4 +51,13 @@ public interface UserService {
      * @exception
      */
     int selectUserListTotCnt(UserVO searchVO);
+    
+    /**
+     * 사용자 로그인 체크한다.
+     * @param vo - 등록할 정보가 담긴 UserVO
+     * @return 등록 결과
+     * @exception Exception
+     */
+    UserVO selectLoginCheck(UserVO vo) throws Exception;
+
 }

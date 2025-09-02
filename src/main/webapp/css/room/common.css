@@ -123,6 +123,15 @@ body {
   color: #666;
 }
 
+.user-profile a {
+  text-decoration: none;
+  color: #666;
+  font-size: 14px;
+  padding: 8px 0;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
 /* 공통 버튼 스타일 */
 .btn {
   padding: 8px 16px;
