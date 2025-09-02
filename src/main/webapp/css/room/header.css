@@ -1,0 +1,87 @@
+@charset "UTF-8";
+
+/* 헤더 공통 스타일 */
+.header {
+	background: white;
+	border-bottom: 1px solid #e0e0e0;
+	padding: 0 20px;
+	height: 60px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.header h1 {
+	font-size: 18px;
+	font-weight: 600;
+	color: #333;
+}
+
+.nav-menu {
+	display: flex;
+	gap: 30px;
+}
+
+.nav-menu a {
+	text-decoration: none;
+	color: #666;
+	font-size: 14px;
+	padding: 8px 0;
+	border-bottom: 2px solid transparent;
+	transition: all 0.2s;
+}
+
+.nav a:hover, .nav a.active {
+	color: #4f46e5;
+	border-bottom-color: #4f46e5;
+}
+
+.user-info {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+}
+
+.notification {
+	position: relative;
+	width: 24px;
+	height: 24px;
+	cursor: pointer;
+}
+
+.notification::before {
+	content: "🔔";
+	font-size: 18px;
+}
+
+.notification-badge {
+	position: absolute;
+	top: -5px;
+	right: -5px;
+	background: #ef4444;
+	color: white;
+	border-radius: 50%;
+	width: 18px;
+	height: 18px;
+	font-size: 11px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.user-profile {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 14px;
+	color: #666;
+}
+
+.user-profile a {
+	text-decoration: none;
+	color: #666;
+	font-size: 14px;
+	padding: 8px 0;
+	border-bottom: 2px solid transparent;
+	transition: all 0.2s;
+}
