@@ -56,106 +56,70 @@
 
         <!-- 회의실 목록 -->
         <div class="card">
-            <div class="card-content">
-                <div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>회의실명</th>
-                                <th>위치</th>
-                                <th>수용인원</th>
-                                <th>시설</th>
-                                <th>상태</th>
-                                <th>관리</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div>컨퍼런스룸 A</div>
-                                    <div>대형 회의실</div>
-                                </td>
-                                <td>2층 201호</td>
-                                <td>20명</td>
-                                <td>
-                                    <div class="flex gap-1">
-                                        <span>프로젝터</span>
-                                        <span>화이트보드</span>
-                                        <span>화상회의</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="status-badge status-available">사용 가능</span>
-                                </td>
-                                <td>
-                                    <div class="flex gap-2">
-                                        <button class="btn btn-secondary" onclick="editRoom(1)">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-danger" onclick="deleteRoom(1)">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div>컨퍼런스룸 B</div>
-                                    <div>중형 회의실</div>
-                                </td>
-                                <td>2층 202호</td>
-                                <td>12명</td>
-                                <td>
-                                    <div class="flex gap-1">
-                                        <span>TV</span>
-                                        <span>화이트보드</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="status-badge status-maintenance">점검 중</span>
-                                </td>
-                                <td>
-                                    <div class="flex gap-2">
-                                        <button class="btn btn-secondary" onclick="editRoom(2)">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-danger" onclick="deleteRoom(2)">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div>미팅룸 1</div>
-                                    <div>소형 회의실</div>
-                                </td>
-                                <td>1층 101호</td>
-                                <td>6명</td>
-                                <td>
-                                    <div class="flex gap-1">
-                                        <span>화이트보드</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="status-badge status-available">사용 가능</span>
-                                </td>
-                                <td>
-                                    <div class="flex gap-2">
-                                        <button class="btn btn-secondary" onclick="editRoom(3)">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-danger" onclick="deleteRoom(3)">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+	        <div class="card-content">
+	            <div>
+	                <table>
+	                    <thead>
+	                        <tr>
+	                            <th>회의실명</th>
+	                            <th>위치</th>
+	                            <th>수용인원</th>
+	                            <th>시설</th>
+	                            <th>상태</th>
+	                            <th>관리</th>
+	                        </tr>
+	                    </thead>
+	                    <tbody>
+	                        <c:choose>
+	                            <c:when test="${not empty roomList}">
+	                                <c:forEach var="room" items="${roomList}">
+	                                    <tr>
+	                                        <td>
+	                                            <div class="name-cell"><c:out value="${room.name}" /></div>
+	                                        </td>
+	                                        <td><c:out value="${room.floor}" />층 <c:out value="${room.number}" /></td>
+	                                        <td class="capacity-cell"><c:out value="${room.capacity}" />명</td>
+	                                        <td>
+	                                            <div class="room-facility-container">
+	                                                <c:forEach var="facility" items="${room.facilities}">
+	                                                    <span class="room-facility"><c:out value="${facility.name}" /></span>
+	                                                </c:forEach>
+	                                            </div>
+	                                        </td>
+	                                        <td>
+	                                            <span class="status-badge status-${room.status}">
+	                                                <c:choose>
+	                                                    <c:when test="${room.status eq 'available'}">사용 가능</c:when>
+	                                                    <c:when test="${room.status eq 'maintenance'}">점검 중</c:when>
+	                                                    <c:when test="${room.status eq 'disabled'}">사용 불가</c:when>
+	                                                    <c:otherwise><c:out value="${room.status}" /></c:otherwise>
+	                                                </c:choose>
+	                                            </span>
+	                                        </td>
+	                                        <td>
+	                                            <div class="flex gap-2">
+	                                                <button class="btn btn-secondary" onclick="editRoom('<c:out value="${room.roomIdx}" />')">
+	                                                    <i class="fas fa-edit"></i>
+	                                                </button>
+	                                                <button class="btn btn-danger" onclick="deleteRoom('<c:out value="${room.roomIdx}" />')">
+	                                                    <i class="fas fa-trash"></i>
+	                                                </button>
+	                                            </div>
+	                                        </td>
+	                                    </tr>
+	                                </c:forEach>
+	                            </c:when>
+	                            <c:otherwise>
+	                                <tr>
+	                                    <td colspan="6" class="text-center">등록된 회의실이 없습니다.</td>
+	                                </tr>
+	                            </c:otherwise>
+	                        </c:choose>
+	                    </tbody>
+	                </table>
+	            </div>
+	        </div>
+	    </div>
     </main>
 
     <!-- 회의실 추가/수정 모달 -->

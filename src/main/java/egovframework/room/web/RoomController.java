@@ -304,6 +304,10 @@ public class RoomController {
 	        return "forward:/main.do"; // 로그인 페이지로 리디렉션
 	    }
 	    
+	    // 회의실 목록 조회
+	    List<RoomVO> roomList = roomService.selectRoomList(new RoomVO());
+        model.addAttribute("roomList", roomList);
+	    
 		// 시설 목록 조회
 		List<FacilityVO> facilityList = roomService.selectAllFacilities();
         model.addAttribute("facilityList", facilityList);

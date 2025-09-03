@@ -98,11 +98,22 @@
 	<select id="selectRoomList" parameterType="roomVO"
 		resultMap="room">
 		SELECT
-		room_idx, name, capacity, floor, number, status, description
-		FROM rooms
+		    A.room_idx,
+		    A.name,
+		    A.capacity,
+		    A.floor,
+		    A.number,
+		    A.status,
+		    A.description,
+		    B.facility_idx,
+		    C.name AS facility_name
+		FROM rooms A
+		LEFT JOIN room_facility B 
+		ON A.room_idx = B.room_idx
+		LEFT JOIN facility C 
+		ON B.facility_idx = C.facility_idx
 		WHERE 1=1
-		ORDER BY room_idx DESC
-		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		ORDER BY A.room_idx, C.facility_idx
 	</select>
 
 	<select id="selectRoomListTotCnt" parameterType="roomVO"

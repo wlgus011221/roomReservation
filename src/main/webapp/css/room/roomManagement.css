@@ -99,12 +99,46 @@ td div {
 	margin-bottom: 0.25rem;
 }
 
+td.capacity-cell {
+    min-width: 100px;       /* 원하는 최소 너비 */
+    text-align: center;    /* 가운데 정렬 */
+}
+
+.name-cell {
+	max-width: 130px;
+}
+
+/* 시설 배지 스타일 */
+.room-facility {
+	display: inline-block;
+	background-color: #EFF6FF; /* 연한 파랑 */
+	color: #1E3A8A; /* 진한 파랑 */
+	font-size: 0.75rem;
+	font-weight: 500;
+	padding: 0.25rem 0.5rem;
+	border-radius: 12px;
+	margin: 0 0.25rem 0.25rem 0; /* 오른쪽/아래 여백 */
+	white-space: nowrap;
+}
+
+/* flex 컨테이너 유지 */
+.room-facility-container {
+	display: flex;
+	flex-wrap: wrap; /* 여러 줄로 자동 줄바꿈 */
+	gap: 0.25rem; /* 요소 사이 간격 */
+	max-width: 350px;
+}
+
 td .status-badge {
 	padding: 0.25rem 0.5rem;
 	border-radius: 4px;
 	font-size: 0.75rem;
 	font-weight: 500;
-	display: inline-block;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;    
+	min-width: 70px;
+	text-align: center;
 }
 
 .status-available {
