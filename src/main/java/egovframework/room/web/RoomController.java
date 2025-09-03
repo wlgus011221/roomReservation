@@ -7,7 +7,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -364,7 +366,22 @@ public class RoomController {
         // 5. 처리 후 페이지 리다이렉션
         return "forward:/roomManagement.do";
     }
-
+	
+	@PostMapping("/deleteRoom.do")
+    @ResponseBody // 이 어노테이션은 메서드의 반환 값을 HTTP 응답 본문에 직접 담아 보냅니다.
+    public String deleteRoom(@RequestParam("roomIdx") int roomIdx) {
+        try {
+            RoomVO roomVO = new RoomVO();
+            roomVO.setRoomIdx(roomIdx);
+            roomService.deleteRoom(roomVO);
+            return "success"; // 삭제 성공 시 "success" 문자열 반환
+        } catch (Exception e) {
+            // 예외 발생 시 로그를 남기는 것이 좋습니다.
+            e.printStackTrace();
+            return "fail"; // 삭제 실패 시 "fail" 문자열 반환
+        }
+    }
+	
 	@RequestMapping(value = "/test.do", produces = "text/html; charset=UTF-8")
 	@ResponseBody
 	public String test(ModelMap model) throws Exception {
