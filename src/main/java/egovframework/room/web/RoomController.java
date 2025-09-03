@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import egovframework.room.service.DepartmentService;
 import egovframework.room.service.DepartmentVO;
 import egovframework.room.service.FacilityVO;
 import egovframework.room.service.RoomService;
+import egovframework.room.service.RoomVO;
 import egovframework.room.service.UserService;
 import egovframework.room.service.UserVO;
 import egovframework.room.service.impl.DepartmentMapper;
@@ -294,7 +296,14 @@ public class RoomController {
 	}
 
 	@RequestMapping(value = "/roomManagement.do")
-	public String roomManagement(ModelMap model) throws Exception {
+	public String roomManagement(HttpSession session, Model model) throws Exception {
+		Integer userIdx = (Integer) session.getAttribute("userIdx");
+	    String userType = (String) session.getAttribute("userType");
+	    if (userIdx == null || userType.equals("USER")) {
+	        model.addAttribute("msg", "접근할 수 없습니다.");
+	        return "forward:/main.do"; // 로그인 페이지로 리디렉션
+	    }
+	    
 		// 시설 목록 조회
 		List<FacilityVO> facilityList = roomService.selectAllFacilities();
         model.addAttribute("facilityList", facilityList);
@@ -303,18 +312,54 @@ public class RoomController {
 	}
 	
 	@PostMapping("/addRoom.do")
-	public String addRoom(HttpSession session, Model model) throws Exception {
+    public String addRoom(
+        @RequestParam("name") String name,
+        @RequestParam("capacity") int capacity,
+        @RequestParam("floor") int floor,
+        @RequestParam("number") String number,
+        @RequestParam(value = "facilities", required = false) List<String> facilities,
+        @RequestParam("status") String status,
+        @RequestParam("description") String description,
+        HttpSession session,
+        Model model) throws Exception {
 
-	    Integer userIdx = (Integer) session.getAttribute("userIdx");
-	    String userType = (String) session.getAttribute("userType");
-	    if (userIdx == null || userType.equals("USER")) {
-	        model.addAttribute("msg", "로그인 상태가 아닙니다.");
-	        return "forward:/myPage.do"; // 로그인 페이지로 리디렉션
-	    }
-	    
-	    // 처리 후 회의실 관리 페이지로 다시 포워딩
-	    return "forward:/roomManagement.do";
-	}
+        // 1. 관리자 권한 확인
+        Integer userIdx = (Integer) session.getAttribute("userIdx");
+        String userType = (String) session.getAttribute("userType");
+        if (userIdx == null || !userType.equals("ADMIN")) {
+            model.addAttribute("msg", "관리자 권한이 없습니다.");
+            return "forward:/main.do";
+        }
+        
+        // 2. RoomVO 객체 생성 및 폼 데이터 설정
+        RoomVO roomVO = new RoomVO();
+        roomVO.setName(name);
+        roomVO.setCapacity(capacity);
+        roomVO.setFloor(floor);
+        roomVO.setNumber(number);
+        roomVO.setStatus(status);
+        roomVO.setDescription(description);
+
+        // 3. 폼에서 넘어온 String 리스트를 FacilityVO 리스트로 변환
+        //    (MyBatis의 foreach를 사용하기 위함)
+        List<FacilityVO> facilityList = new ArrayList<>();
+        if (facilities != null) {
+            for (String facilityIdxStr : facilities) {
+                FacilityVO facility = new FacilityVO();
+                facility.setFacilityIdx(Integer.parseInt(facilityIdxStr));
+                facilityList.add(facility);
+            }
+        }
+        roomVO.setFacilities(facilityList); // RoomVO의 facilities 필드에 설정
+        
+        // 4. 서비스 호출하여 회의실 정보 등록
+        String roomIdx = roomService.insertRoom(roomVO);
+        
+        model.addAttribute("msg", "회의실 추가 했습니다.");
+        
+        // 5. 처리 후 페이지 리다이렉션
+        return "forward:/roomManagement.do";
+    }
 
 	@RequestMapping(value = "/test.do", produces = "text/html; charset=UTF-8")
 	@ResponseBody

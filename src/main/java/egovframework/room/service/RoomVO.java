@@ -27,7 +27,10 @@ public class RoomVO extends RoomDefaultVO { // 페이징을 위한 상위 클래
     /** 설명 */
     private String description;
 
-    /** 시설 목록 (조인용) */
+    /** 시설 목록 (폼 전송용) */
+    private List<String> formFacilities;
+    
+    /** 시설 목록 (DB 저장용) */
     private List<FacilityVO> facilities;
 
     // Getter & Setter
@@ -87,6 +90,15 @@ public class RoomVO extends RoomDefaultVO { // 페이징을 위한 상위 클래
         this.description = description;
     }
 
+    public List<String> getFormFacilities() {
+        return formFacilities;
+    }
+
+    public void setFormFacilities(List<String> formFacilities) {
+        this.formFacilities = formFacilities;
+    }
+
+    // Getter & Setter for facilities
     public List<FacilityVO> getFacilities() {
         return facilities;
     }
@@ -98,7 +110,7 @@ public class RoomVO extends RoomDefaultVO { // 페이징을 위한 상위 클래
     @Override
 	public String toString() {
 		return "RoomVO [roomIdx=" + roomIdx + ", name=" + name + ", capacity=" + capacity + ", floor=" + floor
-				+ ", number=" + number + ", status=" + status + ", description=" + description + ", facilities="
-				+ facilities + "]";
+				+ ", number=" + number + ", status=" + status + ", description=" + description + ", formFacilities="
+				+ formFacilities + ", facilities=" + facilities + "]";
 	}
 }

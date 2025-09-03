@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import egovframework.room.service.FacilityVO;
 import egovframework.room.service.RoomService;
 import egovframework.room.service.RoomVO;
-import egovframework.room.service.FacilityVO;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -22,17 +22,26 @@ public class RoomServiceImpl extends EgovAbstractServiceImpl implements RoomServ
     private final RoomMapper roomMapper;
 
     @Override
+    @Transactional
     public String insertRoom(RoomVO vo) throws Exception {
-        // 1. rooms 테이블에 회의실 정보 등록
-        roomMapper.insertRoom(vo); 
-        
-        // 2. room_facility 테이블에 시설 정보 등록 (선택된 시설이 있을 경우)
-        if (vo.getFacilities() != null && !vo.getFacilities().isEmpty()) {
-             // MyBatis에서 foreach를 사용해 벌크 인서트 처리
-            roomMapper.insertRoomFacility(vo);
+        try {
+            // 1. rooms 테이블에 회의실 정보 등록
+            roomMapper.insertRoom(vo); 
+            
+            LOGGER.debug("Generated roomIdx: " + vo.getRoomIdx());
+            LOGGER.debug("Facilities list size: " + (vo.getFacilities() != null ? vo.getFacilities().size() : 0));
+                    
+            // 2. room_facility 테이블에 시설 정보 등록 (선택된 시설이 있을 경우)
+            if (vo.getFacilities() != null && !vo.getFacilities().isEmpty()) {
+                 // MyBatis에서 foreach를 사용해 벌크 인서트 처리
+                roomMapper.insertRoomFacility(vo);
+            }
+            
+            return String.valueOf(vo.getRoomIdx());
+        } catch (Exception e) {
+            LOGGER.error("Failed to insert room or facilities: ", e);
+            throw e; // Re-throw the exception to trigger transaction rollback
         }
-        
-        return String.valueOf(vo.getRoomIdx());
     }
 
     @Override

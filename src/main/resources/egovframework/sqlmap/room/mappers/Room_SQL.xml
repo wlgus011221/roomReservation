@@ -4,95 +4,114 @@
 
 <mapper namespace="egovframework.room.service.impl.RoomMapper">
 
-    <resultMap id="room" type="roomVO">
-        <result property="roomIdx" column="room_idx"/>
-        <result property="name" column="name"/>
-        <result property="capacity" column="capacity"/>
-        <result property="floor" column="floor"/>
-        <result property="number" column="number"/>
-        <result property="status" column="status"/>
-        <result property="description" column="description"/>
-        <collection property="facilities" ofType="egovframework.room.service.FacilityVO" javaType="java.util.ArrayList">
-            <id property="facilityIdx" column="facility_idx"/>
-            <result property="name" column="facility_name"/>
-        </collection>
-    </resultMap>
+	<resultMap id="room" type="roomVO">
+		<result property="roomIdx" column="room_idx" />
+		<result property="name" column="name" />
+		<result property="capacity" column="capacity" />
+		<result property="floor" column="floor" />
+		<result property="number" column="number" />
+		<result property="status" column="status" />
+		<result property="description" column="description" />
+		<collection property="facilities"
+			ofType="egovframework.room.service.FacilityVO"
+			javaType="java.util.ArrayList">
+			<id property="facilityIdx" column="facility_idx" />
+			<result property="name" column="facility_name" />
+		</collection>
+	</resultMap>
 
-    <resultMap id="facility" type="facilityVO">
-        <id property="facilityIdx" column="facility_idx"/>
-        <result property="name" column="name"/>
-    </resultMap>
+	<resultMap id="facility" type="facilityVO">
+		<id property="facilityIdx" column="facility_idx" />
+		<result property="name" column="name" />
+	</resultMap>
 
-    <insert id="insertRoom" parameterType="roomVO" useGeneratedKeys="true" keyProperty="roomIdx">
-        INSERT INTO rooms (
-            name, capacity, floor, number, status, description
-        ) VALUES (
-            #{name}, #{capacity}, #{floor}, #{number}, #{status}, #{description}
-        )
-    </insert>
+	<insert id="insertRoom" parameterType="roomVO"
+		useGeneratedKeys="true" keyProperty="roomIdx">
+		INSERT INTO rooms(
+			name, 
+			capacity, 
+			floor, 
+			number, 
+			status, 
+			description
+		)
+		VALUES(
+			#{name}, 
+			#{capacity}, 
+			#{floor}, 
+			#{number}, 
+			#{status}, 
+			#{description}
+		)
+	</insert>
 
-    <insert id="insertRoomFacility" parameterType="roomVO">
-        INSERT INTO room_facility (room_idx, facility_idx)
-        VALUES
-        <foreach collection="facilities" item="facility" separator=",">
-            (#{roomIdx}, #{facility.facilityIdx})
-        </foreach>
-    </insert>
+	<insert id="insertRoomFacility" parameterType="roomVO">
+		INSERT INTO room_facility (
+			room_idx, 
+			facility_idx
+		)
+		VALUES
+		<foreach collection="facilities" item="facility" separator=",">
+			(#{roomIdx}, #{facility.facilityIdx})
+		</foreach>
+	</insert>
 
-    <update id="updateRoom" parameterType="roomVO">
-        UPDATE rooms
-        SET
-            name = #{name},
-            capacity = #{capacity},
-            floor = #{floor},
-            number = #{number},
-            status = #{status},
-            description = #{description}
-        WHERE room_idx = #{roomIdx}
-    </update>
+	<update id="updateRoom" parameterType="roomVO">
+		UPDATE rooms
+		SET
+		name = #{name},
+		capacity = #{capacity},
+		floor = #{floor},
+		number = #{number},
+		status = #{status},
+		description = #{description}
+		WHERE room_idx = #{roomIdx}
+	</update>
 
-    <delete id="deleteRoomFacility" parameterType="roomVO">
-        DELETE FROM room_facility
-        WHERE room_idx = #{roomIdx}
-    </delete>
+	<delete id="deleteRoomFacility" parameterType="roomVO">
+		DELETE FROM room_facility
+		WHERE room_idx = #{roomIdx}
+	</delete>
 
-    <delete id="deleteRoom" parameterType="roomVO">
-        DELETE FROM rooms
-        WHERE room_idx = #{roomIdx}
-    </delete>
+	<delete id="deleteRoom" parameterType="roomVO">
+		DELETE FROM rooms
+		WHERE room_idx = #{roomIdx}
+	</delete>
 
-    <select id="selectRoom" parameterType="roomVO" resultMap="room">
-        SELECT
-            A.room_idx,
-            A.name,
-            A.capacity,
-            A.floor,
-            A.number,
-            A.status,
-            A.description,
-            B.facility_idx,
-            C.name AS facility_name
-        FROM rooms A
-        LEFT JOIN room_facility B ON A.room_idx = B.room_idx
-        LEFT JOIN facility C ON B.facility_idx = C.facility_idx
-        WHERE A.room_idx = #{roomIdx}
-    </select>
+	<select id="selectRoom" parameterType="roomVO" resultMap="room">
+		SELECT
+		A.room_idx,
+		A.name,
+		A.capacity,
+		A.floor,
+		A.number,
+		A.status,
+		A.description,
+		B.facility_idx,
+		C.name AS facility_name
+		FROM rooms A
+		LEFT JOIN room_facility B ON A.room_idx = B.room_idx
+		LEFT JOIN facility C ON B.facility_idx = C.facility_idx
+		WHERE A.room_idx = #{roomIdx}
+	</select>
 
-    <select id="selectRoomList" parameterType="roomVO" resultMap="room">
-        SELECT
-            room_idx, name, capacity, floor, number, status, description
-        FROM rooms
-        WHERE 1=1
-        ORDER BY room_idx DESC
-        LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
-    </select>
+	<select id="selectRoomList" parameterType="roomVO"
+		resultMap="room">
+		SELECT
+		room_idx, name, capacity, floor, number, status, description
+		FROM rooms
+		WHERE 1=1
+		ORDER BY room_idx DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
 
-    <select id="selectRoomListTotCnt" parameterType="roomVO" resultType="int">
-        SELECT COUNT(*) FROM rooms
-    </select>
+	<select id="selectRoomListTotCnt" parameterType="roomVO"
+		resultType="int">
+		SELECT COUNT(*) FROM rooms
+	</select>
 
-    <select id="selectAllFacilities" resultMap="facility">
-        SELECT facility_idx, name 
-        FROM facility
-    </select>
+	<select id="selectAllFacilities" resultMap="facility">
+		SELECT facility_idx, name
+		FROM facility
+	</select>
 </mapper>
