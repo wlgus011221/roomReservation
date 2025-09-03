@@ -8,5 +8,8 @@
         <typeAlias alias="departmentVO" type="egovframework.room.service.DepartmentVO"/>
         <typeAlias alias="userSearchVO" type="egovframework.room.service.UserDefaultVO"/>
         <typeAlias alias="userVO" type="egovframework.room.service.UserVO"/>
+        <typeAlias alias="facilityVO" type="egovframework.room.service.FacilityVO"/>
+        <typeAlias alias="roomSearchVO" type="egovframework.room.service.RoomDefaultVO"/>
+        <typeAlias alias="roomVO" type="egovframework.room.service.RoomVO"/>
     </typeAliases>
 </configuration>

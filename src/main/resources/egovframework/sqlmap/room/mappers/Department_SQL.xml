@@ -8,7 +8,7 @@
         <result property="departmentIdx" column="department_idx"/>
         <result property="name" column="name"/>
     </resultMap>
-
+	
     <!-- 부서 등록 -->
     <insert id="insertDepartment" parameterType="departmentVO" useGeneratedKeys="true" keyProperty="departmentIdx">
         INSERT INTO department (name) VALUES (#{name})

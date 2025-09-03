@@ -159,7 +159,7 @@
     </main>
 
     <!-- 회의실 추가/수정 모달 -->
-    <div id="roomModal" class="hidden"">
+    <div id="roomModal" class="hidden">
         <div class="card">
             <div class="card-header">
                 <div class="flex items-center justify-between">
@@ -168,22 +168,22 @@
                 </div>
             </div>
             <div class="card-content">
-                <form>
+                <form id="roomAddForm" action="addRoom.do" method="post">
                     <div class="grid grid-cols-2 gap-4">
                         <div class="form-group">
                             <label class="form-label">회의실명 *</label>
-                            <input type="text" class="form-input" placeholder="회의실명" required>
+                            <input type="text" name="name" class="form-input" placeholder="회의실명" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">수용인원 *</label>
-                            <input type="number" class="form-input" placeholder="인원수" min="1" required>
+                            <input type="number" name="capacity" class="form-input" placeholder="인원수" min="1" required>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div class="form-group">
                             <label class="form-label">층 *</label>
-                            <select class="form-select" required>
+                            <select class="form-select" name="floor" required>
                                 <option value="">층 선택</option>
                                 <option value="1">1층</option>
                                 <option value="2">2층</option>
@@ -192,35 +192,25 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">호실 *</label>
-                            <input type="text" class="form-input" placeholder="예: 201호" required>
+                            <input type="text" name="number" class="form-input" placeholder="예: 201호" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">시설</label>
                         <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="projector" value="projector">
-                                <label for="projector">프로젝터</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="tv" value="tv">
-                                <label for="tv">TV</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="whiteboard" value="whiteboard">
-                                <label for="whiteboard">화이트보드</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="videoconf" value="videoconf">
-                                <label for="videoconf">화상회의</label>
-                            </div>
+                            <c:forEach var="facility" items="${facilityList}">
+							    <div class="checkbox-item">
+							        <input type="checkbox" id="facility_${facility.facilityIdx}" name="facilities" value="${facility.facilityIdx}">
+							        <label for="facility_${facility.facilityIdx}">${facility.name}</label>
+							    </div>
+							</c:forEach>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">상태</label>
-                        <select class="form-select">
+                        <select class="form-select" name="status">
                             <option value="available">사용 가능</option>
                             <option value="maintenance">점검 중</option>
                             <option value="disabled">사용 불가</option>
@@ -229,7 +219,7 @@
 
                     <div class="form-group">
                         <label class="form-label">설명</label>
-                        <textarea class="form-textarea" placeholder="회의실에 대한 추가 설명"></textarea>
+                        <textarea class="form-textarea" name="description" placeholder="회의실에 대한 추가 설명"></textarea>
                     </div>
 
                     <div class="flex justify-end gap-3">

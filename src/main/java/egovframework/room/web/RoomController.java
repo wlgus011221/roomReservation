@@ -25,9 +25,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import egovframework.room.service.DepartmentService;
 import egovframework.room.service.DepartmentVO;
+import egovframework.room.service.FacilityVO;
+import egovframework.room.service.RoomService;
 import egovframework.room.service.UserService;
 import egovframework.room.service.UserVO;
 import egovframework.room.service.impl.DepartmentMapper;
+import egovframework.room.service.impl.RoomMapper;
 import egovframework.room.service.impl.UserMapper;
 
 @Controller
@@ -47,6 +50,12 @@ public class RoomController {
 
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private RoomService roomService;
+
+	@Autowired
+	private RoomMapper roomMapper;
 
 	/**
 	 * 비밀번호 SHA-512 암호화
@@ -286,7 +295,25 @@ public class RoomController {
 
 	@RequestMapping(value = "/roomManagement.do")
 	public String roomManagement(ModelMap model) throws Exception {
+		// 시설 목록 조회
+		List<FacilityVO> facilityList = roomService.selectAllFacilities();
+        model.addAttribute("facilityList", facilityList);
+        
 		return "/roomManagement";
+	}
+	
+	@PostMapping("/addRoom.do")
+	public String addRoom(HttpSession session, Model model) throws Exception {
+
+	    Integer userIdx = (Integer) session.getAttribute("userIdx");
+	    String userType = (String) session.getAttribute("userType");
+	    if (userIdx == null || userType.equals("USER")) {
+	        model.addAttribute("msg", "로그인 상태가 아닙니다.");
+	        return "forward:/myPage.do"; // 로그인 페이지로 리디렉션
+	    }
+	    
+	    // 처리 후 회의실 관리 페이지로 다시 포워딩
+	    return "forward:/roomManagement.do";
 	}
 
 	@RequestMapping(value = "/test.do", produces = "text/html; charset=UTF-8")
