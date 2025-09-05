@@ -218,14 +218,119 @@
 		}
 
 		function openAddModal() {
-			document.getElementById('modalTitle').textContent = '회의실 추가';
+			resetForm();
+		    document.getElementById('modalTitle').textContent = '회의실 추가';
+		    const form = document.getElementById('roomAddForm');
+		    form.action = 'addRoom.do';
+		    document.getElementById('roomModal').classList.remove('hidden');
+		}
+		
+		function openUpdateModal() {
+			document.getElementById('modalTitle').textContent = '회의실 수정';
+			const form = document.getElementById('roomAddForm');
+		    form.action = 'updateRoom.do';
 			document.getElementById('roomModal').classList.remove('hidden');
 		}
 
+		function redirectToMain(message) {
+			alert(message);
+		    window.location.href = '/main.do';
+		}
+
+		function resetForm() {
+			const form = document.getElementById('roomAddForm');
+			form.reset();
+			
+			// hidden 필드 제거 (수정 모드에서 추가되는 roomIdx 필드)
+			const hiddenInput = form.querySelector('input[name="roomIdx"]');
+			if (hiddenInput) {
+				hiddenInput.remove();
+			}
+			
+			// 모든 체크박스 초기화
+			form.querySelectorAll('input[name="facilities"]').forEach(checkbox => {
+				checkbox.checked = false;
+			});
+		}
+
 		function editRoom(id) {
-			document.getElementById('modalTitle').textContent = '회의실 수정';
-			document.getElementById('roomModal').classList.remove('hidden');
-			// 실제로는 여기서 해당 회의실 데이터를 로드해야 함
+		    // console.log("editRoom 호출됨, id:", id);
+		    
+		    $.ajax({
+		        url: '/selectRoom.do',
+		        type: 'GET',
+		        data: { roomIdx: id },
+		        success: function(response) {
+		            // console.log("AJAX 성공!");
+		            // console.log("응답 타입:", typeof response);
+		            // console.log("응답 내용:", response);
+		            
+		            // 응답이 문자열인 경우 JSON 파싱 시도
+		            if (typeof response === 'string') {
+		                try {
+		                    response = JSON.parse(response);
+		                    // console.log("JSON 파싱 후:", response);
+		                } catch (e) {
+		                    console.error("JSON 파싱 실패:", e);
+		                    // console.log("원본 응답:", response);
+		                    return;
+		                }
+		            }
+		            
+		            if (response.result === 'success') {
+		                // console.log("성공 응답 - 데이터:", response.data);
+		                // alert("데이터 로드 성공!\n회의실명: " + response.data.name);
+		                fillModalForm(response.data);
+		                openUpdateModal();
+		            } else {
+		                // console.log("실패 응답:", response.msg);
+		                alert("실패: " + response.msg);
+		            }
+		        },
+		        error: function(xhr, status, error) {
+		            // console.log("AJAX 에러 발생");
+		            // console.log("상태:", xhr.status);
+		            // console.log("응답 텍스트:", xhr.responseText);
+		            console.log("에러:", error);
+		            
+		            alert("에러 발생: " + xhr.status + " - " + error);
+		        }
+		    });
+		}
+		
+		function fillModalForm(roomData) {
+		    const form = document.getElementById('roomAddForm');
+
+		    // 일반 텍스트 및 숫자 필드 채우기
+		    form.querySelector('input[name="name"]').value = roomData.name || '';
+		    form.querySelector('input[name="capacity"]').value = roomData.capacity || '';
+		    form.querySelector('select[name="floor"]').value = roomData.floor || '';
+		    form.querySelector('input[name="number"]').value = roomData.number || '';
+		    form.querySelector('select[name="status"]').value = roomData.status || '';
+		    form.querySelector('textarea[name="description"]').value = roomData.description || '';
+
+		    // 체크박스 필드 처리 (중요)
+		    const facilities = roomData.facilities || [];
+		    form.querySelectorAll('input[name="facilities"]').forEach(checkbox => {
+		        // 기존 선택 상태 초기화
+		        checkbox.checked = false;
+		        // 서버에서 받은 시설 목록에 해당 체크박스의 value가 포함되어 있으면 체크
+		        facilities.forEach(facility => {
+		            if (String(facility.facilityIdx) === checkbox.value) {
+		                checkbox.checked = true;
+		            }
+		        });
+		    });
+
+		    // 수정 모드임을 나타내는 hidden 필드 추가
+		    let hiddenInput = form.querySelector('input[name="roomIdx"]');
+		    if (!hiddenInput) {
+		        hiddenInput = document.createElement('input');
+		        hiddenInput.type = 'hidden';
+		        hiddenInput.name = 'roomIdx';
+		        form.appendChild(hiddenInput);
+		    }
+		    hiddenInput.value = roomData.roomIdx;
 		}
 
 		function deleteRoom(id) {

@@ -22,6 +22,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -380,6 +381,130 @@ public class RoomController {
             e.printStackTrace();
             return "fail"; // 삭제 실패 시 "fail" 문자열 반환
         }
+    }
+	
+	@RequestMapping(value = "/selectRoom.do", 
+            method = {RequestMethod.GET, RequestMethod.POST},
+            produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public Map<String, Object> selectRoom(@RequestParam("roomIdx") int roomIdx, HttpSession session) {
+		Map<String, Object> response = new HashMap<>();
+		
+		System.out.println("=== selectRoom 요청 받음 ===");
+		System.out.println("roomIdx: " + roomIdx);
+		
+		// 세션 정보 확인
+		Integer userIdx = (Integer) session.getAttribute("userIdx");
+		String userType = (String) session.getAttribute("userType");
+		
+		System.out.println("userIdx: " + userIdx);
+		System.out.println("userType: " + userType);
+		
+		// 관리자 권한 확인
+		if (userIdx == null || !userType.equals("ADMIN")) {
+		    System.out.println("권한 체크 실패");
+		    response.put("result", "error");
+		    response.put("msg", "접근 권한이 없습니다.");
+		    return response;
+		}
+		
+		RoomVO roomVO = new RoomVO();
+		roomVO.setRoomIdx(roomIdx);
+		
+		try {
+		    System.out.println("DB 조회 시작");
+		    RoomVO roomData = roomService.selectRoom(roomVO);
+		    System.out.println("DB 조회 완료: " + roomData.toString());
+		    
+		    // JSON 직렬화를 위해 Map으로 변환
+		    Map<String, Object> roomMap = new HashMap<>();
+		    roomMap.put("roomIdx", roomData.getRoomIdx());
+		    roomMap.put("name", roomData.getName());
+		    roomMap.put("capacity", roomData.getCapacity());
+		    roomMap.put("floor", roomData.getFloor());
+		    roomMap.put("number", roomData.getNumber());
+		    roomMap.put("status", roomData.getStatus());
+		    roomMap.put("description", roomData.getDescription());
+		    
+		    // 시설 목록도 Map 리스트로 변환
+		    List<Map<String, Object>> facilityMapList = new ArrayList<>();
+		    if (roomData.getFacilities() != null) {
+		        for (FacilityVO facility : roomData.getFacilities()) {
+		            Map<String, Object> facilityMap = new HashMap<>();
+		            facilityMap.put("facilityIdx", facility.getFacilityIdx());
+		            facilityMap.put("name", facility.getName());
+		            facilityMapList.add(facilityMap);
+		        }
+		    }
+		    roomMap.put("facilities", facilityMapList);
+		    
+		    response.put("result", "success");
+		    response.put("data", roomMap); // Map으로 변환된 데이터 사용
+		    
+		    System.out.println("응답 데이터 준비 완료");
+		    
+		} catch (Exception e) {
+		    System.out.println("DB 조회 중 예외 발생: " + e.getMessage());
+		    e.printStackTrace();
+		    
+		    response.put("result", "error");
+		    response.put("msg", "데이터 조회 중 오류가 발생했습니다: " + e.getMessage());
+		}
+		
+		System.out.println("=== selectRoom 응답 반환 ===");
+		return response;
+	}
+	
+	@PostMapping("/updateRoom.do")
+    public String updateRoom(
+		@RequestParam("roomIdx") int roomIdx,
+        @RequestParam("name") String name,
+        @RequestParam("capacity") int capacity,
+        @RequestParam("floor") int floor,
+        @RequestParam("number") String number,
+        @RequestParam(value = "facilities", required = false) List<String> facilities,
+        @RequestParam("status") String status,
+        @RequestParam("description") String description,
+        HttpSession session,
+        Model model) throws Exception {
+
+        // 1. 관리자 권한 확인
+        Integer userIdx = (Integer) session.getAttribute("userIdx");
+        String userType = (String) session.getAttribute("userType");
+        if (userIdx == null || !userType.equals("ADMIN")) {
+            model.addAttribute("msg", "관리자 권한이 없습니다.");
+            return "forward:/main.do";
+        }
+        
+        // 2. RoomVO 객체 생성 및 폼 데이터 설정
+        RoomVO roomVO = new RoomVO();
+        roomVO.setRoomIdx(roomIdx);
+        roomVO.setName(name);
+        roomVO.setCapacity(capacity);
+        roomVO.setFloor(floor);
+        roomVO.setNumber(number);
+        roomVO.setStatus(status);
+        roomVO.setDescription(description);
+
+        // 3. 폼에서 넘어온 String 리스트를 FacilityVO 리스트로 변환
+        //    (MyBatis의 foreach를 사용하기 위함)
+        List<FacilityVO> facilityList = new ArrayList<>();
+        if (facilities != null) {
+            for (String facilityIdxStr : facilities) {
+                FacilityVO facility = new FacilityVO();
+                facility.setFacilityIdx(Integer.parseInt(facilityIdxStr));
+                facilityList.add(facility);
+            }
+        }
+        roomVO.setFacilities(facilityList); // RoomVO의 facilities 필드에 설정
+        
+        // 4. 서비스 호출하여 회의실 정보 등록
+        roomService.updateRoom(roomVO);
+        
+        model.addAttribute("msg", "회의실 정보를 수정했습니다.");
+        
+        // 5. 처리 후 페이지 리다이렉션
+        return "forward:/roomManagement.do";
     }
 	
 	@RequestMapping(value = "/test.do", produces = "text/html; charset=UTF-8")

@@ -3,7 +3,7 @@ package egovframework.room.service;
 public class FacilityVO {
 
     private static final long serialVersionUID = 1L;
-
+    
     /** 시설 인덱스 */
     private int facilityIdx;
     
