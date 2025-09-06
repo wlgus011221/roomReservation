@@ -32,11 +32,9 @@
                             <label class="form-label">회의실 *</label>
                             <select class="form-select">
                                 <option value="">회의실을 선택하세요</option>
-                                <option value="conference-a">컨퍼런스룸 A (10명)</option>
-                                <option value="conference-b">컨퍼런스룸 B (6명)</option>
-                                <option value="meeting-1">미팅룸 1 (4명)</option>
-                                <option value="meeting-2">미팅룸 2 (4명)</option>
-                                <option value="boardroom">이사회실 (12명)</option>
+                                <c:forEach var="room" items="${roomList}">
+		                            <option value="${room.roomIdx}">${room.name}</option>
+		                        </c:forEach>
                             </select>
                         </div>
                     </div>
@@ -44,7 +42,7 @@
                     <div class="grid grid-cols-2 gap-6">
                         <div class="form-group">
                             <label class="form-label">예약자 (소속) *</label>
-                            <input type="text" class="form-input" placeholder="홍길동 (개발팀)">
+                            <input type="text" class="form-input" value="${name} (${department})" readonly>
                         </div>
                         <div class="form-group">
                             <label class="form-label">참석 인원 *</label>

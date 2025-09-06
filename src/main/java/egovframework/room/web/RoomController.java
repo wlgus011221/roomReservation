@@ -115,12 +115,14 @@ public class RoomController {
 			request.getSession().setAttribute("name", resultVO.getName());
 			request.getSession().setAttribute("userType", resultVO.getUserType());
 			request.getSession().setAttribute("userIdx", resultVO.getUserIdx());
+			request.getSession().setAttribute("department", resultVO.getDepartmentName());
 			return "redirect:/main.do";
 		} else {
 			request.getSession().setAttribute("id", "");
 			request.getSession().setAttribute("name", "");
 			request.getSession().setAttribute("userType", "");
 			request.getSession().setAttribute("userIdx", "");
+			request.getSession().setAttribute("department", "");
 			model.addAttribute("msg", "사용자 정보가 올바르지 않습니다.");
 			return "forward:/login.do";
 		}
@@ -510,11 +512,21 @@ public class RoomController {
 	
 	@RequestMapping(value = "/reservation.do")
 	public String booking(ModelMap model, HttpSession session) throws Exception {
-		// 1. 관리자 권한 확인
+		// user 정보 가져오기
         Integer userIdx = (Integer) session.getAttribute("userIdx");
         String userType = (String) session.getAttribute("userType");
-
+        String name = (String) session.getAttribute("name");
+        String department = (String) session.getAttribute("department");
+        
+        model.addAttribute("userIdx", userIdx);
         model.addAttribute("userType", userType);
+        model.addAttribute("name", name);
+        model.addAttribute("department", department);
+        
+	    // 회의실 목록 조회
+	    List<RoomVO> roomList = roomService.selectRoomList(new RoomVO());
+        model.addAttribute("roomList", roomList);
+	    
         
 		return "/reservation";
 	}

@@ -114,11 +114,17 @@
 	
 	<!-- 로그인 체크 -->
 	<select id="selectLoginCheck" parameterType="userVO" resultMap="user">
-		SELECT id, name, user_type, user_idx
-		FROM users
-		WHERE 1=1
-		AND id = #{id}
-		AND passwd = #{passwd}
+		SELECT 
+	        u.id, 
+	        u.name, 
+	        u.user_type, 
+	        u.user_idx,
+	        d.name as department_name  
+	    FROM users u
+	    LEFT JOIN department d ON u.department_idx = d.department_idx
+	    WHERE 1=1
+	    AND u.id = #{id}
+	    AND u.passwd = #{passwd}
 	</select>
 	
 	<!-- 비밀번호 변경 -->
