@@ -9,5 +9,7 @@
         <typeAlias alias="userVO" type="egovframework.room.service.UserVO"/>
         <typeAlias alias="facilityVO" type="egovframework.room.service.FacilityVO"/>
         <typeAlias alias="roomVO" type="egovframework.room.service.RoomVO"/>
+        <typeAlias alias="reservationVO" type="egovframework.room.service.ReservationVO"/>
+        <typeAlias alias="recurringReservationVO" type="egovframework.room.service.RecurringReservationVO"/>
     </typeAliases>
 </configuration>
