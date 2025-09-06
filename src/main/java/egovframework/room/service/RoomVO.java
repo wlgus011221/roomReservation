@@ -2,7 +2,7 @@ package egovframework.room.service;
 
 import java.util.List;
 
-public class RoomVO extends RoomDefaultVO { // 페이징을 위한 상위 클래스 상속
+public class RoomVO extends DefaultVO { // 페이징을 위한 상위 클래스 상속
 
     private static final long serialVersionUID = 1L;
 

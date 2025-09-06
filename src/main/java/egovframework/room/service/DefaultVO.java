@@ -3,7 +3,7 @@ package egovframework.room.service;
 import java.io.Serializable;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class UserDefaultVO implements Serializable {
+public class DefaultVO implements Serializable {
 
     private static final long serialVersionUID = -858838578081269359L;
 
@@ -31,7 +31,7 @@ public class UserDefaultVO implements Serializable {
     /** recordCountPerPage */
     private int recordCountPerPage = 10;
 
-    // Getter & Setter (DepartmentDefaultVO와 동일)
+    // Getter & Setter
     public int getFirstIndex() {
         return firstIndex;
     }

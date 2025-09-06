@@ -1,6 +1,6 @@
 package egovframework.room.service;
 
-public class DepartmentVO extends DepartmentDefaultVO {
+public class DepartmentVO extends DefaultVO {
 
     private static final long serialVersionUID = 1L;
 
