@@ -299,11 +299,6 @@ public class RoomController {
 	    return "forward:/myPage.do";
 	}
 
-	@RequestMapping(value = "/booking.do")
-	public String booking(ModelMap model) throws Exception {
-		return "/booking";
-	}
-
 	@RequestMapping(value = "/roomManagement.do")
 	public String roomManagement(HttpSession session, Model model) throws Exception {
 		Integer userIdx = (Integer) session.getAttribute("userIdx");
@@ -512,6 +507,17 @@ public class RoomController {
         // 5. 처리 후 페이지 리다이렉션
         return "forward:/roomManagement.do";
     }
+	
+	@RequestMapping(value = "/reservation.do")
+	public String booking(ModelMap model, HttpSession session) throws Exception {
+		// 1. 관리자 권한 확인
+        Integer userIdx = (Integer) session.getAttribute("userIdx");
+        String userType = (String) session.getAttribute("userType");
+
+        model.addAttribute("userType", userType);
+        
+		return "/reservation";
+	}
 	
 	@RequestMapping(value = "/test.do", produces = "text/html; charset=UTF-8")
 	@ResponseBody

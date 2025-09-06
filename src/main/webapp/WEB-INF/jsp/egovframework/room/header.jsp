@@ -10,7 +10,7 @@
     <nav class="nav-menu">
         <a href="main.do" class="active">대시보드</a>
         <c:if test="${not empty sessionScope.name}">
-        	<a href="booking.do">예약하기</a>
+        	<a href="reservation.do">예약하기</a>
         	<a href="myPage.do">마이페이지</a>
         </c:if>
         <c:if test="${sessionScope.userType eq 'ADMIN'}">

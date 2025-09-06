@@ -151,3 +151,7 @@ form .form-group {
 	border-top: 1px solid var(--gray-200);
 	padding-top: 1.5rem;
 }
+
+.hidden {
+	display: none;
+}

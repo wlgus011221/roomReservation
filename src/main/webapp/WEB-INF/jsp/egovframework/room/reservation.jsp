@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회의실 예약 - Meeting Room Booking</title>
     <link rel="stylesheet" href="/css/room/common.css">
-    <link rel="stylesheet" href="/css/room/booking.css">
+    <link rel="stylesheet" href="/css/room/reservation.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -165,25 +165,27 @@
                     </div>
 
                     <!-- 관리자 전용 기능 -->
-                    <div class="border-top">
-                        <div class="flex items-center gap-3">
-                            <i class="fas fa-crown" style="color: var(--warning-color);"></i>
-                            <span class="form-label">관리자 전용 기능</span>
-                        </div>
-                        
-                        <div class="alert alert-warning">
-                            <h4>엑셀 파일 업로드 (통합 예약)</h4>
-                            <div class="flex flex-col gap-3">
-                                <input type="file" accept=".xlsx,.xls" class="form-input">
-                                <p style="font-size: 0.75rem;">
-                                    엑셀 파일 형식: 제목, 회의실, 예약자, 날짜, 시작시간, 종료시간, 참석인원, 회의내용
-                                </p>
-                                <button type="button" class="btn btn-warning" style="width: fit-content;">
-                                    <i class="fas fa-download"></i> 템플릿 다운로드
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <c:if test="${userType eq 'ADMIN'}">
+	                    <div class="border-top">
+	                        <div class="flex items-center gap-3">
+	                            <i class="fas fa-crown" style="color: var(--warning-color);"></i>
+	                            <span class="form-label">관리자 전용 기능</span>
+	                        </div>
+	                        
+	                        <div class="alert alert-warning">
+	                            <h4>엑셀 파일 업로드 (통합 예약)</h4>
+	                            <div class="flex flex-col gap-3">
+	                                <input type="file" accept=".xlsx,.xls" class="form-input">
+	                                <p style="font-size: 0.75rem;">
+	                                    엑셀 파일 형식: 제목, 회의실, 예약자, 날짜, 시작시간, 종료시간, 참석인원, 회의내용
+	                                </p>
+	                                <button type="button" class="btn btn-warning" style="width: fit-content;">
+	                                    <i class="fas fa-download"></i> 템플릿 다운로드
+	                                </button>
+	                            </div>
+	                        </div>
+	                    </div>
+                    </c:if>
 
                     <!-- 버튼 -->
                     <div class="flex justify-end gap-4">
