@@ -11,6 +11,6 @@ public interface DepartmentMapper {
     void updateDepartment(DepartmentVO vo) throws Exception;
     void deleteDepartment(DepartmentVO vo) throws Exception;
     DepartmentVO selectDepartment(DepartmentVO vo) throws Exception;
-    List<DepartmentVO> selectDepartmentList(DepartmentVO searchVO) throws Exception;
-    int selectDepartmentListTotCnt(DepartmentVO searchVO);
+    List<DepartmentVO> selectDepartmentList(DepartmentVO vo) throws Exception;
+    int selectDepartmentListTotCnt(DepartmentVO vo);
 }

@@ -81,7 +81,13 @@ public class RoomController {
 
 	@RequestMapping(value = "/main.do")
 	public String main(ModelMap model) throws Exception {
+		// 오늘 날짜 설정
 		model.addAttribute("today", new Date());
+
+		// DB에서 회의실 개수 불러오기
+		int roomCount = roomService.selectRoomListTotCnt(new RoomVO());
+		model.addAttribute("roomCount", roomCount);
+		
 		return "/main";
 	}
 

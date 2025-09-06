@@ -42,7 +42,7 @@ public interface RoomService {
      * @return 회의실 목록
      * @exception Exception
      */
-    List<RoomVO> selectRoomList(RoomVO searchVO) throws Exception;
+    List<RoomVO> selectRoomList(RoomVO vo) throws Exception;
 
     /**
      * 회의실 총 갯수를 조회한다.
@@ -50,7 +50,7 @@ public interface RoomService {
      * @return 회의실 총 갯수
      * @exception
      */
-    int selectRoomListTotCnt(RoomVO searchVO);
+    int selectRoomListTotCnt(RoomVO vo);
     
     /**
      * 전체 시설 목록을 조회한다.

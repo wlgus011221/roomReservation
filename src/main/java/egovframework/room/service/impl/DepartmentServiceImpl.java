@@ -43,12 +43,12 @@ public class DepartmentServiceImpl extends EgovAbstractServiceImpl implements De
     }
 
     @Override
-    public List<?> selectDepartmentList(DepartmentVO searchVO) throws Exception {
-        return departmentMapper.selectDepartmentList(searchVO);
+    public List<?> selectDepartmentList(DepartmentVO vo) throws Exception {
+        return departmentMapper.selectDepartmentList(vo);
     }
 
     @Override
-    public int selectDepartmentListTotCnt(DepartmentVO searchVO) {
-        return departmentMapper.selectDepartmentListTotCnt(searchVO);
+    public int selectDepartmentListTotCnt(DepartmentVO vo) {
+        return departmentMapper.selectDepartmentListTotCnt(vo);
     }
 }

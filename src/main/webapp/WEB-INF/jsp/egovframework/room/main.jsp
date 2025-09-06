@@ -33,7 +33,7 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <h3>전체 회의실</h3>
-                <div class="stat-number">8개</div>
+                <div class="stat-number">${roomCount}개</div>
             </div>
             <div class="stat-card">
                 <h3>예약된 회의실</h3>
