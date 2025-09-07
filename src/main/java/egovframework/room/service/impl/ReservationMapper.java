@@ -18,7 +18,7 @@ public interface ReservationMapper {
 
     ReservationVO selectReservation(ReservationVO vo) throws Exception;
 
-    List<ReservationVO> selectReservationList(ReservationVO searchVO) throws Exception;
+    List<ReservationVO> selectReservationList(ReservationVO vo) throws Exception;
     
     void updateReservation(ReservationVO vo) throws Exception;
     

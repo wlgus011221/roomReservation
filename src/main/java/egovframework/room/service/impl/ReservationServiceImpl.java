@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import egovframework.room.service.RecurringReservationVO;
 import egovframework.room.service.ReservationService;
 import egovframework.room.service.ReservationVO;
+import egovframework.room.service.RoomVO;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -42,25 +43,24 @@ public class ReservationServiceImpl extends EgovAbstractServiceImpl implements R
 
 	@Override
 	public ReservationVO selectReservation(ReservationVO vo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		ReservationVO resultVO = reservationMapper.selectReservation(vo);
+        if (resultVO == null)
+            throw processException("info.nodata.msg");
+        return resultVO;
 	}
 
 	@Override
-	public List<ReservationVO> selectReservationList(ReservationVO searchVO) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ReservationVO> selectReservationList(ReservationVO vo) throws Exception {
+		return reservationMapper.selectReservationList(vo);
 	}
 
 	@Override
 	public void updateReservation(ReservationVO vo) throws Exception {
-		// TODO Auto-generated method stub
-		
+		reservationMapper.updateReservation(vo);
 	}
 
 	@Override
 	public void deleteReservation(ReservationVO vo) throws Exception {
-		// TODO Auto-generated method stub
-		
+		reservationMapper.deleteReservation(vo);
 	}
 }

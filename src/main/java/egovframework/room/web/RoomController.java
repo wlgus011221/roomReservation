@@ -93,6 +93,12 @@ public class RoomController {
 		int roomCount = roomService.selectRoomListTotCnt(new RoomVO());
 		model.addAttribute("roomCount", roomCount);
 		
+		// DB에서 예약 목록 불러오기
+		List<ReservationVO> reservationList = reservationService.selectReservationList(new ReservationVO());
+        model.addAttribute("reservationList", reservationList);
+        
+        System.out.println(reservationList);
+		
 		return "/main";
 	}
 
