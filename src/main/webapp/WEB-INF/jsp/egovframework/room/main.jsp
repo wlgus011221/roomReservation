@@ -10,6 +10,7 @@
 <title>회의실 예약 시스템</title>
 <link rel="stylesheet" href="/css/room/common.css">
 <link rel="stylesheet" href="/css/room/main.css">
+<!-- <link rel="stylesheet" href="/css/room/calendar.css"> -->
 <!-- 캘린더 API -->
 <link rel="stylesheet"
 	href="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.css" />
@@ -66,33 +67,64 @@
 	</main>
 
 	<script>
-	    const Calendar = tui.Calendar;
-	    const calendar = new Calendar('#calendar', {
-	      defaultView: 'month',
-	      useDetailPopup: true,
-	      useCreationPopup: true,
-	      calendars: [
-	        { id: 'default', name: '회의실 예약', color: '#ffffff', bgColor: '#0475f4' }
-	      ]
-	    });
+		const Calendar = tui.Calendar;
+	
+	    // 랜덤 색상 생성 함수
+	    function getRandomColor() {
+	        const letters = '0123456789ABCDEF';
+	        let color = '#';
+	        for (let i = 0; i < 6; i++) {
+	            color += letters[Math.floor(Math.random() * 16)];
+	        }
+	        return color;
+	    }
 	    
-	 	// DB에서 가져온 예약 목록 데이터 (JSP에서 JavaScript 변수로 변환)
-	    const reservations = [
-	        <c:forEach var="res" items="${reservationList}" varStatus="status">
+	    // DB에서 가져온 회의실 목록 데이터를 JavaScript 배열로 변환
+	    const roomList = [
+	        <c:forEach var="room" items="${roomList}" varStatus="status">
 	            {
-	                id: '${res.reservationIdx}',
-	                calendarId: 'default',
-	                title: '[${res.roomName}] ${res.title}',
-	                category: 'time',
-	                // 날짜와 시간을 ISO 8601 형식으로 조합
-	                start: '<fmt:formatDate value="${res.date}" pattern="yyyy-MM-dd"/>T<fmt:formatDate value="${res.startTime}" pattern="HH:mm:ss"/>',
-	                end: '<fmt:formatDate value="${res.date}" pattern="yyyy-MM-dd"/>T<fmt:formatDate value="${res.endTime}" pattern="HH:mm:ss"/>'
+	                id: '${room.roomIdx}',
+	                name: '${room.name}',
+	                color: '#ffffff', // 캘린더 텍스트 색상
+	                backgroundColor: getRandomColor(), // 배경색
+	                dragBackgroundColor: getRandomColor(),
+	                borderColor: getRandomColor() // 테두리 색상 (월간 뷰 dot 색상)
 	            }<c:if test="${!status.last}">,</c:if>
 	        </c:forEach>
 	    ];
-	 	
+	
+	    const calendar = new Calendar('#calendar', {
+	        defaultView: 'month',
+	        useDetailPopup: true,
+	        isReadOnly: true,
+	        gridSelection: false,
+	        // 회의실 목록을 calendars 옵션에 전달
+	        calendars: roomList
+	    });
+	    
+	 // 예약 목록
+	    const reservations = [
+	        <c:forEach var="res" items="${reservationList}" varStatus="status">
+	            (function() {
+	                const room = roomList.find(r => r.id === '${res.roomIdx}');
+	                return {
+	                    id: '${res.reservationIdx}',
+	                    calendarId: '${res.roomIdx}',
+	                    title: '[${res.roomName}] ${res.title}',
+	                    category: 'time',
+	                    start: '<fmt:formatDate value="${res.date}" pattern="yyyy-MM-dd"/>T<fmt:formatDate value="${res.startTime}" pattern="HH:mm:ss"/>',
+	                    end: '<fmt:formatDate value="${res.date}" pattern="yyyy-MM-dd"/>T<fmt:formatDate value="${res.endTime}" pattern="HH:mm:ss"/>',
+	                    backgroundColor: room.backgroundColor,  // ✅ 회의실 색상 가져오기
+	                    dragBackgroundColor: room.backgroundColor,
+	                    borderColor: room.backgroundColor,      // ✅ border-left도 동일하게
+	                    color: '#fff'
+	                };
+	            })()<c:if test="${!status.last}">,</c:if>
+	        </c:forEach>
+	    ];
+	
 	    // 캘린더에 이벤트 추가
-        calendar.createEvents(reservations);
+	    calendar.createEvents(reservations);
 	 	
         function changeView(view, btn) {
             // 달력 뷰 전환

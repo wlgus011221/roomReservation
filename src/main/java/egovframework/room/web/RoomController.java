@@ -97,6 +97,10 @@ public class RoomController {
 		List<ReservationVO> reservationList = reservationService.selectReservationList(new ReservationVO());
         model.addAttribute("reservationList", reservationList);
         
+        // DB에서 회의실 목록 불러오기
+        List<RoomVO> roomList = roomService.selectRoomList(new RoomVO());
+        model.addAttribute("roomList", roomList);
+        
         System.out.println(reservationList);
 		
 		return "/main";
