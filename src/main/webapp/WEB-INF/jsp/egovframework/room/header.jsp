@@ -36,3 +36,13 @@
         </div>
     </div>
 </header>
+
+<script>
+	//서버에서 전달된 'msg' 값이 있는지 확인
+	const message = '${msg}';
+	
+	// 메시지가 비어있지 않거나 'null'이 아니면 알림창 띄우기
+	if (message && message !== 'null' && message.trim() !== '') {
+	    alert(message);
+	}
+</script>

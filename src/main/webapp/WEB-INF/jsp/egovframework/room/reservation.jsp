@@ -21,16 +21,16 @@
                 <h2 class="card-title">회의실 예약</h2>
             </div>
             <div class="card-content">
-                <form class="flex flex-col gap-6">
+                <form class="flex flex-col gap-6" id="reservationForm" action="addReservation.do" method="post">
                     <!-- 기본 정보 -->
                     <div class="grid grid-cols-2 gap-6">
                         <div class="form-group">
                             <label class="form-label">회의 제목 *</label>
-                            <input type="text" class="form-input" placeholder="회의 제목을 입력하세요">
+                            <input type="text" name="title" class="form-input" placeholder="회의 제목을 입력하세요" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">회의실 *</label>
-                            <select class="form-select">
+                            <select class="form-select" name="roomIdx" required>
                                 <option value="">회의실을 선택하세요</option>
                                 <c:forEach var="room" items="${roomList}">
 		                            <option value="${room.roomIdx}">${room.name}</option>
@@ -43,17 +43,18 @@
                         <div class="form-group">
                             <label class="form-label">예약자 (소속) *</label>
                             <input type="text" class="form-input" value="${name} (${department})" readonly>
+                        	<input type="hidden" name="userIdx" value="${userIdx}">
                         </div>
                         <div class="form-group">
                             <label class="form-label">참석 인원 *</label>
-                            <input type="number" min="1" max="20" class="form-input" placeholder="5">
+                            <input type="number" name="attendees" min="1" max="50" class="form-input" placeholder="5" required>
                         </div>
                     </div>
 
                     <!-- 반복 예약 옵션 -->
                     <div class="border-top">
                         <div class="flex items-center gap-3">
-                            <input type="checkbox" id="recurring" onchange="toggleRecurring()">
+                            <input type="checkbox" id="recurring" name="isRecurring" onchange="toggleRecurring()">
                             <label for="recurring" class="form-label">반복 예약</label>
                         </div>
 
@@ -62,14 +63,14 @@
                             <div class="grid grid-cols-2 gap-6">
                                 <div class="form-group">
                                     <label class="form-label">예약 날짜 *</label>
-                                    <input type="date" class="form-input">
+                                    <input type="date" name="date" class="form-input" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">예약 시간 *</label>
                                     <div class="flex gap-2">
-                                        <input type="time" class="form-input">
+                                        <input type="time" name="startTime" class="form-input" required>
                                         <span class="flex items-center">~</span>
-                                        <input type="time" class="form-input">
+                                        <input type="time" name="endTime" class="form-input" required>
                                     </div>
                                 </div>
                             </div>
@@ -159,7 +160,7 @@
                     <!-- 회의 내용 -->
                     <div class="form-group">
                         <label class="form-label">회의 내용</label>
-                        <textarea class="form-textarea" placeholder="회의 안건이나 내용을 입력하세요"></textarea>
+                        <textarea class="form-textarea" name="content" placeholder="회의 안건이나 내용을 입력하세요"></textarea>
                     </div>
 
                     <!-- 관리자 전용 기능 -->
@@ -197,15 +198,7 @@
         </div>
     </main>
 
-    <script>
-	 	// 서버에서 전달된 'msg' 값이 있는지 확인
-	    const message = '${msg}';
-	    
-	    // 메시지가 비어있지 않거나 'null'이 아니면 알림창 띄우기
-	    if (message && message !== 'null' && message.trim() !== '') {
-	        alert(message);
-	    }
-    
+    <script>    
         function toggleRecurring() {
             const recurringCheckbox = document.getElementById('recurring');
             const singleBooking = document.getElementById('single-booking');

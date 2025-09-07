@@ -30,6 +30,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import egovframework.room.service.DepartmentService;
 import egovframework.room.service.DepartmentVO;
 import egovframework.room.service.FacilityVO;
+import egovframework.room.service.ReservationService;
+import egovframework.room.service.ReservationVO;
 import egovframework.room.service.RoomService;
 import egovframework.room.service.RoomVO;
 import egovframework.room.service.UserService;
@@ -61,6 +63,9 @@ public class RoomController {
 
 	@Autowired
 	private RoomMapper roomMapper;
+	
+	@Autowired
+	private ReservationService reservationService;
 
 	/**
 	 * 비밀번호 SHA-512 암호화
@@ -123,7 +128,7 @@ public class RoomController {
 			request.getSession().setAttribute("userType", "");
 			request.getSession().setAttribute("userIdx", "");
 			request.getSession().setAttribute("department", "");
-			model.addAttribute("msg", "사용자 정보가 올바르지 않습니다.");
+			model.addAttribute("message", "사용자 정보가 올바르지 않습니다.");
 			return "forward:/login.do";
 		}
 	}
@@ -150,7 +155,7 @@ public class RoomController {
 	 * 회원가입 처리
 	 */
 	@PostMapping(value = "/registerProcess.do")
-	public String registerProcess(@ModelAttribute UserVO userVO, RedirectAttributes redirectAttributes) throws Exception {
+	public String registerProcess(@ModelAttribute UserVO userVO, RedirectAttributes redirectAttributes, ModelMap model) throws Exception {
 		System.out.println("회원가입 처리 - UserVO: " + userVO.toString());
 		try {
 			// 비밀번호 암호화
@@ -164,19 +169,20 @@ public class RoomController {
 
 			// 회원가입 처리 (UserService에서 중복 체크 처리)
 			String result = userService.insertUser(userVO);
-			System.out.println("회원가입 완료 - userIdx: " + result);
+			
+			// 성공 메시지를 flashAttribute에 담아 리다이렉션
+			model.addAttribute("msg", "회원가입이 완료되었습니다.");
+	        redirectAttributes.addFlashAttribute("message", "회원가입이 완료되었습니다.");
+	        redirectAttributes.addFlashAttribute("messageType", "success");
 
-			redirectAttributes.addFlashAttribute("message", "회원가입이 완료되었습니다.");
-			redirectAttributes.addFlashAttribute("messageType", "success");
+	        return "forward:/login.do";
 
-			return "redirect:/login.do";
-
-		} catch (Exception e) {
-			System.out.println("회원가입 오류: " + e.getMessage());
-			redirectAttributes.addFlashAttribute("message", "회원가입 중 오류가 발생했습니다: " + e.getMessage());
-			redirectAttributes.addFlashAttribute("messageType", "error");
-			return "redirect:/register.do";
-		}
+	    } catch (Exception e) {
+	        System.out.println("회원가입 오류: " + e.getMessage());
+	        redirectAttributes.addFlashAttribute("message", "회원가입 중 오류가 발생했습니다: " + e.getMessage());
+	        redirectAttributes.addFlashAttribute("messageType", "error");
+	        return "redirect:/register.do"; // 리다이렉트 방식으로 변경
+	    }
 	}
 
 	/**
@@ -530,6 +536,27 @@ public class RoomController {
         
 		return "/reservation";
 	}
+	
+	@PostMapping("/addReservation.do")
+    public String addReservation(@ModelAttribute("reservationVO") ReservationVO reservationVO, HttpSession session, Model model) throws Exception {
+        // 1. 사용자 정보 확인 (세션에서 userIdx 가져오기)
+        Integer userIdx = (Integer) session.getAttribute("userIdx");
+        if (userIdx == null) {
+            model.addAttribute("msg", "로그인 상태가 아닙니다.");
+            return "forward:/login.do";
+        }
+        
+        // 2. 예약자 정보(userIdx)를 ReservationVO에 설정
+        reservationVO.setUserIdx(userIdx);
+
+        // 3. 단일 예약 서비스 호출
+        reservationService.insertSingleReservation(reservationVO);
+        
+        model.addAttribute("msg", "회의실 예약이 완료되었습니다.");
+        
+        // 4. 예약 후 메인 페이지로 리다이렉트
+        return "forward:/main.do";
+    }
 	
 	@RequestMapping(value = "/test.do", produces = "text/html; charset=UTF-8")
 	@ResponseBody

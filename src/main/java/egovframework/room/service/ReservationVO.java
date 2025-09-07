@@ -1,7 +1,8 @@
 package egovframework.room.service;
 
-import java.sql.Time;
 import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class ReservationVO extends DefaultVO { // 페이징을 위한 상위 클래스 상속
 
@@ -23,13 +24,16 @@ public class ReservationVO extends DefaultVO { // 페이징을 위한 상위 클
     private int attendees;
     
     /** 예약 날짜 (단일 예약 시 사용) */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
     
     /** 시작 시간 */
-    private Time startTime;
+    @DateTimeFormat(pattern = "HH:mm")
+    private Date startTime;
     
     /** 종료 시간 */
-    private Time endTime;
+    @DateTimeFormat(pattern = "HH:mm")
+    private Date endTime;
     
     /** 회의 내용 */
     private String content;
@@ -79,16 +83,16 @@ public class ReservationVO extends DefaultVO { // 페이징을 위한 상위 클
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	public Time getStartTime() {
+	public Date getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(Time startTime) {
+	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
-	public Time getEndTime() {
+	public Date getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(Time endTime) {
+	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
 	public String getContent() {
@@ -121,9 +125,13 @@ public class ReservationVO extends DefaultVO { // 페이징을 위한 상위 클
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	
+	@Override
+	public String toString() {
+		return "ReservationVO [reservationIdx=" + reservationIdx + ", roomIdx=" + roomIdx + ", userIdx=" + userIdx
+				+ ", title=" + title + ", attendees=" + attendees + ", date=" + date + ", startTime=" + startTime
+				+ ", endTime=" + endTime + ", content=" + content + ", isRecurring=" + isRecurring + ", recurringIdx="
+				+ recurringIdx + ", roomName=" + roomName + ", userName=" + userName + "]";
 	}
-    
     
 }

@@ -19,9 +19,9 @@
 	            <p>계정에 로그인하세요</p>
 	        </div>
 	        
-	        <c:if test="${not empty msg}">
+	        <c:if test="${not empty message}">
 	            <div class="msg">
-	                ${msg}
+	                ${message}
 	            </div>
 	        </c:if>
 	
@@ -49,5 +49,15 @@
 	        </form>
 	    </div>
 	</div>
+	
+	<script>
+        // 서버에서 전달된 'msg' 값이 있는지 확인
+        const message = '${msg}';
+        
+        // 메시지가 비어있지 않거나 'null'이 아니면 알림창 띄우기
+        if (message && message !== 'null' && message.trim() !== '') {
+            alert(message);
+        }
+    </script>
 </body>
 </html>
