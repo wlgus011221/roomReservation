@@ -8,9 +8,8 @@
         <result property="userIdx" column="user_idx" />
         <result property="title" column="title" />
         <result property="attendees" column="attendees" />
-        <result property="date" column="date" />
-        <result property="startTime" column="start_time" />
-        <result property="endTime" column="end_time" />
+        <result property="startDatetime" column="start_datetime" />
+    	<result property="endDatetime" column="end_datetime" />
         <result property="content" column="content" />
         <result property="isRecurring" column="is_recurring" />
         <result property="recurringIdx" column="recurring_idx" />
@@ -30,10 +29,22 @@
     <!-- 단일 예약 등록 -->
     <insert id="insertSingleReservation" parameterType="reservationVO" useGeneratedKeys="true" keyProperty="reservationIdx">
         INSERT INTO reservations (
-            room_idx, user_idx, title, attendees, date, start_time, end_time, content, is_recurring, recurring_idx
-        ) VALUES (
-            #{roomIdx}, #{userIdx}, #{title}, #{attendees}, #{date}, #{startTime}, #{endTime}, #{content}, FALSE, NULL
-        )
+	        room_idx,
+	        user_idx,
+	        title,
+	        attendees,
+	        start_datetime,
+	        end_datetime,
+	        content
+	    ) VALUES (
+	        #{roomIdx},
+	        #{userIdx},
+	        #{title},
+	        #{attendees},
+	        #{startDatetime, jdbcType=TIMESTAMP},
+	        #{endDatetime, jdbcType=TIMESTAMP},
+	        #{content}
+	    )
     </insert>
 
     <!-- 반복 예약 규칙 등록 -->
@@ -54,16 +65,30 @@
         )
     </insert>
     
-    <!-- 예약 목록 조회 (조인 포함) -->
+    <!-- 전체 예약 목록 조회 (조인 포함) -->
     <select id="selectReservationList" parameterType="reservationVO" resultMap="reservationMap">
         SELECT
-            r.reservation_idx, r.room_idx, r.user_idx, r.title, r.attendees, r.date, r.start_time, r.end_time, r.content, r.is_recurring, r.recurring_idx,
+            r.reservation_idx, r.room_idx, r.user_idx, r.title, r.attendees, r.start_datetime, r.end_datetime, r.content, r.is_recurring, r.recurring_idx,
             ro.name AS room_name,
             u.name AS user_name
         FROM reservations r
         LEFT JOIN rooms ro ON r.room_idx = ro.room_idx
         LEFT JOIN users u ON r.user_idx = u.user_idx
         WHERE 1=1
-        ORDER BY r.date DESC, r.start_time DESC
+        ORDER BY r.start_datetime DESC
+    </select>
+    
+    <!-- 내 예약 목록 조회 (조인 포함) -->
+    <select id="selectMyReservationList" parameterType="reservationVO" resultMap="reservationMap">
+        SELECT
+            r.reservation_idx, r.room_idx, r.user_idx, r.title, r.attendees, r.start_datetime, r.end_datetime, r.content, r.is_recurring, r.recurring_idx,
+            ro.name AS room_name,
+            u.name AS user_name
+        FROM reservations r
+        LEFT JOIN rooms ro ON r.room_idx = ro.room_idx
+        LEFT JOIN users u ON r.user_idx = u.user_idx
+        WHERE 1=1
+        AND u.user_idx = #{userIdx}
+        ORDER BY r.start_datetime DESC
     </select>
 </mapper>

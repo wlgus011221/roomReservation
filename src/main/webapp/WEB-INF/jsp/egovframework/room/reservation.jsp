@@ -33,7 +33,7 @@
                             <select class="form-select" name="roomIdx" required>
                                 <option value="">회의실을 선택하세요</option>
                                 <c:forEach var="room" items="${roomList}">
-		                            <option value="${room.roomIdx}">${room.name}</option>
+		                            <option value="${room.roomIdx}">${room.name} (${room.capacity}명)</option>
 		                        </c:forEach>
                             </select>
                         </div>

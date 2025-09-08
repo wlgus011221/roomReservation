@@ -38,6 +38,13 @@ public interface ReservationService {
     List<ReservationVO> selectReservationList(ReservationVO vo) throws Exception;
     
     /**
+     * 내 예약 목록을 조회한다.
+     * @param searchVO - 조회할 정보가 담긴 VO
+     * @return 예약 목록
+     */
+    List<ReservationVO> selectMyReservationList(ReservationVO vo) throws Exception;
+    
+    /**
      * 예약을 수정한다.
      * @param vo - 수정할 정보가 담긴 ReservationVO
      */

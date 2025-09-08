@@ -23,17 +23,14 @@ public class ReservationVO extends DefaultVO { // 페이징을 위한 상위 클
     /** 참석 인원 */
     private int attendees;
     
-    /** 예약 날짜 (단일 예약 시 사용) */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    /** 예약 시작 날짜 */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date startDatetime;
     
-    /** 시작 시간 */
-    @DateTimeFormat(pattern = "HH:mm")
-    private Date startTime;
-    
-    /** 종료 시간 */
-    @DateTimeFormat(pattern = "HH:mm")
-    private Date endTime;
+    /** 예약 종료 날짜 */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date endDatetime;
+
     
     /** 회의 내용 */
     private String content;
@@ -77,24 +74,23 @@ public class ReservationVO extends DefaultVO { // 페이징을 위한 상위 클
 	public void setAttendees(int attendees) {
 		this.attendees = attendees;
 	}
-	public Date getDate() {
-		return date;
-	}
-	public void setDate(Date date) {
-		this.date = date;
-	}
-	public Date getStartTime() {
-		return startTime;
-	}
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
-	public Date getEndTime() {
-		return endTime;
-	}
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
-	}
+	
+	public Date getStartDatetime() {
+        return startDatetime;
+    }
+
+    public void setStartDatetime(Date startDatetime) {
+        this.startDatetime = startDatetime;
+    }
+
+    public Date getEndDatetime() {
+        return endDatetime;
+    }
+
+    public void setEndDatetime(Date endDatetime) {
+        this.endDatetime = endDatetime;
+    }
+    
 	public String getContent() {
 		return content;
 	}
@@ -129,9 +125,11 @@ public class ReservationVO extends DefaultVO { // 페이징을 위한 상위 클
 	@Override
 	public String toString() {
 		return "ReservationVO [reservationIdx=" + reservationIdx + ", roomIdx=" + roomIdx + ", userIdx=" + userIdx
-				+ ", title=" + title + ", attendees=" + attendees + ", date=" + date + ", startTime=" + startTime
-				+ ", endTime=" + endTime + ", content=" + content + ", isRecurring=" + isRecurring + ", recurringIdx="
-				+ recurringIdx + ", roomName=" + roomName + ", userName=" + userName + "]";
+				+ ", title=" + title + ", attendees=" + attendees + ", startDatetime=" + startDatetime
+				+ ", endDatetime=" + endDatetime + ", content=" + content + ", isRecurring=" + isRecurring
+				+ ", recurringIdx=" + recurringIdx + ", roomName=" + roomName + ", userName=" + userName + "]";
 	}
+	
+	
     
 }

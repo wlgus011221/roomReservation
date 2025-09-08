@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -27,19 +29,19 @@
 
 		<!-- 탭 네비게이션 추가 -->
 		<div class="tab-navigation">
-			<button class="tab-btn active" onclick="showTab('profile')">
+			<button class="tab-btn active" onclick="showTab(this, 'profile')">
 				<i class="fas fa-user"></i> 내 정보
 			</button>
-			<button class="tab-btn" onclick="showTab('bookings')">
+			<button class="tab-btn" onclick="showTab(this, 'bookings')">
 				<i class="fas fa-calendar-check"></i> 내 예약관리
 			</button>
-			<button class="tab-btn" onclick="showTab('attendance')">
+			<button class="tab-btn" onclick="showTab(this, 'attendance')">
 				<i class="fas fa-users"></i> 내 참석 정보
 			</button>
-			<button class="tab-btn" onclick="showTab('notifications')">
+			<button class="tab-btn" onclick="showTab(this, 'notifications')">
 				<i class="fas fa-bell"></i> 알림 관리
 			</button>
-			<button class="tab-btn" onclick="showTab('dashboard')">
+			<button class="tab-btn" onclick="showTab(this, 'dashboard')">
 				<i class="fas fa-chart-line"></i> 내 일정 대시보드
 			</button>
 		</div>
@@ -121,63 +123,68 @@
 					<div class="card-content">
 						<form id="profileEditForm" action="updateProfile.do" method="post">
 							<div class="form-group">
-								<label class="form-label">이름 *</label> 
-								<input type="text" name="name" id="userName" class="form-input" required>
+								<label class="form-label">이름 *</label> <input type="text"
+									name="name" id="userName" class="form-input" required>
 							</div>
 							<div class="form-group">
-								<label class="form-label">부서 *</label> 
-								<select name="departmentIdx" id="departmentSelect" class="form-select" required>
-								    <option value="">부서 선택</option>
-								    <c:forEach var="dept" items="${deptList}">
-								        <option value="${dept.departmentIdx}">${dept.name}</option>
-								    </c:forEach>
+								<label class="form-label">부서 *</label> <select
+									name="departmentIdx" id="departmentSelect" class="form-select"
+									required>
+									<option value="">부서 선택</option>
+									<c:forEach var="dept" items="${deptList}">
+										<option value="${dept.departmentIdx}">${dept.name}</option>
+									</c:forEach>
 								</select>
 							</div>
 							<div class="form-group">
-								<label class="form-label">이메일 *</label> 
-								<input type="email" name="email" id="editEmail" class="form-input" required>
+								<label class="form-label">이메일 *</label> <input type="email"
+									name="email" id="editEmail" class="form-input" required>
 							</div>
 							<div class="form-group">
-								<label class="form-label">전화번호 *</label> 
-								<input type="tel" name="phone" id="editPhone" class="form-input" required>
+								<label class="form-label">전화번호 *</label> <input type="tel"
+									name="phone" id="editPhone" class="form-input" required>
 							</div>
 							<div class="flex justify-end gap-3">
-								<button type="button" class="btn btn-warning" onclick="openPasswordModal()">비밀번호 변경</button>
-								<button type="button" class="btn btn-secondary" onclick="closeModal()">취소</button>
+								<button type="button" class="btn btn-warning"
+									onclick="openPasswordModal()">비밀번호 변경</button>
+								<button type="button" class="btn btn-secondary"
+									onclick="closeModal()">취소</button>
 								<button type="submit" class="btn btn-primary">저장</button>
 							</div>
 						</form>
 					</div>
 				</div>
 			</div>
-			
+
 			<!-- 별도 비밀번호 변경 모달 -->
 			<div id="passwordEditModal" class="modal-overlay hidden">
-			    <div class="card">
-			        <div class="card-header">
-			            <h3 class="card-title">비밀번호 변경</h3>
-			        </div>
-			        <div class="card-content">
-			            <form id="passwordEditForm" action="updatePassword.do" method="post">
-			                <div class="form-group">
-			                    <label>현재 비밀번호</label>
-			                    <input type="password" name="currentPassword" class="form-input" required>
-			                </div>
-			                <div class="form-group">
-			                    <label>새 비밀번호</label>
-			                    <input type="password" name="newPassword" class="form-input" required>
-			                </div>
-			                <div class="form-group">
-			                    <label>새 비밀번호 확인</label>
-			                    <input type="password" name="confirmPassword" class="form-input" required>
-			                </div>
-			                <div class="flex justify-end gap-3">
-			                    <button type="button" class="btn btn-secondary" onclick="closePasswordModal()">취소</button>
-			                    <button type="submit" class="btn btn-primary">변경</button>
-			                </div>
-			            </form>
-			        </div>
-			    </div>
+				<div class="card">
+					<div class="card-header">
+						<h3 class="card-title">비밀번호 변경</h3>
+					</div>
+					<div class="card-content">
+						<form id="passwordEditForm" action="updatePassword.do"
+							method="post">
+							<div class="form-group">
+								<label>현재 비밀번호</label> <input type="password"
+									name="currentPassword" class="form-input" required>
+							</div>
+							<div class="form-group">
+								<label>새 비밀번호</label> <input type="password" name="newPassword"
+									class="form-input" required>
+							</div>
+							<div class="form-group">
+								<label>새 비밀번호 확인</label> <input type="password"
+									name="confirmPassword" class="form-input" required>
+							</div>
+							<div class="flex justify-end gap-3">
+								<button type="button" class="btn btn-secondary"
+									onclick="closePasswordModal()">취소</button>
+								<button type="submit" class="btn btn-primary">변경</button>
+							</div>
+						</form>
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -410,46 +417,114 @@
 	</main>
 
 	<script>
-	    let calendar;       // 캘린더 인스턴스
-	    let isCalendarInit = false;
+		let isCalendarInit = false;
+	    let calendar; // 캘린더 인스턴스를 전역 변수로 선언
+	    const Calendar = tui.Calendar;
 	    
-    	// 마이페이지 탭 전환
-        function showTab(tabName) {
-            // 모든 탭 버튼과 컨텐츠 비활성화
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
-            // 선택된 탭 활성화
-            event.target.classList.add('active');
-            document.getElementById(tabName + '-tab').classList.add('active');
-            
-         	// 내 일정 대시보드 탭이면 캘린더 강제 렌더링
-            if(tabName === 'dashboard') {
-		        if(!isCalendarInit) {
-		            // 캘린더 생성
-		            const Calendar = tui.Calendar;
-		            calendar = new Calendar('#calendar', {
-		                defaultView: 'month',
-		                useDetailPopup: true,
-		                useCreationPopup: true,
-		                calendars: [
-		                    { id: 'default', name: '회의실 예약', color: '#ffffff', bgColor: '#0475f4' }
-		                ]
-		            });
-		
-		            // 테스트 이벤트 추가
-		            calendar.createEvents([
-		                { id: '1', calendarId: 'default', title: '팀 회의', category: 'time', start: '2025-08-26T10:00:00', end: '2025-08-26T11:00:00' },
-		                { id: '2', calendarId: 'default', title: '외부 미팅', category: 'time', start: '2025-08-28T14:00:00', end: '2025-08-28T15:30:00' }
-		            ]);
-		
+	 	// 마이페이지 탭 전환
+        function showTab(btn, tabName) {
+		    // 모든 탭 버튼과 컨텐츠 비활성화
+		    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+		    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+		    
+		    // 선택된 탭 활성화
+		    btn.classList.add('active'); // ✅ event.target 대신 btn 사용
+		    document.getElementById(tabName + '-tab').classList.add('active');
+		    
+		    // 내 일정 대시보드 탭이면 캘린더 강제 렌더링
+		    if(tabName === 'dashboard' && !isCalendarInit) {
+		        setTimeout(() => {
+		            initCalendar();
 		            isCalendarInit = true;
-		        }
-		        // 뷰 초기화
-		        showView('calendar', document.querySelector('.view-btn.active'));
+		            showView('calendar', document.querySelector('.view-btn.active'));
+		        }, 50);
 		    }
+		}
+	 	
+     	// 내 일정 대시보드 뷰 전환
+        function showView(viewName, btn) {
+            if(!btn) return; // 안전 처리
+
+            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            document.getElementById('calendar-view').style.display = 'none';
+            document.getElementById('timeline-view').style.display = 'none';
+            document.getElementById('list-view').style.display = 'none';
+
+            if(viewName === 'calendar') {
+                document.getElementById('calendar-view').style.display = 'block';
+                calendar.changeView('month');
+                calendar.render();
+            } else if(viewName === 'timeline') {
+                document.getElementById('calendar-view').style.display = 'block';
+                calendar.changeView('day');
+                calendar.render();
+            } else if(viewName === 'list') {
+                document.getElementById('list-view').style.display = 'block';
+            }
         }
-    	
+	    
+	 	// 랜덤 색상 생성 함수
+	    function getRandomColor() {
+	        const letters = '0123456789ABCDEF';
+	        let color = '#';
+	        for (let i = 0; i < 6; i++) {
+	            color += letters[Math.floor(Math.random() * 16)];
+	        }
+	        return color;
+	    }
+	    
+	 	// 캘린더 초기화
+	    function initCalendar() {
+	        // 회의실 목록
+	        const roomList = [
+	            <c:forEach var="room" items="${roomList}" varStatus="status">
+	                {
+	                    id: '${room.roomIdx}',
+	                    name: '${room.name}',
+	                    color: '#ffffff',
+	                    backgroundColor: getRandomColor(),
+	                    dragBackgroundColor: getRandomColor(),
+	                    borderColor: getRandomColor()
+	                }<c:if test="${!status.last}">,</c:if>
+	            </c:forEach>
+	        ];
+
+	        // 전역 calendar 생성
+	        calendar = new Calendar('#calendar', {
+	            defaultView: 'month',
+	            useDetailPopup: true,
+	            isReadOnly: true,
+	            gridSelection: false,
+	            calendars: roomList
+	        });
+
+	     	// 예약 목록
+	        const reservations = [
+			    <c:forEach var="res" items="${reservationList}" varStatus="status">
+			        (function() {
+			            const room = roomList.find(r => r.id === '${res.roomIdx}');
+			            return {
+			                id: '${res.reservationIdx}',
+			                calendarId: '${res.roomIdx}',
+			                title: '[${res.roomName}] ${res.title}',
+			                category: 'time',
+			                start: new Date('<fmt:formatDate value="${res.startDatetime}" pattern="yyyy-MM-dd\'T\'HH:mm:ss"/>'), // ✅ ISO 8601 문자열을 JS Date로 변환
+			                end: new Date('<fmt:formatDate value="${res.endDatetime}" pattern="yyyy-MM-dd\'T\'HH:mm:ss"/>'),     // ✅ JS Date
+			                backgroundColor: room.backgroundColor,
+			                dragBackgroundColor: room.backgroundColor,
+			                borderColor: room.backgroundColor,
+			                color: '#fff'
+			            };
+			        })()<c:if test="${!status.last}">,</c:if>
+			    </c:forEach>
+			];
+
+	        // 이벤트 추가
+	        calendar.createEvents(reservations);
+	    }
+	 
     	// 내 정보 수정
     	// 모달 DOM 요소 가져오기
 	    const profileEditModal = document.getElementById('profileEditModal');
@@ -503,30 +578,7 @@
 	            return false; // 폼 제출 중지
 	        }
 	    });
-	    
-    	// 내 일정 대시보드
-        function showView(viewName, btn) {
-		    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-		    btn.classList.add('active');
-		
-		    document.getElementById('calendar-view').style.display = 'none';
-		    document.getElementById('timeline-view').style.display = 'none';
-		    document.getElementById('list-view').style.display = 'none';
-		
-		    if(viewName === 'calendar') {
-		        document.getElementById('calendar-view').style.display = 'block';
-		        calendar.changeView('month');
-		        calendar.render();
-		    } else if(viewName === 'timeline') {
-		        document.getElementById('calendar-view').style.display = 'block';
-		        calendar.changeView('day');
-		        calendar.render();
-		    } else if(viewName === 'list') {
-		        document.getElementById('list-view').style.display = 'block';
-		    }
-		}
-
-
+	        	
     </script>
 </body>
 </html>

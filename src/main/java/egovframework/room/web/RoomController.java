@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -240,13 +241,21 @@ public class RoomController {
 
 	        // 2. UserVO 객체를 서비스 메소드로 전달하여 DB 조회
 	        UserVO userDetails = userService.selectUser(vo);
-	        
-	        // 3. 조회된 정보를 모델에 담아 JSP로 전달
 	        model.addAttribute("userDetails", userDetails);
 	        
-	        // 4. 부서 목록 전체 조회
+	        // 3. 부서 목록 전체 조회
 	        List<DepartmentVO> deptList = departmentMapper.selectDepartmentList(new DepartmentVO());
 			model.addAttribute("deptList", deptList);
+			
+			// 4. DB에서 내 예약 목록 불러오기
+			ReservationVO resVO = new ReservationVO();
+	        resVO.setUserIdx(userIdx);  // 로그인 유저 아이디 설정
+	        List<ReservationVO> reservationList = reservationService.selectMyReservationList(resVO);
+	        model.addAttribute("reservationList", reservationList);
+	        
+	        // 5. DB에서 회의실 목록 불러오기
+	        List<RoomVO> roomList = roomService.selectRoomList(new RoomVO());
+	        model.addAttribute("roomList", roomList);
 		}
 		
 		return "/myPage";
@@ -548,25 +557,48 @@ public class RoomController {
 	}
 	
 	@PostMapping("/addReservation.do")
-    public String addReservation(@ModelAttribute("reservationVO") ReservationVO reservationVO, HttpSession session, Model model) throws Exception {
-        // 1. 사용자 정보 확인 (세션에서 userIdx 가져오기)
-        Integer userIdx = (Integer) session.getAttribute("userIdx");
-        if (userIdx == null) {
-            model.addAttribute("msg", "로그인 상태가 아닙니다.");
-            return "forward:/login.do";
-        }
-        
-        // 2. 예약자 정보(userIdx)를 ReservationVO에 설정
-        reservationVO.setUserIdx(userIdx);
+	public String addReservation(
+	    @RequestParam("title") String title,
+	    @RequestParam("roomIdx") int roomIdx,
+	    @RequestParam("attendees") int attendees,
+	    @RequestParam("date") String dateStr,
+	    @RequestParam("startTime") String startTimeStr,
+	    @RequestParam("endTime") String endTimeStr,
+	    @RequestParam(value = "content", required = false) String content,
+	    HttpSession session, Model model) throws Exception {
 
-        // 3. 단일 예약 서비스 호출
-        reservationService.insertSingleReservation(reservationVO);
-        
-        model.addAttribute("msg", "회의실 예약이 완료되었습니다.");
-        
-        // 4. 예약 후 메인 페이지로 리다이렉트
-        return "forward:/main.do";
-    }
+	    // 1. 사용자 정보 확인
+	    Integer userIdx = (Integer) session.getAttribute("userIdx");
+	    if (userIdx == null) {
+	        model.addAttribute("msg", "로그인 상태가 아닙니다.");
+	        return "forward:/login.do";
+	    }
+
+	    // 2. 날짜와 시간을 합쳐서 Date 객체로 변환
+	    String startDateTimeCombined = dateStr + " " + startTimeStr + ":00";
+	    String endDateTimeCombined = dateStr + " " + endTimeStr + ":00";
+	    
+	    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    Date startDatetime = formatter.parse(startDateTimeCombined);
+	    Date endDatetime = formatter.parse(endDateTimeCombined);
+	    
+	    // 3. ReservationVO 객체 생성 및 값 설정
+	    ReservationVO reservationVO = new ReservationVO();
+	    reservationVO.setUserIdx(userIdx);
+	    reservationVO.setTitle(title);
+	    reservationVO.setRoomIdx(roomIdx);
+	    reservationVO.setAttendees(attendees);
+	    reservationVO.setStartDatetime(startDatetime);
+	    reservationVO.setEndDatetime(endDatetime);
+	    reservationVO.setContent(content);
+
+	    // 4. 단일 예약 서비스 호출
+	    reservationService.insertSingleReservation(reservationVO);
+	    
+	    model.addAttribute("msg", "회의실 예약이 완료되었습니다.");
+	    
+	    return "forward:/main.do";
+	}
 	
 	@RequestMapping(value = "/test.do", produces = "text/html; charset=UTF-8")
 	@ResponseBody

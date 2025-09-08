@@ -102,7 +102,7 @@
 	        calendars: roomList
 	    });
 	    
-	 // 예약 목록
+	 	// 예약 목록
 	    const reservations = [
 	        <c:forEach var="res" items="${reservationList}" varStatus="status">
 	            (function() {
@@ -112,12 +112,13 @@
 	                    calendarId: '${res.roomIdx}',
 	                    title: '[${res.roomName}] ${res.title}',
 	                    category: 'time',
-	                    start: '<fmt:formatDate value="${res.date}" pattern="yyyy-MM-dd"/>T<fmt:formatDate value="${res.startTime}" pattern="HH:mm:ss"/>',
-	                    end: '<fmt:formatDate value="${res.date}" pattern="yyyy-MM-dd"/>T<fmt:formatDate value="${res.endTime}" pattern="HH:mm:ss"/>',
+	                    start: '<fmt:formatDate value="${res.startDatetime}" pattern="yyyy-MM-dd'T'HH:mm:ss"/>',
+	                    end: '<fmt:formatDate value="${res.endDatetime}" pattern="yyyy-MM-dd'T'HH:mm:ss"/>',
 	                    backgroundColor: room.backgroundColor,  // ✅ 회의실 색상 가져오기
 	                    dragBackgroundColor: room.backgroundColor,
 	                    borderColor: room.backgroundColor,      // ✅ border-left도 동일하게
-	                    color: '#fff'
+	                    color: '#fff',
+	                    attendees: ['${res.userName}']
 	                };
 	            })()<c:if test="${!status.last}">,</c:if>
 	        </c:forEach>
