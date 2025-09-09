@@ -63,7 +63,18 @@
 		</div>
 
 		<!-- 캘린더 -->
-		<div id="calendar" class="calendar"></div>
+		<div id="calendar-container">
+  			<!-- 네비게이션 -->
+		  	<div id="calendar-navi">
+			    <button id="btn-prev">◀</button>
+			    <button id="btn-today">오늘</button>
+			    <button id="btn-next">▶</button>
+		  	</div>
+		  	<div id="renderRange"></div>
+		
+			<!-- 달력 본체 -->
+			<div id="calendar"></div>
+		</div>
 	</main>
 
 	<script>
@@ -138,7 +149,47 @@
 
             // 클릭한 버튼만 active 추가
             btn.classList.add('active');
+            
+            setRenderRangeText();
         }
+        
+     	// 이전 / 다음 / 오늘 버튼
+        document.getElementById('btn-prev').addEventListener('click', () => {
+          calendar.prev();
+          setRenderRangeText();
+        });
+
+        document.getElementById('btn-next').addEventListener('click', () => {
+          calendar.next();
+          setRenderRangeText();
+        });
+
+        document.getElementById('btn-today').addEventListener('click', () => {
+          calendar.today();
+          setRenderRangeText();
+        });
+        
+     	// 현재 달력 범위 표시
+        function setRenderRangeText() {
+        	const viewName = calendar.getViewName();
+          	const start = calendar.getDateRangeStart();
+         	const end = calendar.getDateRangeEnd();
+         	let text = '';
+
+         	if (viewName === 'month') {
+           		text = start.toDate().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long' });
+         	} else if (viewName === 'week' || viewName === 'day') {
+           		text =
+             	start.toDate().toLocaleDateString('ko-KR') +
+           		' ~ ' +
+             	end.toDate().toLocaleDateString('ko-KR');
+          }
+
+          document.getElementById('renderRange').innerText = text;
+        }
+
+        // 초기 세팅
+        setRenderRangeText();
     </script>
 </body>
 </html>
