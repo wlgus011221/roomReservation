@@ -1,6 +1,8 @@
 package egovframework.room.service.impl;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
 
@@ -29,4 +31,8 @@ public interface ReservationMapper {
     void deleteRecurringReservation(RecurringReservationVO vo) throws Exception;
     
     int selectCountOverlappingReservations(ReservationVO vo) throws Exception;
+    
+    int countTotalReservationsByDate(String date) throws Exception;
+    
+    int countMyReservationsByDate(Map<String, Object> param) throws Exception;
 }

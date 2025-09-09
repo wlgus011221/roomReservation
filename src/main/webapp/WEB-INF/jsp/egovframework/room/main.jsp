@@ -10,7 +10,8 @@
 <title>회의실 예약 시스템</title>
 <link rel="stylesheet" href="/css/room/common.css">
 <link rel="stylesheet" href="/css/room/main.css">
-<!-- <link rel="stylesheet" href="/css/room/calendar.css"> -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <!-- 캘린더 API -->
 <link rel="stylesheet"
 	href="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.css" />
@@ -27,8 +28,7 @@
 		<div class="section-header">
 			<h2 class="section-title">회의실 예약 현황</h2>
 			<div class="date-controls">
-				<input type="date" class="date-input"
-					value="<fmt:formatDate value='${today}' pattern='yyyy-MM-dd' />">
+				<input type="date" class="date-input" value="${today}">
 				<button class="search-btn">조회</button>
 			</div>
 		</div>
@@ -36,20 +36,25 @@
 		<!-- 통계 카드 -->
 		<div class="stats-grid">
 			<div class="stat-card">
-				<h3>전체 회의실</h3>
-				<div class="stat-number">${roomCount}개</div>
+				<i class="fas fa-building" style="font-size: 2.5rem; color: var(--primary-color);"></i>
+				<div class="stat-content">
+					<h3>전체 회의실</h3>
+					<div class="stat-number">${roomCount}개</div>
+				</div>
 			</div>
 			<div class="stat-card">
-				<h3>예약된 회의실</h3>
-				<div class="stat-number">3개</div>
+			    <i class="fas fa-calendar-check" style="font-size: 2.5rem; color: var(--success-color);"></i>
+			    <div class="stat-content">
+			        <h3>예약</h3>
+			        <div class="stat-number" id="totalReservations">${totalReservations}건</div>
+			    </div>
 			</div>
 			<div class="stat-card">
-				<h3>사용 가능한 회의실</h3>
-				<div class="stat-number">5개</div>
-			</div>
-			<div class="stat-card">
-				<h3>내 예약</h3>
-				<div class="stat-number">1개</div>
+			    <i class="fas fa-calendar-alt" style="font-size: 2.5rem; color: var(--warning-color);"></i>
+			    <div class="stat-content">
+			        <h3>내 예약</h3>
+			        <div class="stat-number" id="myReservations">${myReservations}건</div>
+			    </div>
 			</div>
 		</div>
 
@@ -190,6 +195,26 @@
 
         // 초기 세팅
         setRenderRangeText();
+        
+        $('.search-btn').on('click', function() {
+            const selectedDate = $('.date-input').val();
+            if (selectedDate) {
+                $.ajax({
+                    url: '/getStats.do',
+                    type: 'GET',
+                    data: { date: selectedDate }, // 문자열 그대로 전달
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#totalReservations').text(data.totalReservations + '건');
+                        $('#myReservations').text(data.myReservations + '건');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('예약 통계 조회 실패:', error);
+                    }
+                });
+            }
+        });
+
     </script>
 </body>
 </html>

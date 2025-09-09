@@ -1,6 +1,8 @@
 package egovframework.room.service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface ReservationService {
 
@@ -62,4 +64,7 @@ public interface ReservationService {
      * @return 중복되는 예약의 수
      */
     int countOverlappingReservations(ReservationVO reservationVO) throws Exception;
+    
+    int countTotalReservationsByDate(String date) throws Exception;
+    int countMyReservationsByDate(Map<String, Object> param) throws Exception;
 }

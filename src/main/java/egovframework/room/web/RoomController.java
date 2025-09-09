@@ -6,6 +6,8 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -86,13 +88,34 @@ public class RoomController {
 	}
 
 	@RequestMapping(value = "/main.do")
-	public String main(ModelMap model) throws Exception {
+	public String main(ModelMap model, HttpSession session) throws Exception {    
 		// 오늘 날짜 설정
-		model.addAttribute("today", new Date());
-
-		// DB에서 회의실 개수 불러오기
+		// 오늘 날짜를 문자열로 생성 (YYYY-MM-DD)
+	    LocalDate today = LocalDate.now();
+	    String now = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		model.addAttribute("today", now);
+		
+	    Integer userIdx = (Integer) session.getAttribute("userIdx");
+		
+	    // DB에서 회의실 개수 불러오기
 		int roomCount = roomService.selectRoomListTotCnt(new RoomVO());
 		model.addAttribute("roomCount", roomCount);
+		 
+		// 1. 해당 날짜의 전체 예약 건수 조회
+	    int totalReservations = reservationService.countTotalReservationsByDate(now);
+	    model.addAttribute("totalReservations", totalReservations);
+	    
+	    // 2. 해당 날짜의 내 예약 건수 조회 (로그인 상태일 경우에만)
+	    int myReservations = 0;
+	    if (userIdx != null) {
+	    	Map<String, Object> param = new HashMap<>();
+	    	param.put("userIdx", userIdx);
+	    	param.put("date", now);
+	        myReservations = reservationService.countMyReservationsByDate(param);
+	    } else {
+	        myReservations = 0; // 이 경우 로직은 문제없음
+	    }
+	    model.addAttribute("myReservations", myReservations);
 		
 		// DB에서 예약 목록 불러오기
 		List<ReservationVO> reservationList = reservationService.selectReservationList(new ReservationVO());
@@ -102,9 +125,30 @@ public class RoomController {
         List<RoomVO> roomList = roomService.selectRoomList(new RoomVO());
         model.addAttribute("roomList", roomList);
         
-        System.out.println(reservationList);
-		
 		return "/main";
+	}
+	
+	@RequestMapping("/getStats.do")
+	@ResponseBody
+	public Map<String, Object> getStats(@RequestParam("date") String dateStr, HttpSession session) throws Exception {
+		Map<String, Object> response = new HashMap<>();
+		Integer userIdx = (Integer) session.getAttribute("userIdx");
+
+	    // DB 조회
+	    int totalReservations = reservationService.countTotalReservationsByDate(dateStr);
+
+	    int myReservations = 0;
+	    if (userIdx != null) {
+	    	Map<String, Object> param = new HashMap<>();
+	    	param.put("userIdx", userIdx);
+	    	param.put("date", dateStr);
+	        myReservations = reservationService.countMyReservationsByDate(param);
+	    }
+
+	    response.put("totalReservations", totalReservations);
+	    response.put("myReservations", myReservations);
+
+	    return response;
 	}
 
 	@RequestMapping(value = "/login.do")

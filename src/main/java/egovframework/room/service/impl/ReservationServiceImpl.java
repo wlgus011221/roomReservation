@@ -1,6 +1,9 @@
 package egovframework.room.service.impl;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.slf4j.Logger;
@@ -11,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import egovframework.room.service.RecurringReservationVO;
 import egovframework.room.service.ReservationService;
 import egovframework.room.service.ReservationVO;
-import egovframework.room.service.RoomVO;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -73,4 +75,15 @@ public class ReservationServiceImpl extends EgovAbstractServiceImpl implements R
     public int countOverlappingReservations(ReservationVO reservationVO) throws Exception {
         return reservationMapper.selectCountOverlappingReservations(reservationVO);
     }
+	
+	@Override
+	public int countTotalReservationsByDate(String date) throws Exception {
+	    return reservationMapper.countTotalReservationsByDate(date);
+	}
+
+	@Override
+	public int countMyReservationsByDate(Map<String, Object> param) throws Exception {
+		
+	    return reservationMapper.countMyReservationsByDate(param);
+	}
 }

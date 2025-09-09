@@ -147,4 +147,16 @@
 	    WHERE
 	        reservation_idx = #{reservationIdx}
 	</update>
+	
+	<select id="countTotalReservationsByDate" parameterType="string" resultType="int">
+	    SELECT COUNT(*)
+	    FROM reservations
+	    WHERE substr(start_datetime, 1, 10) = #{date}
+	</select>
+	
+	<select id="countMyReservationsByDate" parameterType="map" resultType="int">
+	    SELECT COUNT(*)
+	    FROM reservations
+	    WHERE user_idx = #{userIdx} AND substr(start_datetime, 1, 10) = #{date}
+	</select>
 </mapper>
