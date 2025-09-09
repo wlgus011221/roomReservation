@@ -612,6 +612,97 @@ public class RoomController {
 	    }
 	}
 	
+	@PostMapping("/deleteReservation.do")
+    @ResponseBody // 이 어노테이션은 메서드의 반환 값을 HTTP 응답 본문에 직접 담아 보냅니다.
+    public String deleteReservation(@RequestParam("reservationIdx") int reservationIdx) {
+        try {
+            ReservationVO reservationVO = new ReservationVO();
+            reservationVO.setReservationIdx(reservationIdx);
+            reservationService.deleteReservation(reservationVO);
+            return "success"; // 삭제 성공 시 "success" 문자열 반환
+        } catch (Exception e) {
+            // 예외 발생 시 로그를 남기는 것이 좋습니다.
+            e.printStackTrace();
+            return "fail"; // 삭제 실패 시 "fail" 문자열 반환
+        }
+    }
+	
+	@RequestMapping(value = "/selectReservation.do", 
+            method = {RequestMethod.GET, RequestMethod.POST},
+            produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public Map<String, Object> selectReservation(@RequestParam("reservationIdx") int reservationIdx, HttpSession session) {
+		Map<String, Object> response = new HashMap<>();
+		
+		try {
+	        // 권한 체크 (예약자 본인만 접근 허용)
+	        Integer userIdx = (Integer) session.getAttribute("userIdx");
+	        if (userIdx == null) {
+	            response.put("result", "error");
+	            response.put("msg", "로그인 상태가 아닙니다.");
+	            return response;
+	        }
+
+	        ReservationVO resVO = new ReservationVO();
+	        resVO.setReservationIdx(reservationIdx);
+	        
+	        ReservationVO reservationData = reservationService.selectReservation(resVO); // 단일 예약 조회 서비스
+	        
+	        // 예약자와 세션의 userIdx가 일치하는지 확인
+	        if (reservationData.getUserIdx() != userIdx) {
+	            response.put("result", "error");
+	            response.put("msg", "수정 권한이 없습니다.");
+	            return response;
+	        }
+
+	        response.put("result", "success");
+	        response.put("data", reservationData);
+	    } catch (Exception e) {
+	        response.put("result", "error");
+	        response.put("msg", "데이터 조회 중 오류 발생: " + e.getMessage());
+	    }
+	    return response;
+	}
+	
+	// 예약 정보 수정
+	@PostMapping("/updateReservation.do")
+	public String updateReservation(@ModelAttribute ReservationVO reservationVO,
+	                                 @RequestParam("date") String dateStr,
+	                                 @RequestParam("startTime") String startTimeStr,
+	                                 @RequestParam("endTime") String endTimeStr,
+	                                 HttpSession session, Model model) throws Exception {
+	    
+	    Integer userIdx = (Integer) session.getAttribute("userIdx");
+	    if (userIdx == null) {
+	        model.addAttribute("msg", "로그인 상태가 아닙니다.");
+	        return "forward:/login.do";
+	    }
+
+	    // 날짜와 시간 합치기
+	    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    Date startDatetime = formatter.parse(dateStr + " " + startTimeStr + ":00");
+	    Date endDatetime = formatter.parse(dateStr + " " + endTimeStr + ":00");
+	    
+	    reservationVO.setStartDatetime(startDatetime);
+	    reservationVO.setEndDatetime(endDatetime);
+	    
+	    // 예약자 정보 설정 (보안)
+	    reservationVO.setUserIdx(userIdx);
+
+	    // 중복 예약 확인 로직 추가 (addReservation.do와 동일)
+	    int overlapCount = reservationService.countOverlappingReservations(reservationVO);
+	    
+	    if (overlapCount > 0) {
+	        model.addAttribute("msg", "이미 다른 예약이 있습니다.");
+	        // 실패 시 필요한 데이터를 다시 모델에 담아 전달
+	        return "forward:/myPage.do";
+	    } else {
+	        reservationService.updateReservation(reservationVO);
+	        model.addAttribute("msg", "예약이 성공적으로 수정되었습니다.");
+	        return "forward:/myPage.do";
+	    }
+	}
+	
 	@RequestMapping(value = "/test.do", produces = "text/html; charset=UTF-8")
 	@ResponseBody
 	public String test(ModelMap model) throws Exception {

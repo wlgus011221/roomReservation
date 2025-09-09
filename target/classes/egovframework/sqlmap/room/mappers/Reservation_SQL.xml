@@ -103,5 +103,48 @@
 		    AND
 		    (end_datetime &gt; #{startDatetime})
 		)
+		<if test="reservationIdx > 0">
+	        AND reservation_idx != #{reservationIdx}
+	    </if>
 	</select>
+	
+	<!-- 예약 취소 -->
+	<delete id="deleteReservation" parameterType="reservationVO">
+		DELETE FROM reservations
+		WHERE reservation_idx = #{reservationIdx}
+	</delete>
+	
+	<!-- 예약 상세 조회 -->
+	<select id="selectReservation" parameterType="reservationVO" resultMap="reservationMap">
+	    SELECT
+	        r.reservation_idx,
+	        r.room_idx,
+	        ro.name AS room_name,
+	        r.user_idx,
+	        u.name AS user_name,
+	        r.title,
+	        r.attendees,
+	        r.start_datetime,
+	        r.end_datetime,
+	        r.content,
+	        r.is_recurring,
+	        r.recurring_idx        
+	    FROM reservations r
+	    LEFT JOIN rooms ro ON r.room_idx = ro.room_idx
+	    LEFT JOIN users u ON r.user_idx = u.user_idx
+	    WHERE r.reservation_idx = #{reservationIdx}
+	</select>
+	
+	<update id="updateReservation" parameterType="reservationVO">
+	    UPDATE reservations
+	    SET
+	        room_idx = #{roomIdx},
+	        title = #{title},
+	        attendees = #{attendees},
+	        start_datetime = #{startDatetime},
+	        end_datetime = #{endDatetime},
+	        content = #{content}
+	    WHERE
+	        reservation_idx = #{reservationIdx}
+	</update>
 </mapper>

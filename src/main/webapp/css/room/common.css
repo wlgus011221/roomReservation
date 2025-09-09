@@ -109,6 +109,16 @@ body {
 	background: #f9fafb;
 }
 
+.btn-danger {
+    background: var(--danger-color); 
+    color: white; 
+
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+}
+
 /* 메인 컨테이너 */
 .main-container {
 	max-width: 1200px;
@@ -196,4 +206,10 @@ body {
 	.nav a {
 		font-size: 13px;
 	}
+}
+
+/* TUI Calendar 상세 팝업에서 Edit/Delete 버튼 숨기기 */
+.tui-full-calendar-popup-detail .tui-full-calendar-popup-detail-item.edit,
+.tui-full-calendar-popup-detail .tui-full-calendar-popup-detail-item.delete {
+    display: none !important;
 }

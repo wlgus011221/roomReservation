@@ -10,6 +10,7 @@
 <title>마이페이지 - 회의실 예약 시스템</title>
 <link rel="stylesheet" href="/css/room/common.css">
 <link rel="stylesheet" href="/css/room/myPage.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
 	rel="stylesheet">
@@ -191,69 +192,125 @@
 
 		<!-- 내 예약관리 탭 -->
 		<div id="bookings-tab" class="tab-content">
-			<div class="card">
-				<div class="card-header">
-					<div class="flex items-center justify-between">
-						<h3 class="card-title">내 예약 현황</h3>
-						<div class="flex gap-2 booking-filters">
-							<button class="btn btn-secondary">전체</button>
-							<button class="btn btn-primary">예정</button>
-							<button class="btn btn-secondary">완료</button>
-							<button class="btn btn-secondary">취소</button>
-						</div>
-					</div>
-				</div>
-				<div class="card-content">
-					<div class="overflow-x-auto">
-						<table class="booking-table">
-							<thead>
-								<tr>
-									<th>날짜</th>
-									<th>시간</th>
-									<th>회의실</th>
-									<th>제목</th>
-									<th>참석자</th>
-									<th>상태</th>
-									<th>관리</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>2024.01.15</td>
-									<td>09:00-10:00</td>
-									<td>컨퍼런스룸 A</td>
-									<td>주간 기획 회의</td>
-									<td>5명</td>
-									<td><span class="status-badge status-occupied">진행 중</span>
-									</td>
-									<td>
-										<div class="flex gap-1">
-											<button class="btn btn-secondary">수정</button>
-											<button class="btn btn-danger">취소</button>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td>2024.01.16</td>
-									<td>14:00-15:30</td>
-									<td>미팅룸 1</td>
-									<td>클라이언트 미팅</td>
-									<td>3명</td>
-									<td><span class="status-badge status-available">예정</span>
-									</td>
-									<td>
-										<div class="flex gap-1">
-											<button class="btn btn-secondary">수정</button>
-											<button class="btn btn-danger">취소</button>
-										</div>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
+		    <div class="card">
+		        <div class="card-content">
+		            <div class="overflow-x-auto">
+		                <table class="booking-table">
+		                    <thead>
+		                        <tr>
+		                            <th>날짜</th>
+		                            <th>시간</th>
+		                            <th>회의실</th>
+		                            <th>제목</th>
+		                            <th>참석자</th>
+		                            <th>상태</th>
+		                            <th>관리</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+		                        <c:choose>
+		                            <c:when test="${not empty reservationList}">
+		                                <c:forEach var="res" items="${reservationList}" varStatus="status">
+		                                    <tr>
+		                                        <td><fmt:formatDate value="${res.startDatetime}" pattern="yyyy.MM.dd"/></td>
+		                                        <td>
+		                                            <fmt:formatDate value="${res.startDatetime}" pattern="HH:mm"/> - 
+		                                            <fmt:formatDate value="${res.endDatetime}" pattern="HH:mm"/>
+		                                        </td>
+		                                        <td>${res.roomName}</td>
+		                                        <td>${res.title}</td>
+		                                        <td>${res.attendees}명</td>
+		                                        <td><span class="status-badge status-available">예정</span></td>
+		                                        <td>
+		                                            <div class="flex gap-1">
+		                                                <button class="btn btn-secondary"
+															onclick="editReservation('<c:out value="${res.reservationIdx}" />')">
+															수정
+														</button>
+		                                                <button class="btn btn-danger"
+															onclick="deleteReservation('<c:out value="${res.reservationIdx}" />')">
+															취소
+														</button>
+		                                            </div>
+		                                        </td>
+		                                    </tr>
+		                                </c:forEach>
+		                            </c:when>
+		                            <c:otherwise>
+		                                <tr>
+		                                    <td colspan="7" style="text-align: center; padding: 20px;">예약 내역이 없습니다.</td>
+		                                </tr>
+		                            </c:otherwise>
+		                        </c:choose>
+		                    </tbody>
+		                </table>
+		            </div>
+		        </div>
+		    </div>
+		    
+		    <!-- 예약 정보 수정 -->
+			<div id="editReservationModal" class="modal-overlay hidden">
+			    <div class="card">
+			        <div class="card-header">
+			            <h3 class="card-title">예약 수정</h3>
+			            <button type="button" onclick="closeEditModal()">×</button>
+			        </div>
+			        <div class="card-content">
+			            <form id="editReservationForm" action="updateReservation.do" method="post">
+			                <input type="hidden" id="editReservationIdx" name="reservationIdx">
+			                
+			                <div class="grid grid-cols-2 gap-6">
+			                    <div class="form-group">
+			                        <label class="form-label">회의 제목 *</label>
+			                        <input type="text" id="editTitle" name="title" class="form-input" required>
+			                    </div>
+			                    <div class="form-group">
+			                        <label class="form-label">회의실 *</label>
+			                        <select class="form-select" id="editRoomIdx" name="roomIdx" required>
+			                            <option value="">회의실을 선택하세요</option>
+			                            <c:forEach var="room" items="${roomList}">
+			                                <option value="${room.roomIdx}">${room.name} (${room.capacity}명)</option>
+			                            </c:forEach>
+			                        </select>
+			                    </div>
+			                </div>
+			
+			                <div class="grid grid-cols-2 gap-6">
+			                    <div class="form-group">
+			                        <label class="form-label">참석 인원 *</label>
+			                        <input type="number" id="editAttendees" name="attendees" min="1" max="50" class="form-input" required>
+			                    </div>
+			                    <div class="form-group">
+			                        <label class="form-label">예약 날짜 *</label>
+			                        <input type="date" id="editDate" name="date" class="form-input" required>
+			                    </div>
+			                </div>
+			
+			                <div class="form-group">
+			                    <label class="form-label">예약 시간 *</label>
+			                    <div class="flex gap-2">
+			                        <input type="time" id="editStartTime" name="startTime" class="form-input" required>
+			                        <span class="flex items-center">~</span>
+			                        <input type="time" id="editEndTime" name="endTime" class="form-input" required>
+			                    </div>
+			                </div>
+			                
+			                <div class="form-group">
+			                    <label class="form-label">회의 내용</label>
+			                    <textarea class="form-textarea" id="editContent" name="content"></textarea>
+			                </div>
+			                
+			                <div class="flex justify-end gap-3">
+			                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">취소</button>
+			                    <button type="submit" class="btn btn-primary">수정</button>
+			                </div>
+			            </form>
+			        </div>
+			    </div>
 			</div>
 		</div>
+		
+		
 
 
 		<!-- 내 참석 정보 탭 -->
@@ -579,7 +636,97 @@
 	            return false; // 폼 제출 중지
 	        }
 	    });
-	        	
+	    
+	    // 내 예약 관리
+		// 모달 DOM 요소 가져오기
+		const editReservationModal = document.getElementById('editReservationModal');
+		const editReservationForm = document.getElementById('editReservationForm');
+		
+		// 모달 열기 함수
+		function openEditModal() {
+		    editReservationModal.classList.remove('hidden');
+		}
+		
+		// 모달 닫기 함수
+		function closeEditModal() {
+		    editReservationModal.classList.add('hidden');
+		}
+		
+		// 폼에 데이터 채우기 함수
+		function fillEditForm(data) {
+		    document.getElementById('editReservationIdx').value = data.reservationIdx;
+		    document.getElementById('editTitle').value = data.title;
+		    document.getElementById('editRoomIdx').value = data.roomIdx;
+		    document.getElementById('editAttendees').value = data.attendees;
+		    document.getElementById('editContent').value = data.content || '';
+		
+		    // 날짜와 시간 필드 채우기
+		    const startDate = new Date(data.startDatetime);
+		    const endDate = new Date(data.endDatetime);
+		
+		    document.getElementById('editDate').value = startDate.toISOString().slice(0,10);
+		    document.getElementById('editStartTime').value = startDate.toTimeString().slice(0,5);
+		    document.getElementById('editEndTime').value = endDate.toTimeString().slice(0,5);
+		}
+	    
+		// 예약 정보 수정
+	    function editReservation(id) {
+		    $.ajax({
+		        url: '/selectReservation.do',
+		        type: 'GET',
+		        data: { reservationIdx: id },
+		        success: function(response) {
+		            
+		            // 응답이 문자열인 경우 JSON 파싱 시도
+		            if (typeof response === 'string') {
+		                try {
+		                    response = JSON.parse(response);
+		                } catch (e) {
+		                    console.error("JSON 파싱 실패:", e);
+		                    return;
+		                }
+		            }
+		            
+		            if (response.result === 'success') {
+		            	fillEditForm(response.data);
+		                openEditModal();
+		            } else {
+		                alert("실패: " + response.msg);
+		            }
+		        },
+		        error: function(xhr, status, error) {
+		            console.log("에러:", error);
+		            
+		            alert("에러 발생: " + xhr.status + " - " + error);
+		        }
+		    });
+		}
+		
+	 	// 예약 취소
+	    function deleteReservation(id) {
+			if (confirm('예약 취소 하시겠습니까?')) {
+				$.ajax({
+					// 컨트롤러의 @RequestMapping 경로를 올바르게 지정
+					url : '/deleteReservation.do',
+					type : 'POST',
+					data : {
+						reservationIdx : id
+					}, // 컨트롤러로 보낼 데이터
+					success : function(response) {
+						// 서버로부터 'success' 문자열을 받으면 성공 처리
+						if (response === 'success') {
+							alert('예약이 성공적으로 취소되었습니다.');
+							window.location.reload(); // 페이지 새로고침
+						} else {
+							alert('예약 취소 중 오류가 발생했습니다.');
+						}
+					},
+					error : function() {
+						alert('서버와 통신 중 오류가 발생했습니다.');
+					}
+				});
+			}
+		}
     </script>
 </body>
 </html>
