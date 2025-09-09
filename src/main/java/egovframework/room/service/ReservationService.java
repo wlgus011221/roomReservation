@@ -55,4 +55,11 @@ public interface ReservationService {
      * @param vo - 삭제할 정보가 담긴 ReservationVO
      */
     void deleteReservation(ReservationVO vo) throws Exception;
+    
+    /**
+     * 특정 시간대에 중복되는 예약이 있는지 확인
+     * @param reservationVO
+     * @return 중복되는 예약의 수
+     */
+    int countOverlappingReservations(ReservationVO reservationVO) throws Exception;
 }

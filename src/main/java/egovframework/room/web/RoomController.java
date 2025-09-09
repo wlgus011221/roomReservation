@@ -592,12 +592,24 @@ public class RoomController {
 	    reservationVO.setEndDatetime(endDatetime);
 	    reservationVO.setContent(content);
 
-	    // 4. 단일 예약 서비스 호출
-	    reservationService.insertSingleReservation(reservationVO);
+	    // 4. 중복 예약 확인
+	    int overlapCount = reservationService.countOverlappingReservations(reservationVO);
 	    
-	    model.addAttribute("msg", "회의실 예약이 완료되었습니다.");
-	    
-	    return "forward:/main.do";
+	    if (overlapCount > 0) {
+	        // 중복 예약이 존재할 경우
+	        model.addAttribute("msg", "이미 다른 예약이 있습니다.");
+	        // 실패 메시지를 reservation.jsp에 표시하기 위해 forward
+	        // 필요한 데이터를 다시 모델에 담아 전달
+//	        model.addAttribute("roomList", roomService.selectRoomList(new RoomVO()));
+//	        model.addAttribute("name", session.getAttribute("name"));
+//	        model.addAttribute("department", session.getAttribute("department"));
+	        return "forward:/reservation.do";
+	    } else {
+	        // 중복 예약이 없을 경우, 정상적으로 예약 진행
+	        reservationService.insertSingleReservation(reservationVO);
+	        model.addAttribute("msg", "회의실 예약이 완료되었습니다.");
+	        return "forward:/main.do";
+	    }
 	}
 	
 	@RequestMapping(value = "/test.do", produces = "text/html; charset=UTF-8")

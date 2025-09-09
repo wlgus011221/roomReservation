@@ -515,7 +515,8 @@
 			                backgroundColor: room.backgroundColor,
 			                dragBackgroundColor: room.backgroundColor,
 			                borderColor: room.backgroundColor,
-			                color: '#fff'
+			                color: '#fff',
+			                attendees: ['${res.userName}']
 			            };
 			        })()<c:if test="${!status.last}">,</c:if>
 			    </c:forEach>

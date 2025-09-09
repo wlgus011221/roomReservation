@@ -68,4 +68,9 @@ public class ReservationServiceImpl extends EgovAbstractServiceImpl implements R
 	public void deleteReservation(ReservationVO vo) throws Exception {
 		reservationMapper.deleteReservation(vo);
 	}
+	
+	@Override
+    public int countOverlappingReservations(ReservationVO reservationVO) throws Exception {
+        return reservationMapper.selectCountOverlappingReservations(reservationVO);
+    }
 }

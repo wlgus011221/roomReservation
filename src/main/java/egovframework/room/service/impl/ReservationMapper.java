@@ -27,4 +27,6 @@ public interface ReservationMapper {
     void deleteReservation(ReservationVO vo) throws Exception;
     
     void deleteRecurringReservation(RecurringReservationVO vo) throws Exception;
+    
+    int selectCountOverlappingReservations(ReservationVO vo) throws Exception;
 }

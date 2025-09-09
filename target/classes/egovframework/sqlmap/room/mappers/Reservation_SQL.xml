@@ -91,4 +91,17 @@
         AND u.user_idx = #{userIdx}
         ORDER BY r.start_datetime DESC
     </select>
+    
+    <!-- 중복 예약 확인 -->
+    <!-- &lt is '<'   &gt is '>' -->
+    <select id="selectCountOverlappingReservations" parameterType="reservationVO" resultType="int">
+	    SELECT COUNT(*)
+		FROM reservations
+		WHERE room_idx = #{roomIdx}
+		AND (
+		    (start_datetime &lt; #{endDatetime})
+		    AND
+		    (end_datetime &gt; #{startDatetime})
+		)
+	</select>
 </mapper>
