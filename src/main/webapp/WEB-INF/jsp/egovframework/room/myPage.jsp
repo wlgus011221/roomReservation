@@ -310,8 +310,6 @@
 			</div>
 		</div>
 		
-		
-
 
 		<!-- 내 참석 정보 탭 -->
 		<div id="attendance-tab" class="tab-content">
@@ -440,9 +438,6 @@
 								onclick="showView('calendar', this)">
 								<i class="fas fa-calendar"></i> 달력뷰
 							</button>
-							<button class="view-btn" onclick="showView('list', this)">
-								<i class="fas fa-list"></i> 리스트뷰
-							</button>
 							<button class="view-btn" onclick="showView('timeline', this)">
 								<i class="fas fa-chart-gantt"></i> 타임라인뷰
 							</button>
@@ -465,14 +460,6 @@
 							<!-- 달력 본체 -->
 							<div id="calendar"></div>
 						</div>
-					</div>
-
-					<!-- 리스트 -->
-					<div id="list-view" class="dashboard-view" style="display: none;">
-						<ul>
-							<li>회의실 A - 팀 회의 (2025-08-26 10:00)</li>
-							<li>회의실 B - 외부 미팅 (2025-08-28 14:00)</li>
-						</ul>
 					</div>
 
 					<!-- 타임라인 (같은 캘린더 div 사용) -->
@@ -519,7 +506,6 @@
 
             document.getElementById('calendar-view').style.display = 'none';
             document.getElementById('timeline-view').style.display = 'none';
-            document.getElementById('list-view').style.display = 'none';
 
             if(viewName === 'calendar') {
                 document.getElementById('calendar-view').style.display = 'block';
@@ -531,9 +517,7 @@
                 calendar.changeView('day');
                 setRenderRangeText();
                 calendar.render();
-            } else if(viewName === 'list') {
-                document.getElementById('list-view').style.display = 'block';
-            }
+            } 
         }
 	    
 	 	// 랜덤 색상 생성 함수

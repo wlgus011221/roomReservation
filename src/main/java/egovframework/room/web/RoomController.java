@@ -125,6 +125,12 @@ public class RoomController {
         List<RoomVO> roomList = roomService.selectRoomList(new RoomVO());
         model.addAttribute("roomList", roomList);
         
+        // 오늘 날짜의 예약 목록 불러오기
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("date", now);
+        List<ReservationVO> todayReservationList = reservationService.selectReservationListByDate(paramMap);
+        model.addAttribute("todayReservationList", todayReservationList);
+        
 		return "/main";
 	}
 	
@@ -149,6 +155,16 @@ public class RoomController {
 	    response.put("myReservations", myReservations);
 
 	    return response;
+	}
+	
+	// /getReservationsByDate.do
+	@RequestMapping("/getReservationsByDate.do")
+	@ResponseBody
+	public List<ReservationVO> getReservationsByDate(@RequestParam("date") String dateStr) throws Exception {
+	    Map<String, Object> paramMap = new HashMap<>();
+	    paramMap.put("date", dateStr);
+	    List<ReservationVO> reservationList = reservationService.selectReservationListByDate(paramMap);
+	    return reservationList;
 	}
 
 	@RequestMapping(value = "/login.do")

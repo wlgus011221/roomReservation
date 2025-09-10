@@ -66,5 +66,13 @@ public interface ReservationService {
     int countOverlappingReservations(ReservationVO reservationVO) throws Exception;
     
     int countTotalReservationsByDate(String date) throws Exception;
+    
     int countMyReservationsByDate(Map<String, Object> param) throws Exception;
+    
+    /**
+     * 특정 날짜의 예약 목록을 조회한다.
+     * @param paramMap - 조회할 날짜 정보가 담긴 Map
+     * @return 해당 날짜의 예약 목록
+     */
+    List<ReservationVO> selectReservationListByDate(Map<String, Object> paramMap) throws Exception;
 }

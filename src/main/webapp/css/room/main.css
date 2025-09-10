@@ -110,6 +110,7 @@
 	border-bottom-color: #4285f4;
 }
 
+/* 캘린더 뷰(월,주,일) */
 #calendar {
 	height: 600px;
 }
@@ -145,6 +146,77 @@
   
 }
 
+/* 리스트 뷰 컨테이너 */
+#list-view-container {
+    padding: 20px;
+    background-color: #f7f9fc;
+    border-radius: 8px;
+}
+
+/* 개별 예약 카드 */
+.reservation-card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.card-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.card-status {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #4CAF50; /* 진행중 상태 색상 */
+}
+
+/* 카드 본문 (상세 정보) */
+.card-body {
+    padding-top: 15px;
+}
+
+.card-detail {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 12px;
+}
+
+.card-detail:last-child {
+    margin-bottom: 0;
+}
+
+.card-detail i {
+    width: 24px;
+    text-align: center;
+    color: #007bff; /* 아이콘 색상 */
+    margin-right: 12px;
+}
+
+.no-reservation-text {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #888;
+    padding: 50px 0;
+}
 
 /* 반응형 */
 @media ( max-width : 768px) {
