@@ -85,9 +85,9 @@ public class ReservationServiceImpl extends EgovAbstractServiceImpl implements R
 	public int countMyReservationsByDate(Map<String, Object> param) throws Exception {
 	    return reservationMapper.countMyReservationsByDate(param);
 	}
-	
+
 	@Override
-    public List<ReservationVO> selectReservationListByDate(Map<String, Object> paramMap) throws Exception {
-        return reservationMapper.selectReservationListByDate(paramMap);
-    }
+	public List<ReservationVO> selectReservationListByDate(Map<String, Object> param) throws Exception {
+		return reservationMapper.selectReservationListByDate(param);
+	}
 }

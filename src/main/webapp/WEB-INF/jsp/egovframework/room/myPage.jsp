@@ -220,7 +220,20 @@
 		                                        <td>${res.roomName}</td>
 		                                        <td>${res.title}</td>
 		                                        <td>${res.attendees}명</td>
-		                                        <td><span class="status-badge status-available">예정</span></td>
+		                                        <td>
+													<c:set var="now" value="<%= new java.util.Date() %>" />
+		                                            <c:choose>
+		                                                <c:when test="${res.endDatetime.before(now)}">
+		                                                    <span class="status-badge status-used">사용 완료</span>
+		                                                </c:when>
+		                                                <c:when test="${res.startDatetime.before(now) and res.endDatetime.after(now)}">
+		                                                    <span class="status-badge status-in-progress">진행중</span>
+		                                                </c:when>
+		                                                <c:otherwise>
+		                                                    <span class="status-badge status-available">예정</span>
+		                                                </c:otherwise>
+		                                            </c:choose>
+												</td>
 		                                        <td>
 		                                            <div class="flex gap-1">
 		                                                <button class="btn btn-secondary"

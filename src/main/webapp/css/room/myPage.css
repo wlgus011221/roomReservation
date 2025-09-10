@@ -214,18 +214,18 @@
 	display: inline-block;
 }
 
-.status-occupied {
+.status-available {
 	background-color: var(--primary-color);
 	color: #fff;
 }
 
-.status-available {
+.status-used {
 	background-color: var(--success-color);
 	color: #fff;
 }
 
-.status-cancelled {
-	background-color: var(--danger-color);
+.status-in-progress {
+	background-color: var(--warning-color);
 	color: #fff;
 }
 

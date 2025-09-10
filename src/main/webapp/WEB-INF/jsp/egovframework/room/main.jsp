@@ -64,7 +64,6 @@
 			<button class="tab-btn" onclick="changeView('week', this)">주간</button>
 			<button class="tab-btn" onclick="changeView('day', this)">일간</button>
 			<button class="tab-btn" onclick="changeView('list', this)">리스트</button>
-			<button class="tab-btn" onclick="changeView('timeline', this)">타임라인</button>
 		</div>
 
 		<!-- 캘린더 -->

@@ -89,7 +89,7 @@
         LEFT JOIN users u ON r.user_idx = u.user_idx
         WHERE 1=1
         AND u.user_idx = #{userIdx}
-        ORDER BY r.start_datetime DESC
+        ORDER BY r.start_datetime ASC
     </select>
     
     <!-- 중복 예약 확인 -->
@@ -179,5 +179,6 @@
 	        SUBSTR(r.start_datetime, 1, 10) = #{date}
 	    ORDER BY
 	        r.start_datetime ASC
+	    
     </select>
 </mapper>

@@ -157,7 +157,6 @@ public class RoomController {
 	    return response;
 	}
 	
-	// /getReservationsByDate.do
 	@RequestMapping("/getReservationsByDate.do")
 	@ResponseBody
 	public List<ReservationVO> getReservationsByDate(@RequestParam("date") String dateStr) throws Exception {
