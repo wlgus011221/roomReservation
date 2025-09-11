@@ -433,6 +433,34 @@ public class RoomController {
 		return "/roomManagement";
 	}
 	
+	@RequestMapping(value = "/getRoomList.do", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> getRoomList(@ModelAttribute("searchVO") RoomVO searchVO) throws Exception {
+	    Map<String, Object> response = new HashMap<>();
+
+	    // --- 빈 문자열 처리 --- //
+	    if (searchVO.getFloor() != null && "".equals(searchVO.getFloor().toString())) {
+	        searchVO.setFloor(null);
+	    }
+
+	    if (searchVO.getStatus() != null && "".equals(searchVO.getStatus())) {
+	        searchVO.setStatus(null);
+	    }
+
+	    if (searchVO.getSearchKeyword() != null && "".equals(searchVO.getSearchKeyword())) {
+	        searchVO.setSearchKeyword(null);
+	    }
+	    // -------------------- //
+
+	    // 검색 조건만 세팅
+	    List<RoomVO> roomList = roomService.selectRoomList(searchVO);
+
+	    response.put("list", roomList);
+	    response.put("totalCount", roomList.size()); // 총 개수
+
+	    return response;
+	}
+	
 	@PostMapping("/addRoom.do")
     public String addRoom(
         @RequestParam("name") String name,

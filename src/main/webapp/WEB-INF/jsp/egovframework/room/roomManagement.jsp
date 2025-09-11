@@ -34,10 +34,10 @@
 			<div class="card-content">
 				<div class="grid grid-cols-3 gap-4">
 					<div class="form-group">
-						<input type="text" class="form-input" placeholder="회의실 이름 검색...">
+						<input type="text" id="searchName" class="form-input" placeholder="회의실 이름 검색...">
 					</div>
 					<div class="form-group">
-						<select class="form-select">
+						<select class="form-select" id="searchStatus">
 							<option value="">모든 상태</option>
 							<option value="available">사용 가능</option>
 							<option value="maintenance">점검 중</option>
@@ -45,7 +45,7 @@
 						</select>
 					</div>
 					<div class="form-group">
-						<select class="form-select">
+						<select class="form-select" id="searchFloor">
 							<option value="">모든 층</option>
 							<option value="1">1층</option>
 							<option value="2">2층</option>
@@ -53,6 +53,7 @@
 						</select>
 					</div>
 				</div>
+				<button class="btn btn-primary mt-2" onclick="searchRooms()">검색</button>
 			</div>
 		</div>
 
@@ -209,6 +210,76 @@
 	</div>
 
 	<script>
+		function searchRooms() {
+		    const name = $('#searchName').val();
+		    const status = $('#searchStatus').val();
+		    const floor = $('#searchFloor').val();
+	
+		    $.ajax({
+		        url: '/getRoomList.do',
+		        type: 'GET',
+		        data: {
+		            name: name,
+		            status: status,
+		            floor: floor
+		        },
+		        success: function(response) {
+		            renderRoomTable(response.list);
+		        },
+		        error: function() {
+		            alert('회의실 목록 조회 중 오류가 발생했습니다.');
+		        }
+		    });
+		}
+	
+		function renderRoomTable(roomList) {
+		    const tbody = $('table tbody');
+		    tbody.empty();
+	
+		    if (roomList.length === 0) {
+		        tbody.append('<tr><td colspan="6" class="text-center">등록된 회의실이 없습니다.</td></tr>');
+		        return;
+		    }
+	
+		    roomList.forEach(room => {
+		        let facilities = '';
+		        room.facilities?.forEach(f => {
+		            facilities += `<span class="room-facility">\${f.name}</span> `;
+		        });
+				
+		        let statusText = '';
+		        switch(room.status) {
+		            case 'available':
+		                statusText = '사용 가능';
+		                break;
+		            case 'maintenance':
+		                statusText = '점검 중';
+		                break;
+		            case 'disabled':
+		                statusText = '사용 불가';
+		                break;
+		            default:
+		                statusText = room.status;
+		        }
+		        
+		        tbody.append(`
+		            <tr>
+		                <td>\${room.name}</td>
+		                <td>\${room.floor}층 \${room.number}</td>
+		                <td class="capacity-cell">\${room.capacity}명</td>
+		                <td>\${facilities}</td>
+		                <td><span class="status-badge status-\${room.status}">\${statusText}</span></td>
+		                <td>
+		                    <div class="flex gap-2">
+		                        <button class="btn btn-secondary" onclick="editRoom(\${room.roomIdx})"><i class="fas fa-edit"></i></button>
+		                        <button class="btn btn-danger" onclick="deleteRoom(\${room.roomIdx})"><i class="fas fa-trash"></i></button>
+		                    </div>
+		                </td>
+		            </tr>
+		        `);
+		    });
+		}
+		
 		function openAddModal() {
 			resetForm();
 		    document.getElementById('modalTitle').textContent = '회의실 추가';

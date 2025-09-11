@@ -113,6 +113,15 @@
 		LEFT JOIN facility C 
 		ON B.facility_idx = C.facility_idx
 		WHERE 1=1
+		<if test="name != null and name != ''">
+	        AND A.name LIKE CONCAT('%', #{name}, '%')
+	    </if>
+	    <if test="status != null and status != ''">
+	        AND A.status = #{status}
+	    </if>
+	    <if test="floor != null and floor != ''">
+	        AND A.floor = #{floor}
+	    </if>
 		ORDER BY A.room_idx, C.facility_idx
 	</select>
 

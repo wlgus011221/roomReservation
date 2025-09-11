@@ -16,7 +16,7 @@ public class RoomVO extends DefaultVO { // 페이징을 위한 상위 클래스 
     private int capacity;
     
     /** 층 */
-    private int floor;
+    private Integer floor;
     
     /** 호실 */
     private String number;
@@ -58,11 +58,11 @@ public class RoomVO extends DefaultVO { // 페이징을 위한 상위 클래스 
         this.capacity = capacity;
     }
 
-    public int getFloor() {
+    public Integer getFloor() {
         return floor;
     }
 
-    public void setFloor(int floor) {
+    public void setFloor(Integer floor) {
         this.floor = floor;
     }
 
