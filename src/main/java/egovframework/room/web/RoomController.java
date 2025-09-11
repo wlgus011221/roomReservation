@@ -113,7 +113,7 @@ public class RoomController {
 	    	param.put("date", now);
 	        myReservations = reservationService.countMyReservationsByDate(param);
 	    } else {
-	        myReservations = 0; // 이 경우 로직은 문제없음
+	        myReservations = 0;
 	    }
 	    model.addAttribute("myReservations", myReservations);
 		
@@ -337,7 +337,7 @@ public class RoomController {
 			// 4. DB에서 내 예약 목록 불러오기
 			ReservationVO resVO = new ReservationVO();
 	        resVO.setUserIdx(userIdx);  // 로그인 유저 아이디 설정
-	        List<ReservationVO> reservationList = reservationService.selectMyReservationList(resVO);
+	        List<ReservationVO> reservationList = reservationService.selectMyAllReservationList(resVO);
 	        model.addAttribute("reservationList", reservationList);
 	        
 	        // 5. DB에서 회의실 목록 불러오기

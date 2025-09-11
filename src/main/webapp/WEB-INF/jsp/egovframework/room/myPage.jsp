@@ -36,12 +36,14 @@
 			<button class="tab-btn" onclick="showTab(this, 'bookings')">
 				<i class="fas fa-calendar-check"></i> 내 예약관리
 			</button>
+			<!-- 
 			<button class="tab-btn" onclick="showTab(this, 'attendance')">
 				<i class="fas fa-users"></i> 내 참석 정보
 			</button>
 			<button class="tab-btn" onclick="showTab(this, 'notifications')">
 				<i class="fas fa-bell"></i> 알림 관리
 			</button>
+			 -->
 			<button class="tab-btn" onclick="showTab(this, 'dashboard')">
 				<i class="fas fa-chart-line"></i> 내 일정 대시보드
 			</button>
@@ -279,6 +281,7 @@
 		
 
 		<!-- 내 참석 정보 탭 -->
+		<!-- 
 		<div id="attendance-tab" class="tab-content">
 			<div class="card">
 				<div class="card-header">
@@ -334,9 +337,10 @@
 				</div>
 			</div>
 		</div>
-
+		 -->
 
 		<!-- 알림 관리 탭 -->
+		<!-- 
 		<div id="notifications-tab" class="tab-content">
 			<div class="card">
 				<div class="card-header">
@@ -360,8 +364,10 @@
 					<button class="btn btn-primary">설정 저장</button>
 				</div>
 			</div>
-
+			 -->
+			 
 			<!-- 알림 히스토리 -->
+			<!-- 
 			<div class="card" style="margin-top: 1.5rem;">
 				<div class="card-header">
 					<h3 class="card-title">최근 알림</h3>
@@ -392,6 +398,7 @@
 				</div>
 			</div>
 		</div>
+		 -->
 
 
 		<!-- 내 일정 대시보드 탭 추가 -->

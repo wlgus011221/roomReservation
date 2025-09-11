@@ -53,11 +53,13 @@
 
                     <!-- 반복 예약 옵션 -->
                     <div class="border-top">
+                    	<!-- 
                         <div class="flex items-center gap-3">
                             <input type="checkbox" id="recurring" name="isRecurring" onchange="toggleRecurring()">
                             <label for="recurring" class="form-label">반복 예약</label>
                         </div>
-
+						-->
+						
                         <!-- 일회성 예약 (기본) -->
                         <div id="single-booking" class="flex flex-col gap-4">
                             <div class="grid grid-cols-2 gap-6">
@@ -164,6 +166,7 @@
                     </div>
 
                     <!-- 관리자 전용 기능 -->
+                    <!-- 
                     <c:if test="${userType eq 'ADMIN'}">
 	                    <div class="border-top">
 	                        <div class="flex items-center gap-3">
@@ -185,7 +188,8 @@
 	                        </div>
 	                    </div>
                     </c:if>
-
+					 -->
+					 
                     <!-- 버튼 -->
                     <div class="flex justify-end gap-4">
                         <button type="button" class="btn btn-secondary">취소</button>

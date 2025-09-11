@@ -1,7 +1,5 @@
 package egovframework.room.service.impl;
 
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import egovframework.room.service.RecurringReservationVO;
 import egovframework.room.service.ReservationService;
 import egovframework.room.service.ReservationVO;
 import lombok.RequiredArgsConstructor;
@@ -29,19 +26,7 @@ public class ReservationServiceImpl extends EgovAbstractServiceImpl implements R
     public void insertSingleReservation(ReservationVO vo) throws Exception {
         reservationMapper.insertSingleReservation(vo);
     }
-    
-    @Override
-    @Transactional
-    public int insertRecurringReservation(RecurringReservationVO vo) throws Exception {
-        reservationMapper.insertRecurringReservation(vo);
-        return vo.getRecurringIdx();
-    }
-    
-    @Override
-    @Transactional
-    public void insertRecurringReservationDetail(ReservationVO vo) throws Exception {
-        reservationMapper.insertRecurringReservationDetail(vo);
-    }
+
 
 	@Override
 	public ReservationVO selectReservation(ReservationVO vo) throws Exception {
@@ -59,6 +44,11 @@ public class ReservationServiceImpl extends EgovAbstractServiceImpl implements R
 	@Override
 	public List<ReservationVO> selectMyReservationList(ReservationVO vo) throws Exception {
 		return reservationMapper.selectMyReservationList(vo);
+	}
+	
+	@Override
+	public List<ReservationVO> selectMyAllReservationList(ReservationVO vo) throws Exception {
+		return reservationMapper.selectMyAllReservationList(vo);
 	}
 	
 	@Override

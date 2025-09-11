@@ -31,19 +31,13 @@ public class ReservationVO extends DefaultVO { // 페이징을 위한 상위 클
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endDatetime;
 
-    
     /** 회의 내용 */
     private String content;
-
-    /** 반복 예약 여부 */
-    private boolean isRecurring;
-
-    /** 반복 예약 규칙 인덱스 */
-    private Integer recurringIdx;
 
     // 조인용 필드
     private String roomName;
     private String userName;
+    
 	public int getReservationIdx() {
 		return reservationIdx;
 	}
@@ -97,18 +91,7 @@ public class ReservationVO extends DefaultVO { // 페이징을 위한 상위 클
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public boolean isRecurring() {
-		return isRecurring;
-	}
-	public void setRecurring(boolean isRecurring) {
-		this.isRecurring = isRecurring;
-	}
-	public Integer getRecurringIdx() {
-		return recurringIdx;
-	}
-	public void setRecurringIdx(Integer recurringIdx) {
-		this.recurringIdx = recurringIdx;
-	}
+
 	public String getRoomName() {
 		return roomName;
 	}
@@ -121,15 +104,12 @@ public class ReservationVO extends DefaultVO { // 페이징을 위한 상위 클
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	
 	@Override
 	public String toString() {
 		return "ReservationVO [reservationIdx=" + reservationIdx + ", roomIdx=" + roomIdx + ", userIdx=" + userIdx
 				+ ", title=" + title + ", attendees=" + attendees + ", startDatetime=" + startDatetime
-				+ ", endDatetime=" + endDatetime + ", content=" + content + ", isRecurring=" + isRecurring
-				+ ", recurringIdx=" + recurringIdx + ", roomName=" + roomName + ", userName=" + userName + "]";
+				+ ", endDatetime=" + endDatetime + ", content=" + content + ", roomName=" + roomName + ", userName="
+				+ userName + "]";
 	}
-	
-	
     
 }

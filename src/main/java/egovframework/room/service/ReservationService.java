@@ -1,6 +1,5 @@
 package egovframework.room.service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -11,19 +10,6 @@ public interface ReservationService {
      * @param vo - 등록할 정보가 담긴 ReservationVO
      */
     void insertSingleReservation(ReservationVO vo) throws Exception;
-    
-    /**
-     * 반복 예약 규칙을 등록한다.
-     * @param vo - 등록할 정보가 담긴 RecurringReservationVO
-     * @return 등록된 반복 예약 규칙의 ID
-     */
-    int insertRecurringReservation(RecurringReservationVO vo) throws Exception;
-
-    /**
-     * 반복 예약을 등록한다.
-     * @param vo - 등록할 정보가 담긴 ReservationVO
-     */
-    void insertRecurringReservationDetail(ReservationVO vo) throws Exception;
     
     /**
      * 예약을 조회한다.
@@ -40,11 +26,18 @@ public interface ReservationService {
     List<ReservationVO> selectReservationList(ReservationVO vo) throws Exception;
     
     /**
-     * 내 예약 목록을 조회한다.
+     * 내 예약 목록을 조회한다. (페이징 처리)
      * @param searchVO - 조회할 정보가 담긴 VO
      * @return 예약 목록
      */
     List<ReservationVO> selectMyReservationList(ReservationVO vo) throws Exception;
+    
+    /**
+     * 내 예약 목록을 조회한다.
+     * @param searchVO - 조회할 정보가 담긴 VO
+     * @return 예약 목록
+     */
+    List<ReservationVO> selectMyAllReservationList(ReservationVO vo) throws Exception;
     
     /**
      * 내 예약 총 갯수를 조회한다.
