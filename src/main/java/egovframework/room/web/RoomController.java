@@ -125,11 +125,14 @@ public class RoomController {
         List<RoomVO> roomList = roomService.selectRoomList(new RoomVO());
         model.addAttribute("roomList", roomList);
         
-        // 오늘 날짜의 예약 목록 불러오기
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("date", now);
-        List<ReservationVO> todayReservationList = reservationService.selectReservationListByDate(paramMap);
-        model.addAttribute("todayReservationList", todayReservationList);
+        // 오늘 날짜의 예약 목록 불러오기 (초기 리스트 뷰를 위한 데이터)
+//        ReservationVO todayResVO = new ReservationVO();
+//        todayResVO.setSearchKeyword(now); // now 변수(날짜)를 searchKeyword 필드에 설정
+//        todayResVO.setPageIndex(1);
+//        todayResVO.setRecordCountPerPage(10);
+//        todayResVO.setFirstIndex(0);
+//        List<ReservationVO> todayReservationList = reservationService.selectReservationListByDate(todayResVO);
+//        model.addAttribute("todayReservationList", todayReservationList);
         
 		return "/main";
 	}
@@ -159,11 +162,36 @@ public class RoomController {
 	
 	@RequestMapping("/getReservationsByDate.do")
 	@ResponseBody
-	public List<ReservationVO> getReservationsByDate(@RequestParam("date") String dateStr) throws Exception {
-	    Map<String, Object> paramMap = new HashMap<>();
-	    paramMap.put("date", dateStr);
-	    List<ReservationVO> reservationList = reservationService.selectReservationListByDate(paramMap);
-	    return reservationList;
+	public Map<String, Object> getReservationsByDate(
+	    @RequestParam("date") String dateStr,
+	    @RequestParam(value = "pageIndex", defaultValue = "1") int pageIndex,
+	    @RequestParam(value = "pageUnit", defaultValue = "10") int pageUnit) throws Exception {
+
+	    Map<String, Object> response = new HashMap<>();
+	    
+	    // 1. VO 객체에 페이징 및 검색 정보 설정
+	    ReservationVO reservationVO = new ReservationVO();
+	    reservationVO.setSearchKeyword(dateStr); // 날짜를 검색어로 사용
+	    reservationVO.setPageIndex(pageIndex);
+	    reservationVO.setRecordCountPerPage(pageUnit);
+	    reservationVO.setFirstIndex((pageIndex - 1) * pageUnit);
+	    
+	    // 2. 전체 레코드 수 조회 (페이징 계산을 위해 필요)
+	    int totalCount = reservationService.countTotalReservationsByDate(dateStr);
+	    
+	    // 3. 페이징 처리된 목록 조회
+	    List<ReservationVO> reservationList = new ArrayList<>();
+	    if (totalCount > 0) {
+	        reservationList = reservationService.selectReservationListByDate(reservationVO);
+	    }
+
+	    // 4. 응답 데이터 구성
+	    response.put("list", reservationList);
+	    response.put("totalCount", totalCount);
+	    response.put("pageIndex", pageIndex);
+	    response.put("pageUnit", pageUnit);
+
+	    return response;
 	}
 
 	@RequestMapping(value = "/login.do")

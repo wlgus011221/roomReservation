@@ -160,25 +160,30 @@
 	    WHERE user_idx = #{userIdx} AND substr(start_datetime, 1, 10) = #{date}
 	</select>
 	
-	<select id="selectReservationListByDate" parameterType="map" resultType="reservationVO">
+	<select id="selectReservationListByDate" parameterType="reservationVO" resultMap="reservationMap">
         SELECT
-	        r.reservation_idx AS reservationIdx,
-	        r.title,
-	        r.start_datetime AS startDatetime,
-	        r.end_datetime AS endDatetime,
-	        r.attendees,
-	        ro.name AS roomName,
-	        u.name AS userName
-	    FROM
-	        reservations r
-	    JOIN
-	        rooms ro ON r.room_idx = ro.room_idx
-	    JOIN
-	        users u ON r.user_idx = u.user_idx
-	    WHERE
-	        SUBSTR(r.start_datetime, 1, 10) = #{date}
-	    ORDER BY
-	        r.start_datetime ASC
-	    
+            r.reservation_idx,
+            r.room_idx,
+            r.user_idx,
+            r.title,
+            r.attendees,
+            r.start_datetime,
+            r.end_datetime,
+            r.content,
+            r.is_recurring,
+            r.recurring_idx,
+            ro.name AS room_name,
+            u.name AS user_name
+        FROM
+            reservations r
+        JOIN
+            rooms ro ON r.room_idx = ro.room_idx
+        JOIN
+            users u ON r.user_idx = u.user_idx
+        WHERE
+            SUBSTR(r.start_datetime, 1, 10) = #{searchKeyword}
+        ORDER BY
+            r.start_datetime ASC
+        LIMIT #{firstIndex}, #{recordCountPerPage}
     </select>
 </mapper>

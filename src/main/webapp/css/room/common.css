@@ -195,6 +195,46 @@ body {
 	color: #374151;
 }
 
+/* 페이지네이션 컨테이너 */
+.pagination-container {
+    display: flex;           /* flex 사용 */
+    justify-content: center; /* 가로 가운데 정렬 */
+    align-items: center;     /* 세로 가운데 정렬 */
+    gap: 8px;                /* 버튼 간 간격 */
+    margin-top: 20px;        /* 위쪽 여백 */
+    flex-wrap: wrap;         /* 화면 작아지면 줄바꿈 */
+}
+
+/* 페이지 버튼 스타일 */
+.page-link {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    color: #333;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.page-link:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.page-link.active {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: 600;
+    cursor: default;
+}
+
+/* TUI Calendar 상세 팝업에서 Edit/Delete 버튼 숨기기 */
+.tui-full-calendar-popup-detail .tui-full-calendar-popup-detail-item.edit,
+.tui-full-calendar-popup-detail .tui-full-calendar-popup-detail-item.delete {
+    display: none !important;
+}
+
 /* 반응형 */
 @media ( max-width : 768px) {
 	.header {
@@ -206,10 +246,4 @@ body {
 	.nav a {
 		font-size: 13px;
 	}
-}
-
-/* TUI Calendar 상세 팝업에서 Edit/Delete 버튼 숨기기 */
-.tui-full-calendar-popup-detail .tui-full-calendar-popup-detail-item.edit,
-.tui-full-calendar-popup-detail .tui-full-calendar-popup-detail-item.delete {
-    display: none !important;
 }

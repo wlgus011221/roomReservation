@@ -87,7 +87,7 @@ public class ReservationServiceImpl extends EgovAbstractServiceImpl implements R
 	}
 
 	@Override
-	public List<ReservationVO> selectReservationListByDate(Map<String, Object> param) throws Exception {
-		return reservationMapper.selectReservationListByDate(param);
+	public List<ReservationVO> selectReservationListByDate(ReservationVO vo) throws Exception {
+	    return reservationMapper.selectReservationListByDate(vo);
 	}
 }

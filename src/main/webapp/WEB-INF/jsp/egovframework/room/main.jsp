@@ -82,49 +82,14 @@
 		
 		<!-- 리스트 뷰 -->
 		<div id="list-view-container" style="display: none;">
-		    <div class="list-container">
-		        <c:choose>
-		            <c:when test="${empty todayReservationList}">
-		                <p class="no-reservation-text">해당 날짜에 예약이 없습니다.</p>
-		            </c:when>
-		            <c:otherwise>
-		                <c:forEach var="res" items="${todayReservationList}" varStatus="status">
-		                    <div class="reservation-card">
-		                        <div class="card-header">
-		                            <h3 class="card-title">${res.title}</h3>
-		                        </div>
-		                        <div class="card-body">
-		                            <div class="card-detail">
-		                                <i class="fas fa-building"></i>
-		                                <span>${res.roomName}</span>
-		                            </div>
-		                            <div class="card-detail">
-		                                <i class="far fa-clock"></i>
-		                                <span>
-		                                    <fmt:formatDate value="${res.startDatetime}" pattern="HH:mm"/> - 
-		                                    <fmt:formatDate value="${res.endDatetime}" pattern="HH:mm"/>
-		                                </span>
-		                            </div>
-		                            <div class="card-detail">
-		                                <i class="fas fa-user"></i>
-		                                <span>${res.userName}</span>
-		                            </div>
-		                            <div class="card-detail">
-		                                <i class="fas fa-users"></i>
-		                                <span>${res.attendees}명</span>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </c:forEach>
-		            </c:otherwise>
-		        </c:choose>
-		    </div>
+		    <div class="list-container"></div>
+		    <div id="pagination-container" class="pagination-container"></div>
 		</div>
 	</main>
 
 	<script>
-		const Calendar = tui.Calendar;
-	
+	    const Calendar = tui.Calendar;
+	    
 	    // 랜덤 색상 생성 함수
 	    function getRandomColor() {
 	        const letters = '0123456789ABCDEF';
@@ -158,7 +123,7 @@
 	        calendars: roomList
 	    });
 	    
-	 	// 예약 목록
+	    // 예약 목록
 	    const reservations = [
 	        <c:forEach var="res" items="${reservationList}" varStatus="status">
 	            (function() {
@@ -182,167 +147,217 @@
 	
 	    // 캘린더에 이벤트 추가
 	    calendar.createEvents(reservations);
-	 	
-        function changeView(view, btn) {
-        	// 모든 탭의 active 클래스 제거
-            document.querySelectorAll('#view-tabs .tab-btn').forEach(tab => {
-                tab.classList.remove('active');
-            });
-
-            // 클릭한 버튼에 active 클래스 추가
-            btn.classList.add('active');
-
-            const calendarContainer = document.getElementById('calendar-container');
-            const listViewContainer = document.getElementById('list-view-container');
-
-            if (view === 'list') {
-                // 리스트 뷰 버튼 클릭 시
-                calendarContainer.style.display = 'none';
-                listViewContainer.style.display = 'block';
+	    
+	    function changeView(view, btn) {
+	        // 모든 탭의 active 클래스 제거
+	        document.querySelectorAll('#view-tabs .tab-btn').forEach(tab => {
+	            tab.classList.remove('active');
+	        });
+	
+	        // 클릭한 버튼에 active 클래스 추가
+	        btn.classList.add('active');
+	
+	        const calendarContainer = document.getElementById('calendar-container');
+	        const listViewContainer = document.getElementById('list-view-container');
+	
+	        if (view === 'list') {
+	            // 리스트 뷰 버튼 클릭 시
+	            calendarContainer.style.display = 'none';
+	            listViewContainer.style.display = 'block';
+	            
+	            // Fetch data for the first page
+	            const selectedDate = $('.date-input').val();
+	            fetchReservationsByDate(selectedDate, 1, 10);
+	        } else {
+	            // 다른 캘린더 뷰 버튼 클릭 시
+	            calendarContainer.style.display = 'block';
+	            listViewContainer.style.display = 'none';
+	            calendar.changeView(view); // 캘린더 뷰 전환
+	            setRenderRangeText(); // 현재 날짜 범위 업데이트 (기존 함수)
+	        }
+	    }
+	    
+	    // 이전 / 다음 / 오늘 버튼
+	    document.getElementById('btn-prev').addEventListener('click', () => {
+	        calendar.prev();
+	        setRenderRangeText();
+	    });
+	
+	    document.getElementById('btn-next').addEventListener('click', () => {
+	        calendar.next();
+	        setRenderRangeText();
+	    });
+	
+	    document.getElementById('btn-today').addEventListener('click', () => {
+	        calendar.today();
+	        setRenderRangeText();
+	    });
+	    
+	    // 현재 달력 범위 표시
+	    function setRenderRangeText() {
+	        const viewName = calendar.getViewName();
+	        const start = calendar.getDateRangeStart();
+	        const end = calendar.getDateRangeEnd();
+	        let text = '';
+	
+	        if (viewName === 'month') {
+	            text = start.toDate().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long' });
+	        } else if (viewName === 'week' || viewName === 'day') {
+	            text =
+	                start.toDate().toLocaleDateString('ko-KR') +
+	                ' ~ ' +
+	                end.toDate().toLocaleDateString('ko-KR');
+	        }
+	
+	        document.getElementById('renderRange').innerText = text;
+	    }
+	
+	    // 초기 세팅
+	    setRenderRangeText();
+	    
+	    const PAGE_UNIT = 10; // 전역 상수로 정의
+	    
+        function renderReservationList(data) {
+            const listContainer = document.querySelector('#list-view-container .list-container');
+            const paginationContainer = document.getElementById('pagination-container');
+            let html = '';
+    
+            if (data.list.length === 0) {
+                html = '<p class="no-reservation-text">해당 날짜에 예약이 없습니다.</p>';
             } else {
-                // 다른 캘린더 뷰 버튼 클릭 시
-                calendarContainer.style.display = 'block';
-                listViewContainer.style.display = 'none';
-                calendar.changeView(view); // 캘린더 뷰 전환
-                setRenderRangeText(); // 현재 날짜 범위 업데이트 (기존 함수)
-            }
-        }
-        
-     	// 이전 / 다음 / 오늘 버튼
-        document.getElementById('btn-prev').addEventListener('click', () => {
-          calendar.prev();
-          setRenderRangeText();
-        });
-
-        document.getElementById('btn-next').addEventListener('click', () => {
-          calendar.next();
-          setRenderRangeText();
-        });
-
-        document.getElementById('btn-today').addEventListener('click', () => {
-          calendar.today();
-          setRenderRangeText();
-        });
-        
-     	// 현재 달력 범위 표시
-        function setRenderRangeText() {
-        	const viewName = calendar.getViewName();
-          	const start = calendar.getDateRangeStart();
-         	const end = calendar.getDateRangeEnd();
-         	let text = '';
-
-         	if (viewName === 'month') {
-           		text = start.toDate().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long' });
-         	} else if (viewName === 'week' || viewName === 'day') {
-           		text =
-             	start.toDate().toLocaleDateString('ko-KR') +
-           		' ~ ' +
-             	end.toDate().toLocaleDateString('ko-KR');
-          }
-
-          document.getElementById('renderRange').innerText = text;
-        }
-
-        // 초기 세팅
-        setRenderRangeText();
-        
-        $('.search-btn').on('click', function() {
-            const selectedDate = $('.date-input').val();
-            if (selectedDate) {
-            	// 통계 데이터 조회
-                $.ajax({
-                    url: '/getStats.do',
-                    type: 'GET',
-                    data: { date: selectedDate }, // 문자열 그대로 전달
-                    dataType: 'json',
-                    success: function(data) {
-                        $('#totalReservations').text(data.totalReservations + '건');
-                        $('#myReservations').text(data.myReservations + '건');
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('예약 통계 조회 실패:', error);
+                data.list.forEach(function(res) {
+                    const startDate = new Date(res.startDatetime);
+                    const endDate = new Date(res.endDatetime);
+    
+                    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+                        console.error("Invalid Date received for reservation:", res);
+                        // Handle invalid dates gracefully or skip this item
+                        return;
                     }
-                });
-            	
-            	// 예약 목록 데이터 조회
-                $.ajax({
-                    url: '/getReservationsByDate.do',
-                    type: 'GET',
-                    data: { date: selectedDate },
-                    dataType: 'json',
-                    success: function(data) {                       
-                        const listViewContainer = document.getElementById('list-view-container');
-                        let html = '';
-
-                        if (data.length === 0) {
-                            html = '<p class="no-reservation-text">해당 날짜에 예약이 없습니다.</p>';
-                        } else {
-                        	data.forEach(function(res) {
-                        		console.log("받아온 데이터:", res);
-                                console.log("제목:", res.title);
-                                console.log("회의실 이름:", res.roomName);
-                                console.log("시작 시간 타임스탬프:", res.startDatetime);
-                                console.log("종료 시간 타임스탬프:", res.endDatetime);
-                                console.log("시작 시간 타임스탬프:", typeof(res.startDatetime));
-                                console.log("종료 시간 타임스탬프:", typeof(res.endDatetime));
-                                console.log("예약자 이름:", res.userName);
-                                console.log("참석 인원:", res.attendees);
-                                
-                                // ✅ 타임스탬프 → Date 변환
-                                const startDate = new Date(res.startDatetime);
-                                const endDate = new Date(res.endDatetime);
-
-                                // ✅ "HH:mm" 포맷 (24시간제)
-                                const startTimeStr = startDate.toLocaleTimeString('ko-KR', {
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                    hour12: false
-                                });
-                                const endTimeStr = endDate.toLocaleTimeString('ko-KR', {
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                    hour12: false
-                                });
-
-                                // 참석 인원 처리
-                                const attendeesCount = res.attendees ? res.attendees : 0;
-
-                                html += `
-                                    <div class="reservation-card">
-                                        <div class="card-header">
-                                            <h3 class="card-title">\${res.title}</h3>  
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="card-detail">
-                                                <i class="fas fa-building"></i>
-                                                <span>\${res.roomName}</span>    
-                                            </div>
-                                            <div class="card-detail">
-                                                <i class="far fa-clock"></i>
-                                                <span>\${startTimeStr} - \${endTimeStr}</span>
-                                            </div>
-                                            <div class="card-detail">
-                                                <i class="fas fa-user"></i>
-                                                <span>\${res.userName}</span>   
-                                            </div>
-                                            <div class="card-detail">
-                                                <i class="fas fa-users"></i>
-                                                <span>\${attendeesCount}명</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                `;
-                            });
-                        }
-                        listViewContainer.innerHTML = html;
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('예약 목록 조회 실패:', error);
-                    }
+    
+                    const startTimeStr = startDate.toLocaleTimeString('ko-KR', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false
+                    });
+                    const endTimeStr = endDate.toLocaleTimeString('ko-KR', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false
+                    });
+    
+                    const attendeesCount = res.attendees ? res.attendees : 0;
+    
+                    html += `
+                        <div class="reservation-card">
+                            <div class="card-header">
+                                <h3 class="card-title">\${res.title}</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-detail">
+                                    <i class="fas fa-building"></i>
+                                    <span>\${res.roomName}</span>
+                                </div>
+                                <div class="card-detail">
+                                    <i class="far fa-clock"></i>
+                                    <span>\${startTimeStr} - \${endTimeStr}</span>
+                                </div>
+                                <div class="card-detail">
+                                    <i class="fas fa-user"></i>
+                                    <span>\${res.userName}</span>
+                                </div>
+                                <div class="card-detail">
+                                    <i class="fas fa-users"></i>
+                                    <span>\${attendeesCount}명</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
                 });
             }
-        });
+            listContainer.innerHTML = html;
+            
+            renderPagination(data.totalCount || 0, data.pageIndex || 1, PAGE_UNIT);
+        }
+    
+        function renderPagination(totalCount, currentPage) {
+            const paginationContainer = document.getElementById('pagination-container');
+            paginationContainer.innerHTML = '';
+            
+            const totalPages = Math.ceil(totalCount / PAGE_UNIT);
+            if(totalPages <= 1){
+                paginationContainer.style.display='none';
+                return;
+            }
+            paginationContainer.style.display='flex';
 
-    </script>
+            const maxPagesToShow = 5;
+            const startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+            const endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+            let html = '';
+            
+            if(currentPage > 1){
+                html += `<span class="page-link" onclick="fetchReservationsByDate(\$('.date-input').val(), \${currentPage-1}, \${PAGE_UNIT})">이전</span>`;
+            }
+            
+            for(let i=startPage; i<=endPage; i++){
+                if(i === currentPage){
+                    html += `<span class="page-link active">${i}</span>`;
+                } else {
+                    html += `<span class="page-link" onclick="fetchReservationsByDate(\$('.date-input').val(), \${i}, \${PAGE_UNIT})">\${i}</span>`;
+                }
+            }
+            
+            if(currentPage < totalPages){
+                html += `<span class="page-link" onclick="fetchReservationsByDate\($('.date-input').val(), \${currentPage+1}, \${PAGE_UNIT})">다음</span>`;
+            }
+            
+            paginationContainer.innerHTML = html;
+        }
+    
+        function fetchReservationsByDate(selectedDate, pageIndex, pageUnit) {
+		    $.ajax({
+		        url: '/getReservationsByDate.do',
+		        type: 'GET',
+		        data: { 
+		            date: selectedDate,
+		            pageIndex: pageIndex,
+		            pageUnit: pageUnit
+		        },
+		        dataType: 'json',
+		        success: function(data) {
+		            renderReservationList(data);
+		        },
+		        error: function(xhr, status, error) {
+		            console.error('예약 목록 조회 실패:', error);
+		        }
+		    });
+		}
+	    
+	    // Date search button click handler
+	    $('.search-btn').on('click', function() {
+	        const selectedDate = $('.date-input').val();
+	        if (selectedDate) {
+	            // 통계 데이터 조회
+	            $.ajax({
+	                url: '/getStats.do',
+	                type: 'GET',
+	                data: { date: selectedDate },
+	                dataType: 'json',
+	                success: function(data) {
+	                    $('#totalReservations').text(data.totalReservations + '건');
+	                    $('#myReservations').text(data.myReservations + '건');
+	                },
+	                error: function(xhr, status, error) {
+	                    console.error('예약 통계 조회 실패:', error);
+	                }
+	            });
+	            
+	            // Fetch reservation list with initial pagination parameters (page 1, 10 items)
+	            fetchReservationsByDate(selectedDate, 1, 10);
+	        }
+	    });
+	
+	</script>
 </body>
 </html>

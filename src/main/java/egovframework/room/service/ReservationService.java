@@ -74,5 +74,5 @@ public interface ReservationService {
      * @param paramMap - 조회할 날짜 정보가 담긴 Map
      * @return 해당 날짜의 예약 목록
      */
-    List<ReservationVO> selectReservationListByDate(Map<String, Object> paramMap) throws Exception;
+    List<ReservationVO> selectReservationListByDate(ReservationVO vo) throws Exception;
 }

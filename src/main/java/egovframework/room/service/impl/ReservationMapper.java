@@ -36,5 +36,5 @@ public interface ReservationMapper {
     
     int countMyReservationsByDate(Map<String, Object> param) throws Exception;
     
-    List<ReservationVO> selectReservationListByDate(Map<String, Object> paramMap) throws Exception;
+    List<ReservationVO> selectReservationListByDate(ReservationVO vo) throws Exception;
 }
