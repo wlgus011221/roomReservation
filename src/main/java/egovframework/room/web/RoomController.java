@@ -1,5 +1,7 @@
 package egovframework.room.web;
 
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
@@ -22,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -193,6 +197,54 @@ public class RoomController {
 
 	    return response;
 	}
+	
+//	@GetMapping("/excelDownload.do")
+//    public void excelDownload(@RequestParam("date") String date, HttpServletResponse response) throws IOException, Exception {
+//        // 1. 해당 날짜의 전체 예약 데이터를 조회
+//        ReservationVO reservationVO = new ReservationVO();
+//        reservationVO.setSearchKeyword(date);
+//        reservationVO.setPageIndex(1);
+//        // 모든 데이터를 가져오기 위해 최대값으로 설정
+//        reservationVO.setRecordCountPerPage(Integer.MAX_VALUE);
+//        
+//        List<ReservationVO> reservationList = reservationService.selectReservationListByDate(reservationVO);
+//
+//        // 2. 엑셀 워크북 생성
+//        Workbook workbook = new XSSFWorkbook();
+//        Sheet sheet = workbook.createSheet("회의실 예약 리스트");
+//
+//        // 3. 헤더 생성
+//        String[] headers = {"회의실", "예약자", "제목", "시작 시간", "종료 시간"};
+//        Row headerRow = sheet.createRow(0);
+//        for (int i = 0; i < headers.length; i++) {
+//            Cell cell = headerRow.createCell(i);
+//            cell.setCellValue(headers[i]);
+//        }
+//
+//        // 4. 데이터 행 생성
+//        int rowNum = 1;
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        for (ReservationVO res : reservationList) {
+//            Row row = sheet.createRow(rowNum++);
+//            row.createCell(0).setCellValue(res.getRoomName());
+//            row.createCell(1).setCellValue(res.getUserName());
+//            row.createCell(2).setCellValue(res.getTitle());
+//            row.createCell(3).setCellValue(dateFormat.format(res.getStartDatetime()));
+//            row.createCell(4).setCellValue(dateFormat.format(res.getEndDatetime()));
+//        }
+//
+//        // 5. 응답 헤더 설정
+//        String filename = "회의실_예약_리스트_" + date + ".xlsx";
+//        // 파일명 인코딩 (한글 깨짐 방지)
+//        String encodedFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20");
+//
+//        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+//        response.setHeader("Content-Disposition", "attachment;filename=" + encodedFilename);
+//        
+//        // 6. 엑셀 파일 전송
+//        workbook.write(response.getOutputStream());
+//        workbook.close();
+//    }
 
 	@RequestMapping(value = "/login.do")
 	public String login(ModelMap model) throws Exception {	

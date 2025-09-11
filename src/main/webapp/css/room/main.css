@@ -225,11 +225,46 @@
     border: 1px solid #ccc;
 }
 
-#calendar-container {
-  border: 1px solid #ddd;
+/* 엑셀 버튼 기본 스타일 */
+.btn-excel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px; /* 아이콘과 텍스트 간격 */
+  padding: 6px 14px;
   border-radius: 6px;
-  padding: 10px;
-  background: #fff;
+  border: 1px solid #ddd;
+  font-size: 13px;
+  font-weight: 500;
+  background-color: #f8f9fa; /* 기본 배경 */
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 10px;
+}
+
+/* hover 효과 */
+.btn-excel:hover {
+  background-color: #e9ecef;
+  border-color: #ccc;
+  transform: translateY(-1px);
+}
+
+/* 다운로드 전용 색상 강조 */
+.btn-excel.download {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: #fff;
+}
+
+.btn-excel.download:hover {
+  background-color: #0069d9;
+  border-color: #005cbf;
+}
+
+#list-view-container .excel-btn-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
 }
 
 /* 반응형 */

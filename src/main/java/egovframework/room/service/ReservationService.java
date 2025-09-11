@@ -75,4 +75,11 @@ public interface ReservationService {
      * @return 해당 날짜의 예약 목록
      */
     List<ReservationVO> selectReservationListByDate(ReservationVO vo) throws Exception;
+    
+    /**
+     * 특정 날짜의 예약 목록을 조회한다. 페이징 X
+     * @param paramMap - 조회할 날짜 정보가 담긴 Map
+     * @return 해당 날짜의 예약 목록
+     */
+    List<ReservationVO> selectReservationListByDateNoPaging(ReservationVO vo) throws Exception;
 }

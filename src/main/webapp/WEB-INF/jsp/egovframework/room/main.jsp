@@ -65,7 +65,13 @@
 			<button class="tab-btn" onclick="changeView('day', this)">일간</button>
 			<button class="tab-btn" onclick="changeView('list', this)">리스트</button>
 		</div>
-
+		
+		<div class="toolbar">
+		  <button class="btn-excel download" onclick="downloadAllReservationsExcel()">
+		    <i class="fas fa-file-download"></i> 전체 예약 엑셀 다운로드
+		  </button>
+		</div>
+		
 		<!-- 캘린더 -->
 		<div id="calendar-container">
   			<!-- 네비게이션 -->
@@ -82,6 +88,11 @@
 		
 		<!-- 리스트 뷰 -->
 		<div id="list-view-container" style="display: none;">
+			<div class="excel-btn-wrapper">	
+				<button class="btn-excel download" onclick="downloadExcel()"> 
+					<i class="fas fa-file-download"></i> 엑셀 다운로드
+				</button>
+			</div>
 		    <div class="list-container"></div>
 		    <div id="pagination-container" class="pagination-container"></div>
 		</div>
@@ -357,7 +368,20 @@
 	            fetchReservationsByDate(selectedDate, 1, 10);
 	        }
 	    });
-	
+		
+	    function downloadExcel() {
+	        const selectedDate = $('.date-input').val();
+	        if (selectedDate) {
+	            // 새로 만든 컨트롤러로 요청
+	            window.location.href = `/excelDownload.do?date=\${selectedDate}`;
+	        } else {
+	            alert('날짜를 선택해 주세요.');
+	        }
+	    }
+	    
+	    function downloadAllReservationsExcel() {
+	        window.location.href = `/excelAllDownload.do`;
+	    }
 	</script>
 </body>
 </html>

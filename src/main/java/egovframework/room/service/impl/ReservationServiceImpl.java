@@ -85,4 +85,9 @@ public class ReservationServiceImpl extends EgovAbstractServiceImpl implements R
 	public List<ReservationVO> selectReservationListByDate(ReservationVO vo) throws Exception {
 	    return reservationMapper.selectReservationListByDate(vo);
 	}
+	
+	@Override
+	public List<ReservationVO> selectReservationListByDateNoPaging(ReservationVO vo) throws Exception {
+	    return reservationMapper.selectReservationListByDateNoPaging(vo);
+	}
 }

@@ -230,9 +230,8 @@ body {
 }
 
 /* TUI Calendar 상세 팝업에서 Edit/Delete 버튼 숨기기 */
-.tui-full-calendar-popup-detail .tui-full-calendar-popup-detail-item.edit,
-.tui-full-calendar-popup-detail .tui-full-calendar-popup-detail-item.delete {
-    display: none !important;
+.toastui-calendar-section-button {
+  display: none !important;
 }
 
 /* 반응형 */
