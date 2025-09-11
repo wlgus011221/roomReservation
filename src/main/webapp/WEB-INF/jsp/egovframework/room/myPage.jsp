@@ -59,12 +59,15 @@
 					</div>
 					<div class="card-content">
 						<div class="profile-info">
-							<div class="user-avatar"></div>
-							<h4>${userDetails.name}</h4>
-							<p>${userDetails.departmentName}•${userDetails.userType}</p>
+							<!-- 프로필 이미지 기능하게 되면 여기에 추가 -->
+							<!-- <div class="user-avatar"></div> -->
 						</div>
 
 						<div class="profile-details">
+							<div>
+								<h4>${userDetails.name}</h4>
+								<p>${userDetails.departmentName}•${userDetails.userType}</p>
+							</div>
 							<div>
 								<label>사번</label>
 								<p>${userDetails.id}</p>
@@ -94,19 +97,15 @@
 						</div>
 						<div class="card-content stats-grid">
 							<div class="stats-item">
-								<div class="stat-number" style="color: var(--primary-color);">24</div>
-								<div class="stat-label">이번 달 예약</div>
+								<div class="stat-number" style="color: var(--primary-color);">${reservatoinCount}</div>
+								<div class="stat-label">예약 횟수</div>
 							</div>
 							<div class="stats-item">
-								<div class="stat-number" style="color: var(--success-color);">18</div>
+								<div class="stat-number" style="color: var(--success-color);">${completedMeetings}</div>
 								<div class="stat-label">완료된 회의</div>
 							</div>
 							<div class="stats-item">
-								<div class="stat-number" style="color: var(--warning-color);">2</div>
-								<div class="stat-label">취소된 예약</div>
-							</div>
-							<div class="stats-item">
-								<div class="stat-number" style="color: var(--gray-700);">36h</div>
+								<div class="stat-number" style="color: var(--gray-700);">${totalUsageHours}h</div>
 								<div class="stat-label">총 이용 시간</div>
 							</div>
 						</div>

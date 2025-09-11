@@ -343,6 +343,25 @@ public class RoomController {
 	        // 5. DB에서 회의실 목록 불러오기
 	        List<RoomVO> roomList = roomService.selectRoomList(new RoomVO());
 	        model.addAttribute("roomList", roomList);
+	        
+	        // 6. 통계
+	        int reservationCount = reservationService.selectMyReservationListTotCnt(resVO);
+	        model.addAttribute("reservatoinCount", reservationCount);
+	        
+	        int completedMeetings = 0;
+	        int totalUsageHours = 0;
+	        Date now = new Date();
+
+	        for (ReservationVO reservation : reservationList) {
+	            if (reservation.getEndDatetime().before(now)) {
+	                completedMeetings++;
+	                long durationMillis = reservation.getEndDatetime().getTime() - reservation.getStartDatetime().getTime();
+	                totalUsageHours += (durationMillis / (1000 * 60 * 60)); // 밀리초를 시간으로 변환
+	            }
+	        }
+
+	        model.addAttribute("completedMeetings", completedMeetings);
+	        model.addAttribute("totalUsageHours", totalUsageHours);
 		}
 		
 		return "/myPage";
