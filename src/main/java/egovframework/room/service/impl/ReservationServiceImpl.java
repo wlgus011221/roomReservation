@@ -60,6 +60,11 @@ public class ReservationServiceImpl extends EgovAbstractServiceImpl implements R
 	public List<ReservationVO> selectMyReservationList(ReservationVO vo) throws Exception {
 		return reservationMapper.selectMyReservationList(vo);
 	}
+	
+	@Override
+    public int selectMyReservationListTotCnt(ReservationVO vo) throws Exception {
+        return reservationMapper.selectMyReservationListTotCnt(vo);
+    }
 
 	@Override
 	public void updateReservation(ReservationVO vo) throws Exception {

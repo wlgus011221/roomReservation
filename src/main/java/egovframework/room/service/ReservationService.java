@@ -47,6 +47,13 @@ public interface ReservationService {
     List<ReservationVO> selectMyReservationList(ReservationVO vo) throws Exception;
     
     /**
+     * 내 예약 총 갯수를 조회한다.
+     * @param vo - 조회할 정보가 담긴 VO
+     * @return 내 예약 총 갯수
+     */
+    int selectMyReservationListTotCnt(ReservationVO vo) throws Exception;
+    
+    /**
      * 예약을 수정한다.
      * @param vo - 수정할 정보가 담긴 ReservationVO
      */

@@ -207,57 +207,11 @@
 		                            <th>관리</th>
 		                        </tr>
 		                    </thead>
-		                    <tbody>
-		                        <c:choose>
-		                            <c:when test="${not empty reservationList}">
-		                                <c:forEach var="res" items="${reservationList}" varStatus="status">
-		                                    <tr>
-		                                        <td><fmt:formatDate value="${res.startDatetime}" pattern="yyyy.MM.dd"/></td>
-		                                        <td>
-		                                            <fmt:formatDate value="${res.startDatetime}" pattern="HH:mm"/> - 
-		                                            <fmt:formatDate value="${res.endDatetime}" pattern="HH:mm"/>
-		                                        </td>
-		                                        <td>${res.roomName}</td>
-		                                        <td>${res.title}</td>
-		                                        <td>${res.attendees}명</td>
-		                                        <td>
-													<c:set var="now" value="<%= new java.util.Date() %>" />
-		                                            <c:choose>
-		                                                <c:when test="${res.endDatetime.before(now)}">
-		                                                    <span class="status-badge status-used">사용 완료</span>
-		                                                </c:when>
-		                                                <c:when test="${res.startDatetime.before(now) and res.endDatetime.after(now)}">
-		                                                    <span class="status-badge status-in-progress">진행중</span>
-		                                                </c:when>
-		                                                <c:otherwise>
-		                                                    <span class="status-badge status-available">예정</span>
-		                                                </c:otherwise>
-		                                            </c:choose>
-												</td>
-		                                        <td>
-		                                            <div class="flex gap-1">
-		                                                <button class="btn btn-secondary"
-															onclick="editReservation('<c:out value="${res.reservationIdx}" />')">
-															수정
-														</button>
-		                                                <button class="btn btn-danger"
-															onclick="deleteReservation('<c:out value="${res.reservationIdx}" />')">
-															취소
-														</button>
-		                                            </div>
-		                                        </td>
-		                                    </tr>
-		                                </c:forEach>
-		                            </c:when>
-		                            <c:otherwise>
-		                                <tr>
-		                                    <td colspan="7" style="text-align: center; padding: 20px;">예약 내역이 없습니다.</td>
-		                                </tr>
-		                            </c:otherwise>
-		                        </c:choose>
-		                    </tbody>
+		                    <tbody id="myBookingsTableBody">
+		                        </tbody>
 		                </table>
 		            </div>
+		            <div id="myBookingsPagination" class="pagination-container mt-4"></div>
 		        </div>
 		    </div>
 		    
@@ -490,6 +444,9 @@
 	    let calendar; // 캘린더 인스턴스를 전역 변수로 선언
 	    const Calendar = tui.Calendar;
 	    
+	    const PAGE_UNIT = 10;
+		const PAGE_SIZE = 5;
+	    
 	 	// 마이페이지 탭 전환
         function showTab(btn, tabName) {
 		    // 모든 탭 버튼과 컨텐츠 비활성화
@@ -500,6 +457,11 @@
 		    btn.classList.add('active'); // ✅ event.target 대신 btn 사용
 		    document.getElementById(tabName + '-tab').classList.add('active');
 		    
+		 	// '내 예약관리' 탭을 선택하면 목록을 불러옵니다.
+		    if(tabName === 'bookings') {
+		        fetchMyReservations(1);
+		    }
+		 
 		    // 내 일정 대시보드 탭이면 캘린더 강제 렌더링
 		    if(tabName === 'dashboard' && !isCalendarInit) {
 		        setTimeout(() => {
@@ -684,6 +646,106 @@
 	    });
 	    
 	    // 내 예약 관리
+		function fetchMyReservations(pageIndex) {
+			$.ajax({
+				url: '/getMyReservations.do',
+				type: 'GET',
+				data: {
+					pageIndex: pageIndex,
+					pageUnit: PAGE_UNIT
+				},
+				dataType: 'json',
+				success: function(response) {
+					renderMyReservations(response.list);
+					renderMyBookingsPagination(response.totalCount, pageIndex);
+				},
+				error: function(xhr, status, error) {
+					console.error("내 예약 목록 조회 실패:", error);
+					$('#myBookingsTableBody').html('<tr><td colspan="7" style="text-align: center; padding: 20px;">예약 내역을 불러오는 데 실패했습니다.</td></tr>');
+				}
+			});
+		}
+
+		function renderMyReservations(list) {
+			const tbody = $('#myBookingsTableBody');
+			tbody.empty();
+
+			if (list && list.length > 0) {
+				const now = new Date();
+				list.forEach(res => {
+					const startDatetime = new Date(res.startDatetime);
+					const endDatetime = new Date(res.endDatetime);
+					
+					let statusHtml = '';
+					if (endDatetime < now) {
+						statusHtml = `<span class="status-badge status-used">사용 완료</span>`;
+					} else if (startDatetime < now && endDatetime > now) {
+						statusHtml = `<span class="status-badge status-in-progress">진행중</span>`;
+					} else {
+						statusHtml = `<span class="status-badge status-available">예정</span>`;
+					}
+					
+					const row = `
+						<tr>
+							<td>\${startDatetime.toLocaleDateString()}</td>
+							<td>\${startDatetime.toTimeString().slice(0, 5)} - \${endDatetime.toTimeString().slice(0, 5)}</td>
+							<td>\${res.roomName}</td>
+							<td>\${res.title}</td>
+							<td>\${res.attendees}명</td>
+							<td>\${statusHtml}</td>
+							<td>
+								<div class="flex gap-1">
+									<button class="btn btn-secondary" onclick="editReservation('\${res.reservationIdx}')">
+										수정
+									</button>
+									<button class="btn btn-danger" onclick="deleteReservation('\${res.reservationIdx}')">
+										취소
+									</button>
+								</div>
+							</td>
+						</tr>
+					`;
+					tbody.append(row);
+				});
+			} else {
+				tbody.append('<tr><td colspan="7" style="text-align: center; padding: 20px;">예약 내역이 없습니다.</td></tr>');
+			}
+		}
+
+		function renderMyBookingsPagination(totalCount, currentPage) {
+			const paginationContainer = $('#myBookingsPagination');
+			paginationContainer.empty();
+
+			const totalPages = Math.ceil(totalCount / PAGE_UNIT);
+			if (totalPages <= 1) {
+				paginationContainer.hide();
+				return;
+			}
+			paginationContainer.show();
+
+			const startPage = Math.max(1, currentPage - Math.floor(PAGE_SIZE / 2));
+			const endPage = Math.min(totalPages, startPage + PAGE_SIZE - 1);
+
+			let html = '';
+			if (currentPage > 1) {
+				html += `<span class="page-link" onclick="fetchMyReservations(\${currentPage - 1})">이전</span>`;
+			}
+
+			for (let i = startPage; i <= endPage; i++) {
+				if (i === currentPage) {
+					html += `<span class="page-link active">\${i}</span>`;
+				} else {
+					html += `<span class="page-link" onclick="fetchMyReservations(\${i})">\${i}</span>`;
+				}
+			}
+
+			if (currentPage < totalPages) {
+				html += `<span class="page-link" onclick="fetchMyReservations(\${currentPage + 1})">다음</span>`;
+			}
+
+			paginationContainer.html(html);
+		}
+		
 		// 모달 DOM 요소 가져오기
 		const editReservationModal = document.getElementById('editReservationModal');
 		const editReservationForm = document.getElementById('editReservationForm');
@@ -714,7 +776,7 @@
 		    document.getElementById('editStartTime').value = startDate.toTimeString().slice(0,5);
 		    document.getElementById('editEndTime').value = endDate.toTimeString().slice(0,5);
 		}
-	    
+		
 		// 예약 정보 수정
 	    function editReservation(id) {
 		    $.ajax({

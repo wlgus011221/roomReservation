@@ -89,7 +89,13 @@
         LEFT JOIN users u ON r.user_idx = u.user_idx
         WHERE 1=1
         AND u.user_idx = #{userIdx}
-        ORDER BY r.start_datetime ASC
+        ORDER BY r.start_datetime DESC
+        LIMIT #{firstIndex}, #{recordCountPerPage}
+    </select>
+    
+    <select id="selectMyReservationListTotCnt" parameterType="reservationVO" resultType="int">
+        SELECT COUNT(*) FROM reservations
+        WHERE user_idx = #{userIdx}
     </select>
     
     <!-- 중복 예약 확인 -->

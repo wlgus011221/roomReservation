@@ -24,6 +24,8 @@ public interface ReservationMapper {
     
     List<ReservationVO> selectMyReservationList(ReservationVO vo) throws Exception;
     
+    int selectMyReservationListTotCnt(ReservationVO vo) throws Exception;
+    
     void updateReservation(ReservationVO vo) throws Exception;
     
     void deleteReservation(ReservationVO vo) throws Exception;

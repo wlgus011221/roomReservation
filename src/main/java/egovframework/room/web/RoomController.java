@@ -412,6 +412,42 @@ public class RoomController {
 	    // 처리 후 마이페이지로 다시 포워딩
 	    return "forward:/myPage.do";
 	}
+	
+	@RequestMapping(value = "/getMyReservations.do", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getMyReservations(
+            @ModelAttribute("searchVO") ReservationVO searchVO, 
+            HttpSession session) throws Exception {
+        
+        Map<String, Object> response = new HashMap<>();
+        Integer userIdx = (Integer) session.getAttribute("userIdx");
+        
+        if (userIdx == null) {
+            response.put("error", "로그인 상태가 아닙니다.");
+            return response;
+        }
+
+        // Set the user ID and pagination parameters
+        searchVO.setUserIdx(userIdx);
+        searchVO.setFirstIndex((searchVO.getPageIndex() - 1) * searchVO.getRecordCountPerPage());
+
+        // Get total count
+        int totalCount = reservationService.selectMyReservationListTotCnt(searchVO);
+
+        // Get paginated list
+        List<ReservationVO> myReservationList = new ArrayList<>();
+        if (totalCount > 0) {
+            myReservationList = reservationService.selectMyReservationList(searchVO);
+        }
+
+        // Add data to the response map
+        response.put("list", myReservationList);
+        response.put("totalCount", totalCount);
+        response.put("pageIndex", searchVO.getPageIndex());
+        response.put("pageUnit", searchVO.getRecordCountPerPage());
+
+        return response;
+    }
 
 	@RequestMapping(value = "/roomManagement.do")
 	public String roomManagement(HttpSession session, Model model) throws Exception {
