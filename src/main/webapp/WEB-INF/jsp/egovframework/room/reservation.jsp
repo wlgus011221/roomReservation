@@ -192,7 +192,7 @@
 					 
                     <!-- 버튼 -->
                     <div class="flex justify-end gap-4">
-                        <button type="button" class="btn btn-secondary">취소</button>
+                        <button type="button" class="btn btn-secondary" onclick="cancelBtn()">취소</button>
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-calendar-plus"></i> 예약하기
                         </button>
@@ -216,6 +216,10 @@
                 recurringBooking.classList.add('hidden');
             }
         }
+        
+        function cancelBtn() {
+	        window.location.href = `/main.do`;
+	    }
     </script>
 </body>
 </html>

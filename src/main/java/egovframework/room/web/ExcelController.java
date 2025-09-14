@@ -27,7 +27,7 @@ public class ExcelController {
 	@Autowired
     private ReservationService reservationService;
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @GetMapping("/excelDownload.do")
     public void excelDownload(@RequestParam("date") String dateStr, HttpServletResponse response) throws IOException, Exception {
@@ -35,7 +35,6 @@ public class ExcelController {
         ReservationVO reservationVO = new ReservationVO();
         
         // 쿼리문의 WHERE 조건에 맞는 형식으로 날짜를 설정
-        // 이 부분이 핵심! 쿼리문에 맞는 형식으로 문자열을 searchKeyword에 넣어줍니다.
         reservationVO.setSearchKeyword(dateStr); 
 
         reservationVO.setPageIndex(1);

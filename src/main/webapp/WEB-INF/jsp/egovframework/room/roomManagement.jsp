@@ -409,7 +409,7 @@
 						// 서버로부터 'success' 문자열을 받으면 성공 처리
 						if (response === 'success') {
 							alert('회의실이 성공적으로 삭제되었습니다.');
-							window.location.reload(); // 페이지 새로고침
+							window.location.href = '/roomManagement.do';
 						} else {
 							alert('회의실 삭제 중 오류가 발생했습니다.');
 						}
