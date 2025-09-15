@@ -85,7 +85,6 @@
 		<servlet-name>swagger</servlet-name>
 		<url-pattern>/swagger-ui.html</url-pattern>
 		<url-pattern>/webjars/**</url-pattern>
-		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
 </web-app>
